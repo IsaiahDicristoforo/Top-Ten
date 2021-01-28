@@ -30,8 +30,8 @@ As a user interested in ranking a list of my favorite items, I want to be able t
 
 ## Scrum Roles
 **Project Owner**: Isaiah Dicristoforo\
-**Integration Specialists**: Christian Turner and Colin Vitols\
-**UI Designer**: Atharva Chalke and Matthew Willison\
+**Integration Specialists**: Christian Turner and Atharva Chalke\
+**UI Designer**:  Colin Vitols and Matthew Willison\
 
 
 ## Group Standup
