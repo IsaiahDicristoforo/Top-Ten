@@ -20,6 +20,14 @@ As a user interested in ranking a list of my favorite items, I want to be able t
 ## Class Diagram
 
 ## Class Diagram Description
+**MainActivity:** The first screen the user sees. This will have a list of all the list items of the day, and an option to vote for the user's favorite list item.  
+  
+**RetrofitInstance:** Boostrap class required for Retrofit.  
+  
+**ListItem:** Noun class that represents a list item.  
+  
+**IListItemDAO:** Interface for Retrofit to find and parse List Item JSON.  
+  
 
 ## Product Backlog
 *Located under this repository's GitHub Projects tab*
