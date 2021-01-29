@@ -17,7 +17,8 @@ Top Ten is an engaging Android polling app in which users can vote on a list of 
 As a user interested in ranking a list of my favorite items, I want to be able to rank those items by personal preference, and see my reponse compared to other users.
 
 
-## Class Diagram
+## Class Diagram  
+![Class Diagram](https://user-images.githubusercontent.com/41589695/106334986-d5c31f00-62b1-11eb-8f16-62727074d743.png)  
 
 ## Class Diagram Description
 **MainActivity:** The first screen the user sees. This will have a list of all the list items of the day, and an option to vote for the user's favorite list item.  
