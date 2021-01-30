@@ -37,7 +37,18 @@ Then the vote they placed on Cheerios should be removed, and added to the tally 
 
 ## Class Diagram
 
+![Class Diagram](https://user-images.githubusercontent.com/41589695/106334986-d5c31f00-62b1-11eb-8f16-62727074d743.png)  
+
+
 ## Class Diagram Description
+
+**MainActivity:** The first screen the user sees. This will have a list of all the list items of the day, and an option to vote for the user's favorite list item.  
+
+**RetrofitInstance:** Boostrap class required for Retrofit.  
+
+**ListItem:** Noun class that represents a list item.  
+
+**IListItemDAO:** Interface for Retrofit to find and parse List Item JSON.  
 
 ## Product Backlog
 *Located under this repository's GitHub Projects tab*
