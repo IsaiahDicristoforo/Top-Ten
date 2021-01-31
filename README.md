@@ -35,10 +35,56 @@ Given that a user with one vote attempts to vote for Cherrios on a list of favor
 When they have already voted on Cinnamon Toast Crunch/
 Then the vote they placed on Cheerios should be removed, and added to the tally for Cinnamon Toast Crunch\
 
+### Requirement 02: Earn Points for making correct predictions about the list of the day
+
+#### Scenario
+As a user interesting in earning points in this app, I want to make a prediction about a list before voting goes live so that I will earn points if my prediction is correct.
+
+#### Dependencies
+Firebase, timed notifications and events so that the user can make predictions before a list of the day goes live.
+
+#### Assumptions
+User's predictions can be stored in firbase, and compared with the final results after voting on a list ends.
+
+#### Examples
+
+1.1\
+Given that a list of cereals is available for people to make predictions on before voting opens up\
+When a user predicts that Cinnamon Toast Crunch will be the most voted on Cereal\
+Then if after voting ends Cinnamon Toast Crunch is the most voted on cereal, the user should receive 1000 points.\
+
+1.2\
+Given that a list of cereals is available for people to make predictions on before voting opens up\
+When a user predicts that Cinnamon Toast Crunch will be the most voted on Cereal\
+Then if after voting ends Cinnamon Toast Crunch is NOT the most voted on cereal, the user should lose 500 points.\
+
+### Requirement 03: Redeem points for prizes and extra votes
+
+#### Scenario
+As a user, after making correct predictions about how other users will vote, I want to redeem the points I earn for prizes and bonuses in the app such as an extra vote.
+
+#### Dependencies
+Firebase login system to assign points to a user account.
+
+#### Assumptions
+User's have an account to which points can be awarded. User's can make predictions on the list of the day before voting opens to earn points.
+
+#### Examples
+
+1.1\
+Given that a user has earned 5,000 points by making correct predictions\
+When a user buys the "extra vote" bonus from the rewards page\
+Then the user should be able to vote twice when the next list goes live \
+
+1.2\
+Given that a user has no points earned in the app\
+When a user attempts to buy the "extra vote" bonus from the rewards page\
+Then their attempt to make the purchase should be rejected, and they should only be able to vote once on the next list.\
+
 
 ## Class Diagram
 
-![Class Diagram](https://user-images.githubusercontent.com/41589695/106334986-d5c31f00-62b1-11eb-8f16-62727074d743.png)  
+![ClassDiagram](https://user-images.githubusercontent.com/41589695/106377762-6e968f00-63c5-11eb-924d-bdcc6d7f7787.png)  
 
 
 ## Class Diagram Description
@@ -50,6 +96,10 @@ Then the vote they placed on Cheerios should be removed, and added to the tally 
 **ListItem:** Noun class that represents a list item.  
 
 **IListItemDAO:** Interface for Retrofit to find and parse List Item JSON.  
+
+**PreviousTopRated:** Noun class that represents a previously top rated item.  
+
+**IPreviousTopRated:** Interface for Retrofit to find and parse Previously Top Rated List Item JSON.  
 
 ## Product Backlog
 *Located under this repository's GitHub Projects tab*
