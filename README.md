@@ -50,6 +50,10 @@ Then the vote they placed on Cheerios should be removed, and added to the tally 
 
 **IListItemDAO:** Interface for Retrofit to find and parse List Item JSON.  
 
+**PreviousTopRated:** Noun class that represents a previously top rated item.  
+
+**IPreviousTopRated:** Interface for Retrofit to find and parse Previously Top Rated List Item JSON.  
+
 ## Product Backlog
 *Located under this repository's GitHub Projects tab*
 
