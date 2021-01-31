@@ -8,7 +8,7 @@ Top Ten is an engaging Android polling app in which users can vote on a list of 
 * Before voting begins, users can predict which item will come out on top, earning points if guessing correctly.
 
 ## Storyboard
-[Storyboard - On InVision] (https://projects.invisionapp.com/prototype/TopTenDesign-ckkjcz4cd001f9s01t91hwjht/play/afdaa50e)
+[Storyboard - On InVision](https://projects.invisionapp.com/prototype/TopTenDesign-ckkjcz4cd001f9s01t91hwjht/play/afdaa50e)
 
 ## Functional Requirements
 
