@@ -37,7 +37,7 @@ Then the vote they placed on Cheerios should be removed, and added to the tally 
 
 ## Class Diagram
 
-![Class Diagram](https://user-images.githubusercontent.com/41589695/106334986-d5c31f00-62b1-11eb-8f16-62727074d743.png)  
+![ClassDiagram](https://user-images.githubusercontent.com/41589695/106377762-6e968f00-63c5-11eb-924d-bdcc6d7f7787.png)  
 
 
 ## Class Diagram Description
