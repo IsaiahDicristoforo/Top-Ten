@@ -109,7 +109,7 @@ Then their attempt to make the purchase should be rejected, and they should only
 
 
 ## Scrum Roles
-**Project Owner**: Isaiah Dicristoforo\
+**Project Owners**: Isaiah Dicristoforo and Kyle Marler\
 **Integration Specialists**: Christian Turner and Atharva Chalke\
 **UI Designer**:  Colin Vitols and Matthew Willison
 
