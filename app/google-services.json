@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "101202310065",
+    "project_id": "top-ten-de8df",
+    "storage_bucket": "top-ten-de8df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101202310065:android:630e83e4dede36cfeac390",
+        "android_client_info": {
+          "package_name": "edu.uc.groupProject.topten"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101202310065-rt758l3v3l6u3kt1bp31do03jg9klnkq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl5zL-KHFbtwHxIRjx8vq9zMcecVE05BI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101202310065-rt758l3v3l6u3kt1bp31do03jg9klnkq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
