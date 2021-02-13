@@ -1,5 +1,6 @@
 package edu.uc.groupProject.topten
 
+import edu.uc.groupProject.topten.DTO.TestDTO
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -16,3 +17,4 @@ class ExampleUnitTest {
     }
 
 }
+
