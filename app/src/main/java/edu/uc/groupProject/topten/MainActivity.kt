@@ -3,12 +3,10 @@ package edu.uc.groupProject.topten
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.model.Document
 import edu.uc.groupProject.topten.DTO.TestDTO
-import edu.uc.groupProject.topten.DTO.TestListItem
+import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import java.util.*
 
@@ -50,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         var listItemCollectionReference = listsReference.collection("MyListItems")
 
-        var arrayOfListItemsToAdd : Array<TestListItem> = createSampleListItems();
+        var arrayOfListItemsToAdd : Array<ListItem> = createSampleListItems();
 
         for(item in arrayOfListItemsToAdd){
             listItemCollectionReference.document(item.title).set(item);
@@ -58,12 +56,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun createSampleListItems():Array<TestListItem>{
+    fun createSampleListItems():Array<ListItem>{
 
         var sampleListItems = arrayOf(
-                TestListItem("The Dark Knight", "A movie about Batman", 100),
-                TestListItem("The Return of the King", "A movie about a ring and some eagles", 150),
-                TestListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200)
+                ListItem("The Dark Knight", "A movie about Batman", 100),
+                ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
+                ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200)
 
         )
         return sampleListItems
