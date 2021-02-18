@@ -22,12 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        writeListToDatabase()
-
-
-
-
-
+       // writeListToDatabase()
     }
 
     fun writeListToDatabase(){

@@ -6,9 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import edu.uc.groupProject.topten.DAO.CurrentListAdapter
 import edu.uc.groupProject.topten.R
 
 
@@ -20,6 +25,7 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var adapter : CurrentListAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +42,16 @@ class MainFragment : Fragment() {
 
             it ->  view!!.findViewById<Spinner>(R.id.spn_spinner).setAdapter(ArrayAdapter(context!!, R.layout.support_simple_spinner_dropdown_item, it))
 
+            adapter = CurrentListAdapter(viewModel.listItems.value!!)
+
+            view!!.findViewById<RecyclerView>(R.id.rec_currentList).layoutManager =  LinearLayoutManager(this.context)
+            view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter
 
         })
+
+
+
+
 
     }
 
