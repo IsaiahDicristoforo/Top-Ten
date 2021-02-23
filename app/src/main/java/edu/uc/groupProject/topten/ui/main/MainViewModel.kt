@@ -38,7 +38,7 @@ class MainViewModel : ViewModel() {
 
                     //val listItem = it.toObject(ListItem::class.java)
 
-                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test",4)
+                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
                     allListItems.add(listItem!!)
                 }
 
@@ -46,7 +46,6 @@ class MainViewModel : ViewModel() {
             }
         }
     }
-
 
 
 

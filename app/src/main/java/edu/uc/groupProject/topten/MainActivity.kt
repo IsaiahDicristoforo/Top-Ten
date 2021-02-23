@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-       // writeListToDatabase()
+        writeListToDatabase()
     }
 
     fun writeListToDatabase(){
@@ -58,7 +58,14 @@ class MainActivity : AppCompatActivity() {
         var sampleListItems = arrayOf(
                 ListItem("The Dark Knight", "A movie about Batman", 100),
                 ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
-                ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200)
+                ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200),
+                ListItem("The Godfather", "n/a", 24),
+                ListItem("The Avengers", "", 231),
+                ListItem("Inception", "", 12),
+                ListItem("E.T", "", 124),
+                ListItem("The Matrix", "", 42)
+
+
 
         )
         return sampleListItems
