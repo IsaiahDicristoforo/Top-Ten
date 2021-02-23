@@ -31,7 +31,7 @@ class ExampleUnitTest {
 
     lateinit var mainViewModel: MainViewModel
 
-    var listService = mockk<ListService>()
+    var ListService = mockk<ListService>()
 
     @Test
     fun SearchForTheAvengers_ReturnsTheAvengers(){
@@ -41,7 +41,7 @@ class ExampleUnitTest {
     }
 
 
-   private fun givenAListOfItemsAreAvailable(){
+   fun givenAListOfItemsAreAvailable(){
        mainViewModel = MainViewModel();
        createMockData()
    }
@@ -56,9 +56,9 @@ class ExampleUnitTest {
         allListItems.add(theAvengers)
 
         allListItemsLiveData.postValue(allListItems);
-        every { listService.fetchList(any()) } returns allListItemsLiveData
+        every { ListService.fetchList(any()) } returns allListItemsLiveData
 
-         mainViewModel.ListService = listService
+         mainViewModel.ListService = ListService
 
     }
 
