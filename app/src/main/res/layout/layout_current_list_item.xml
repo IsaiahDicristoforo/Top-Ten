@@ -13,6 +13,14 @@
             android:layout_width="match_parent"
             android:layout_height="169dp">
 
+                <Button
+                    android:id="@+id/btn_vote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vote"
+                    android:translationX="800px"
+                    android:translationY="-10px" />
+
                 <TextView
                     android:id="@+id/txt_Title"
                     android:layout_width="322dp"
