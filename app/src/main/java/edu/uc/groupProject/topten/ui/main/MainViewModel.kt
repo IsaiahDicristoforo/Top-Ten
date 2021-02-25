@@ -10,7 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.ktx.Firebase
 import edu.uc.groupProject.topten.DTO.ListItem
+import edu.uc.groupProject.topten.DTO.Strawpoll
 import edu.uc.groupProject.topten.Service.ListService
+import edu.uc.groupProject.topten.Service.StrawpollService
 
 class MainViewModel : ViewModel() {
 
@@ -47,7 +49,11 @@ class MainViewModel : ViewModel() {
         }
     }
 
-
+    fun fetchStrawpoll() {
+        val service = StrawpollService()
+        var strawpoll = service.getStrawpoll(1)
+        var stringg = ""
+    }
 
 
 

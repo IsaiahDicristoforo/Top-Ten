@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.DTO.ListItem
+import edu.uc.groupProject.topten.Service.StrawpollService
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import java.util.*
 
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         )
         return sampleListItems
     }
+
 
 
 

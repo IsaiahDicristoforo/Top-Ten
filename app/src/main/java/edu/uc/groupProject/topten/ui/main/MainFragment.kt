@@ -49,7 +49,7 @@ class MainFragment : Fragment() {
 
         })
 
-
+        viewModel.fetchStrawpoll()
 
 
 
