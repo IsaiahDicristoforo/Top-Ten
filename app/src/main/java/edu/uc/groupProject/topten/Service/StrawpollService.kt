@@ -16,7 +16,6 @@ class StrawpollService {
         val service = StrawpollInstance.retrofitInstance?.create(IStrawpollDAO::class.java)
         val call = service?.getStrawpoll(id)
 
-
         call?.enqueue(object: Callback<Strawpoll> {
             override fun onFailure(call: Call<Strawpoll>, t: Throwable) {
                 TODO("Not yet implemented")
@@ -26,7 +25,6 @@ class StrawpollService {
                 strawpoll.value = response?.body()
             }
         })
-
         return strawpoll
     }
 }

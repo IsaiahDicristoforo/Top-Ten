@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object StrawpollInstance {
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "https://strawpoll.me/api/v2"
+    private val BASE_URL = "https://strawpoll.me/api/v2/"
 
     val retrofitInstance: Retrofit?
         get() {
