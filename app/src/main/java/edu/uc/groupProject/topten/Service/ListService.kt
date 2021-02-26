@@ -6,7 +6,7 @@ import edu.uc.groupProject.topten.DTO.ListItem
 class ListService {
 
 
-   fun  fetchList(listName: String): MutableLiveData<ArrayList<ListItem>> {
+   fun  fetchList(listName: MutableLiveData<ArrayList<ListItem>>): MutableLiveData<ArrayList<ListItem>> {
        return MutableLiveData<ArrayList<ListItem>>()
     }
 

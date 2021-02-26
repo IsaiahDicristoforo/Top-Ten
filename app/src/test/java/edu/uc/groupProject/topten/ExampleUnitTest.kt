@@ -1,23 +1,16 @@
 package edu.uc.groupProject.topten
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import edu.uc.groupProject.topten.DTO.ListItem
-import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.Service.ListService
 import edu.uc.groupProject.topten.ui.main.MainViewModel
-import io.mockk.confirmVerified
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Test
 
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.rules.TestRule
-import org.mockito.Mock
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -58,7 +51,7 @@ class ExampleUnitTest {
         allListItemsLiveData.postValue(allListItems);
         every { ListService.fetchList(any()) } returns allListItemsLiveData
 
-         mainViewModel.ListService = ListService
+         mainViewModel.listService = ListService
 
     }
 
