@@ -10,7 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.ktx.Firebase
 import edu.uc.groupProject.topten.DTO.ListItem
-import edu.uc.groupProject.topten.Service.ListService
+import edu.uc.groupProject.topten.DTO.ListUtils
 
 class MainViewModel : ViewModel() {
 
@@ -32,7 +32,7 @@ class MainViewModel : ViewModel() {
                 return@addSnapshotListener
             }
             if(snapshot != null){
-                val allListItems = ArrayList<ListItem>()
+                var allListItems = ArrayList<ListItem>()
                 val documents = snapshot.documents
                 documents.forEach{
 
@@ -42,10 +42,13 @@ class MainViewModel : ViewModel() {
                     allListItems.add(listItem!!)
                 }
 
+                allListItems = ListUtils().sortListItems(allListItems)
                 listItems.value = allListItems
             }
         }
     }
+
+
 
 
 

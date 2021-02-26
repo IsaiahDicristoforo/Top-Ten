@@ -51,9 +51,6 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
             firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
 
             addVote(holder.listItemTitle.text.toString(), firestore)
-
-
-
         }
     }
 
