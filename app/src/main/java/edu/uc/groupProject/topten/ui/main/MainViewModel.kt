@@ -47,14 +47,10 @@ class MainViewModel : ViewModel() {
                 listItems.value = allListItems
             }
         }
-    }
+    }*/
 
-    fun fetchStrawpoll() {
+    fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
         val service = StrawpollService()
-        var strawpoll = service.getStrawpoll(1)
-        var stringg = ""
+        return service.getStrawpoll(id)
     }
-
-
-
 }
