@@ -11,10 +11,13 @@
         android:id="@+id/rec_currentList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:translationY="56sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

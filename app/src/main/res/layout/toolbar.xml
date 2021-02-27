@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/design_default_color_primary"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+    <TextView
+        android:id="@+id/toolbarTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/bowlby_one_sc"
+        android:text="@string/top_ten"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#F8F8F8"
+        android:textSize="24sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/usernamestatic"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/bowlby_one_sc"
+        android:text="@string/username"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#F8F8F8"
+        android:textSize="12sp"
+        android:translationX="51sp"
+        android:translationY="-14sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="76sp"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/bowlby_one_sc"
+        android:text="test"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#F8F8F8"
+        android:textSize="12sp"
+        android:translationX="54sp"
+        android:translationY="-14sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/pointsstatic"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/bowlby_one_sc"
+        android:text="@string/points"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#F8F8F8"
+        android:textSize="12sp"
+        android:translationX="-98sp"
+        android:translationY="14sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="76sp"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/bowlby_one_sc"
+        android:text="test"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#F8F8F8"
+        android:textSize="12sp"
+        android:translationX="-96sp"
+        android:translationY="14sp"
+        android:visibility="visible" />
+</androidx.appcompat.widget.Toolbar>
