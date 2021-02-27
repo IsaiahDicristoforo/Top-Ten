@@ -61,6 +61,6 @@ class MainViewModel : ViewModel() {
      * @return listService.fetchList(listItems)
      */
     fun fetchList(s: String) {
-        listItems = listService.fetchList(listItems)
+        listItems = listService.fetchList(s)
     }
 }

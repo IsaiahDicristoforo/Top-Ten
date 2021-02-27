@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.Service.ListService
 import edu.uc.groupProject.topten.ui.main.MainViewModel
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Test
 
 import org.junit.Rule
@@ -30,17 +32,16 @@ class ExampleUnitTest {
     fun SearchForTheAvengers_ReturnsTheAvengers(){
         givenAListOfItemsAreAvailable()
         whenSearchForMovies()
-        //thenVerifyFunctionsInvoked()
+        thenVerifyFunctionsInvoked()
     }
 
 
-   fun givenAListOfItemsAreAvailable(){
+    fun givenAListOfItemsAreAvailable(){
        mainViewModel = MainViewModel();
        createMockData()
-   }
+    }
 
-     fun createMockData() {
-
+    fun createMockData() {
         var allListItemsLiveData = MutableLiveData<ArrayList<ListItem>>()
         var allListItems = ArrayList<ListItem>()
         var theDarkKnight = ListItem("The Dark Knight", "A movie about batman", 3)
@@ -51,28 +52,16 @@ class ExampleUnitTest {
         allListItemsLiveData.postValue(allListItems);
         every { ListService.fetchList(any()) } returns allListItemsLiveData
 
-         mainViewModel.listService = ListService
-
+        mainViewModel.listService = ListService
     }
 
     private fun whenSearchForMovies(){
-
         mainViewModel.fetchList("Top Ten Comic Book Movies")
     }
 
-
-
-    /*
-
-    //Currently will fail and break
-
-     private fun thenVerifyFunctionsInvoked(){
-
+    private fun thenVerifyFunctionsInvoked(){
         verify { ListService.fetchList("The Avengers") }
         confirmVerified(ListService)
     }
-    */
-
-
 }
 
