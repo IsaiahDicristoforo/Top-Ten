@@ -34,8 +34,7 @@ class MainFragment : Fragment() {
      * Creates the view.
      * @param inflater The layout inflater
      * @param container the main view that contains sub-views
-     * @param savedInstanceState The current instance. Can be used for a variety of things,
-     * like saving the current state of the list.
+     * @param savedInstanceState The current instance.
      * @return The layout of the application's UI.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,9 +44,9 @@ class MainFragment : Fragment() {
     }
 
     /**
-     * Responsible for displaying the list onto the application's UI. Connects to the MainViewModel.
-     * @param savedInstanceState The current instance. Can be used for a variety of things,
-     * like saving the current state of the list.
+     * Responsible for displaying the list onto the application's recyclerview. Connects to the
+     * MainViewModel.
+     * @param savedInstanceState The current instance.
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
