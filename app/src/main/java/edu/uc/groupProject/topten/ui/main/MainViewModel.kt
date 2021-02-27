@@ -9,12 +9,18 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.Service.ListService
 
+/**
+ * MainViewModel class. Does most of the heavy lifting for the database work.
+ *
+ * Responsible for connecting the Firebase database to the recyclerview, and actively updating the
+ * list when a vote is made.
+ */
 class MainViewModel : ViewModel() {
 
-    public var listItems:MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
+    var listItems:MutableLiveData<ArrayList<ListItem>> = MutableLiveData()
     var listService: ListService = ListService()
 
-    private lateinit var firestore : FirebaseFirestore
+    private var firestore : FirebaseFirestore
 
     init{
         firestore = FirebaseFirestore.getInstance()
@@ -22,11 +28,16 @@ class MainViewModel : ViewModel() {
         waitForListUpdate()
     }
 
-    //The code inside of this function fires every time a vote changes
+    /**
+     * This function fires every time a vote is added or changed on the generated list. Responsible
+     * for creating DTO objects from the database list.
+     */
     private fun waitForListUpdate() {
         firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
             snapshot, e ->
             //executed every time the vote changes
+
+            //logs error, if any
             if(e != null){
                 Log.w(TAG, "Listen Failed", e)
                 return@addSnapshotListener
@@ -35,11 +46,8 @@ class MainViewModel : ViewModel() {
                 val allListItems = ArrayList<ListItem>()
                 val documents = snapshot.documents // collection of list items on database
                 documents.forEach{
-
-                    //val listItem = it.toObject(ListItem::class.java)
-
                     //create new DTO
-                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
+                    val listItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
                     allListItems.add(listItem!!)
                 }
 
@@ -55,7 +63,4 @@ class MainViewModel : ViewModel() {
     fun fetchList(s: String) {
         listItems = listService.fetchList(listItems)
     }
-
-
-
 }
