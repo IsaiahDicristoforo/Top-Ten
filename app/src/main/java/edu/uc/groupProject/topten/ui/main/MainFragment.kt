@@ -15,36 +15,49 @@ import edu.uc.groupProject.topten.DAO.CurrentListAdapter
 import edu.uc.groupProject.topten.R
 
 
-
+/**
+ * MainFragment class.
+ *
+ * Responsible for creating the view, and additionally contains Observe functionality that
+ * connects to the database.
+ */
 class MainFragment : Fragment() {
 
     companion object {
         fun newInstance() = MainFragment()
     }
-
+    //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter : CurrentListAdapter
 
-
+    /**
+     * Creates the view.
+     * @param inflater The layout inflater
+     * @param container the main view that contains sub-views
+     * @param savedInstanceState The current instance. Can be used for a variety of things,
+     * like saving the current state of the list.
+     * @return The layout of the application's UI.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
+    /**
+     * Responsible for displaying the list onto the application's UI. Connects to the MainViewModel.
+     * @param savedInstanceState The current instance. Can be used for a variety of things,
+     * like saving the current state of the list.
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.listItems.observe(this, Observer {
-
-            //it ->  view!!.findViewById<Spinner>(R.id.spn_spinner).setAdapter(ArrayAdapter(context!!, R.layout.support_simple_spinner_dropdown_item, it))
-
             adapter = CurrentListAdapter(viewModel.listItems.value!!)
 
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).layoutManager =  LinearLayoutManager(this.context)
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter
-
         })
 
 
