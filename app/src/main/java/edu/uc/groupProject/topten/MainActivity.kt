@@ -11,8 +11,15 @@ import edu.uc.groupProject.topten.Service.StrawpollService
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import java.util.*
 
+/**
+ * MainActivity class. Contains mocked data to test functionality.
+ */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     * onCreate function
+     * @param savedInstanceState the saved instance state
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -26,6 +33,10 @@ class MainActivity : AppCompatActivity() {
         writeListToDatabase()
     }
 
+    /**
+     * Writes the list to the Firebase Database. Currently writes the mocked data below to the
+     * database.
+     */
     fun writeListToDatabase(){
 
         lateinit var firestore : FirebaseFirestore
@@ -54,6 +65,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Creates the mocked data list used by the program for testing purposes
+     * @return sampleListItems
+     */
     fun createSampleListItems():Array<ListItem>{
 
         var sampleListItems = arrayOf(
@@ -61,13 +76,10 @@ class MainActivity : AppCompatActivity() {
                 ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
                 ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200),
                 ListItem("The Godfather", "n/a", 24),
-                ListItem("The Avengers", "", 231),
+                ListItem("The Avengers", "They all team up to fight bad guys", 231),
                 ListItem("Inception", "", 12),
                 ListItem("E.T", "", 124),
                 ListItem("The Matrix", "", 42)
-
-
-
         )
         return sampleListItems
     }
