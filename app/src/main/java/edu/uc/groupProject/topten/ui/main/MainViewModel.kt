@@ -16,51 +16,47 @@ import edu.uc.groupProject.topten.Service.ListService
  * list when a vote is made.
  */
 class MainViewModel : ViewModel() {
-
-    var listItems:MutableLiveData<ArrayList<ListItem>> = MutableLiveData()
+    var list:MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var listService: ListService = ListService()
 
-    private var firestore : FirebaseFirestore
-
-    init{
-        firestore = FirebaseFirestore.getInstance()
-        firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-        waitForListUpdate()
+    /**
+     * Passes the fetchList function down to the service layer.
+     * @return listService.fetchList(listItems)
+     */
+    fun fetchList(listName: String) {
+        list = listService.fetchList(listName)
     }
 
     /**
      * This function fires every time a vote is added or changed on the generated list. Responsible
      * for creating DTO objects from the database list.
      */
-    private fun waitForListUpdate() {
-        firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
-            snapshot, e ->
-            //executed every time the vote changes
-
-            //logs error, if any
-            if(e != null){
-                Log.w(TAG, "Listen Failed", e)
-                return@addSnapshotListener
-            }
-            if(snapshot != null){
-                val allListItems = ArrayList<ListItem>()
-                val documents = snapshot.documents // collection of list items on database
-                documents.forEach{
-                    //create new DTO
-                    val listItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
-                    allListItems.add(listItem!!)
-                }
-
-                listItems.value = allListItems //changing live data collection
-            }
-        }
-    }
-
-    /**
-     * Passes the fetchList function down to the service layer.
-     * @return listService.fetchList(listItems)
-     */
-    fun fetchList(s: String) {
-        listItems = listService.fetchList(s)
-    }
+//    private var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+//    init{
+//        firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
+//        waitForListUpdate()
+//    }
+//
+//    private fun waitForListUpdate() {
+//        firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
+//            snapshot, e ->
+//            if(e != null){
+//                Log.w(TAG, "Listen Failed", e)
+//                return@addSnapshotListener
+//            }
+//            if(snapshot != null){
+//                val allListItems = ArrayList<ListItem>()
+//                val documents = snapshot.documents
+//                documents.forEach{
+//
+//                    //val listItem = it.toObject(ListItem::class.java)
+//
+//                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
+//                    allListItems.add(listItem!!)
+//                }
+//
+//                list.value = allListItems
+//            }
+//        }
+//    }
 }

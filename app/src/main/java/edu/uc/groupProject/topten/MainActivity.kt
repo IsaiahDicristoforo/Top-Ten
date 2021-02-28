@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
                 ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200),
                 ListItem("The Godfather", "n/a", 24),
-                ListItem("The Avengers", "", 231),
+                ListItem("The Avengers", "They all team up to fight bad guys", 231),
                 ListItem("Inception", "", 12),
                 ListItem("E.T", "", 124),
                 ListItem("The Matrix", "", 42)

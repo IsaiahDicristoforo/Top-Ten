@@ -17,8 +17,4 @@ class ListService {
     fun  fetchList(listName: String): MutableLiveData<ArrayList<ListItem>> {
        return MutableLiveData<ArrayList<ListItem>>()
     }
-
-
-
-
 }
