@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.ListItem
+import edu.uc.groupProject.topten.DTO.Strawpoll
 import edu.uc.groupProject.topten.Service.ListService
+import edu.uc.groupProject.topten.Service.StrawpollService
 
 /**
  * MainViewModel class. Does most of the heavy lifting for the database work.
@@ -27,6 +29,11 @@ class MainViewModel : ViewModel() {
         list = listService.fetchList(listName)
     }
 
+    fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
+        val service = StrawpollService()
+        return service.getStrawpoll(id)
+    }
+  
     /**
      * This function fires every time a vote is added or changed on the generated list. Responsible
      * for creating DTO objects from the database list.

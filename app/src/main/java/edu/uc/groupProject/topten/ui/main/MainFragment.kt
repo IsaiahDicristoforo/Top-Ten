@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter
         })
 
-
+        viewModel.fetchStrawpoll()
 
 
 
