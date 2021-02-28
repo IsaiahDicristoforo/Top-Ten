@@ -10,8 +10,15 @@ import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import java.util.*
 
+/**
+ * MainActivity class. Contains mocked data to test functionality.
+ */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     * onCreate function
+     * @param savedInstanceState the saved instance state
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -25,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         writeListToDatabase()
     }
 
+    /**
+     * Writes the list to the Firebase Database. Currently writes the mocked data below to the
+     * database.
+     */
     fun writeListToDatabase(){
 
         lateinit var firestore : FirebaseFirestore
@@ -53,6 +64,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Creates the mocked data list used by the program for testing purposes
+     * @return sampleListItems
+     */
     fun createSampleListItems():Array<ListItem>{
 
         var sampleListItems = arrayOf(
