@@ -36,11 +36,11 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.listItems.observe(this, Observer {
+        viewModel.list.observe(this, Observer {
 
             //it ->  view!!.findViewById<Spinner>(R.id.spn_spinner).setAdapter(ArrayAdapter(context!!, R.layout.support_simple_spinner_dropdown_item, it))
 
-            adapter = CurrentListAdapter(viewModel.listItems.value!!)
+            adapter = CurrentListAdapter(viewModel.list.value!!)
 
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).layoutManager =  LinearLayoutManager(this.context)
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter

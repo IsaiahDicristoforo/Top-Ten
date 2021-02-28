@@ -13,41 +13,39 @@ import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.Service.ListService
 
 class MainViewModel : ViewModel() {
+    var list:MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
+    var listService: ListService = ListService()
 
-    public var listItems:MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
-
-    private lateinit var firestore : FirebaseFirestore
-
-    init{
-        firestore = FirebaseFirestore.getInstance()
-        firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-        waitForListUpdate()
+    fun fetchList(listName: String) {
+        list = listService.fetchList(listName)
     }
 
-    private fun waitForListUpdate() {
-        firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
-            snapshot, e ->
-            if(e != null){
-                Log.w(TAG, "Listen Failed", e)
-                return@addSnapshotListener
-            }
-            if(snapshot != null){
-                val allListItems = ArrayList<ListItem>()
-                val documents = snapshot.documents
-                documents.forEach{
-
-                    //val listItem = it.toObject(ListItem::class.java)
-
-                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
-                    allListItems.add(listItem!!)
-                }
-
-                listItems.value = allListItems
-            }
-        }
-    }
-
-
-
-
+//    private var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+//    init{
+//        firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
+//        waitForListUpdate()
+//    }
+//
+//    private fun waitForListUpdate() {
+//        firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
+//            snapshot, e ->
+//            if(e != null){
+//                Log.w(TAG, "Listen Failed", e)
+//                return@addSnapshotListener
+//            }
+//            if(snapshot != null){
+//                val allListItems = ArrayList<ListItem>()
+//                val documents = snapshot.documents
+//                documents.forEach{
+//
+//                    //val listItem = it.toObject(ListItem::class.java)
+//
+//                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
+//                    allListItems.add(listItem!!)
+//                }
+//
+//                list.value = allListItems
+//            }
+//        }
+//    }
 }
