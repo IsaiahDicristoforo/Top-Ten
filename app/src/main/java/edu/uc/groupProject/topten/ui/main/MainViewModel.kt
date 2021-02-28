@@ -47,7 +47,7 @@ class MainViewModel : ViewModel() {
                 listItems.value = allListItems
             }
         }
-    }*/
+    }
 
     fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
         val service = StrawpollService()
