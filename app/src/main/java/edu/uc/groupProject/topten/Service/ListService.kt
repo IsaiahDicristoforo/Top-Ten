@@ -4,13 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import edu.uc.groupProject.topten.DTO.ListItem
 
 class ListService {
-
-
-   fun  fetchList(listName: String): MutableLiveData<ArrayList<ListItem>> {
-       return MutableLiveData<ArrayList<ListItem>>()
+    fun  fetchList(listName: String): MutableLiveData<ArrayList<ListItem>> {
+        return MutableLiveData<ArrayList<ListItem>>()
     }
-
-
-
-
 }

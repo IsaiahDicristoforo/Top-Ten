@@ -64,9 +64,6 @@ class MainActivity : AppCompatActivity() {
                 ListItem("Inception", "", 12),
                 ListItem("E.T", "", 124),
                 ListItem("The Matrix", "", 42)
-
-
-
         )
         return sampleListItems
     }
