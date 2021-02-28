@@ -3,12 +3,19 @@ package edu.uc.groupProject.topten
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.Service.StrawpollService
 import edu.uc.groupProject.topten.ui.main.MainFragment
+import org.w3c.dom.Text
+
 import java.util.*
 
 /**
@@ -29,8 +36,10 @@ class MainActivity : AppCompatActivity() {
                     .commitNow()
         }
 
-
+        this.supportActionBar?.hide();
         writeListToDatabase()
+        getUser()
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     /**
@@ -82,6 +91,31 @@ class MainActivity : AppCompatActivity() {
                 ListItem("The Matrix", "", 42)
         )
         return sampleListItems
+    }
+
+    fun getUser(){
+        lateinit var firestore : FirebaseFirestore
+        firestore = FirebaseFirestore.getInstance()
+        val docRef = firestore.collection("users").document("testuser")
+
+
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d("document", "DocumentSnapshot data: ${document.data}")
+                    val username = findViewById<TextView>(R.id.username)
+                    username.text = document.getString("username")
+                    val points = findViewById<TextView>(R.id.points)
+                    points.text = document.getString("points")
+
+                } else {
+                    Log.d("no document", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("error", "get failed with ", exception)
+            }
+
     }
 
 

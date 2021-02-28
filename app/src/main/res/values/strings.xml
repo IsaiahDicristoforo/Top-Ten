@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Top Ten</string>
+    <string name="top_ten">Top Ten</string>
+    <string name="username">Username:</string>
+    <string name="points">Points:</string>
+
+    <style name="app_name" parent="Theme.AppCompat.NoActionBar"></style>
 </resources>
