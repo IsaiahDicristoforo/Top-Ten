@@ -52,8 +52,8 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.listItems.observe(this, Observer {
-            adapter = CurrentListAdapter(viewModel.listItems.value!!)
+        viewModel.list.observe(this, Observer {
+            adapter = CurrentListAdapter(viewModel.list.value!!)
 
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).layoutManager =  LinearLayoutManager(this.context)
             view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter
