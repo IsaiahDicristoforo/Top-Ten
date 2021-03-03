@@ -71,8 +71,6 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
 
         }
 
-
-
     }
 
 
