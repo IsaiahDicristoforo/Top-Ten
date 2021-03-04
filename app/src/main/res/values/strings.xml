@@ -3,6 +3,10 @@
     <string name="top_ten">Top Ten</string>
     <string name="username">Username:</string>
     <string name="points">Points:</string>
+    <string name="currentList">Current</string>
+    <string name="pastList">Past</string>
+    <string name="privateList">Private</string>
+    <string name="currentListView">CurrentList</string>
 
     <style name="app_name" parent="Theme.AppCompat.NoActionBar"></style>
 </resources>
