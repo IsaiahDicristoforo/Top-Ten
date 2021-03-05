@@ -1,4 +1,4 @@
-package edu.uc.groupProject.topten.DAO
+package edu.uc.groupProject.topten.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.R
-import edu.uc.groupProject.topten.ui.main.MainViewModel
 
 /**
  * Populates a list of data into a container.
@@ -21,7 +20,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
-    ): CurrentListAdapter.ViewHolder {
+    ): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_current_list_item,viewGroup, false)
         return  ViewHolder(view)
     }
@@ -52,7 +51,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
      * @param holder reprenet the list item
      * @param position its current position in the list
      */
-    override fun onBindViewHolder(holder: CurrentListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.listItemTitle.text = listItems[position].title
         holder.totalVotes.text = listItems[position].totalVotes.toString()
