@@ -52,8 +52,6 @@ class MainFragment : Fragment() {
         var userPoints = view!!.findViewById<TextView>(R.id.points)
 
         recyclerView.layoutManager =  LinearLayoutManager(this.context)
-
-        //Moved from MainActivity - Benjamin Gomori, Code Review
         userName.text = viewModel.getUserName()
         userPoints.text = viewModel.getUserPoints()
 

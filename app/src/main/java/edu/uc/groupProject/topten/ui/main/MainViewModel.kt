@@ -28,7 +28,7 @@ class MainViewModel : ViewModel() {
     init{
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
 
-        writeListToDatabase()//Moved from MainActivity -Benjamin Gomori, Code Review
+        writeListToDatabase()
         waitForListUpdate()
     }
 
@@ -73,6 +73,10 @@ class MainViewModel : ViewModel() {
         return sampleListItems
     }
 
+    /**
+     * Provide the user name from the firebase database
+     * @return userName
+     */
     fun getUserName(): String {
         val docRef = firestore.collection("users").document("testuser")
         var userName: String = ""
@@ -93,7 +97,10 @@ class MainViewModel : ViewModel() {
         return userName
     }
 
-
+    /**
+     * Provide the user points from the firebase database
+     * @return userPoints
+     */
     fun getUserPoints(): String{
         val docRef = firestore.collection("users").document("testuser")
         var userPoints: String = ""
@@ -114,11 +121,10 @@ class MainViewModel : ViewModel() {
         return userPoints
     }
 
+    /**
+     * gets the list items from firebase
+     */
     private fun waitForListUpdate() {
-        /*  By Benjamin Gomori Code Review
-            Every time a user votes - data is sent to firebase via "holder.voteButton.setOnClickListener()" in the CurrentListAdapter.
-            Thus this Listener gets called
-         */
         firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
                 snapshot, e ->
             if(e != null){
@@ -127,11 +133,6 @@ class MainViewModel : ViewModel() {
             }
 
             if(snapshot != null){
-                /*  By Benjamin Gomori Code Review
-                   [1] Re-rendering the list of Items, into the recycler view, when a user votes, is a waist of resources
-                   [2] Since on each single vote this will run, we should distinguish between a user vote - only one change, vs new list - many changes.
-                   If you do re-render the list, then added should be added to disable the voting button user has used.
-                */
                 if(snapshot.getDocumentChanges().size > 1 ){
 
                     val allListItems = ArrayList<ListItem>()

@@ -10,11 +10,13 @@ import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.ui.main.MainViewModel
 
-/*  By Benjamin Gomori Code Review
-    I don't think that the RecyclerView Adapter should not be using firebase directly.
-    As I understand the RecyclerView Adapter - it should use ready data to populate the recycle view.
-    The ViewModels should be the centralized location for feeding live and firebase data.
-*/
+/**
+ * Populates a list of data into a container.
+ *
+ * @param MainViewModel the main view model
+ * @param listItems an array list of incoming data
+ * @return RecyclerView.Adapter<CurrentListAdapter.ViewHolder>
+ */
 class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
@@ -24,7 +26,13 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
         return  ViewHolder(view)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    /**
+     * Populates a list item
+     *
+     * @param view
+     * @return RecyclerView.ViewHolder
+     */
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val listItemTitle: TextView
         val totalVotes: TextView
         val currentRank: TextView
@@ -38,6 +46,12 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
         }
     }
 
+    /**
+     * Populates a list item
+     *
+     * @param holder reprenet the list item
+     * @param position its current position in the list
+     */
     override fun onBindViewHolder(holder: CurrentListAdapter.ViewHolder, position: Int) {
 
         holder.listItemTitle.text = listItems[position].title
@@ -46,19 +60,17 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
         var voteCount = listItems[position].totalVotes
 
         holder.voteButton.setOnClickListener(){
-            /*  By Benjamin Gomori Code Review
-                [1] Once a user voted, that ViewHolder vote button should be disabled.
-                [2] There might not be a need to use synced data coming in from firebase to keep the vote count in-synced.
-                Basing the UI vote count on firebase may not be the most user friendly, as it will not update instantly.
-                Instead in such cases, when the update in data is always predictable, the UI count can be updated programmatically,
-                and data should be sent to update Firebase.
-             */
             holder.voteButton.isClickable = false
             holder.totalVotes.text = (voteCount + 1).toString()
             mvm.addListItemVote(holder.listItemTitle.text.toString())
         }
     }
 
+    /**
+     * Return the size of the list
+     *
+     * @return size
+     */
     override fun getItemCount(): Int {
         return listItems.size
     }

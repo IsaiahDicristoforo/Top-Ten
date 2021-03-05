@@ -4,13 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import edu.uc.groupProject.topten.ui.main.MainFragment
 
-/*  By Benjamin Gomori Code Review
-    The ViewModels should be the centralized location for feeding activities and fragments with live and firebase data.
-    Thus I removed all of the functions that write to or call the database
-*/
-
 /**
- * MainActivity class. Contains mocked data to test functionality.
+ * MainActivity class.
  */
 class MainActivity : AppCompatActivity() {
 
