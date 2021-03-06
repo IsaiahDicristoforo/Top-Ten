@@ -31,7 +31,8 @@ When a user votes for Cinnamon Toast Crunch\
 Then the Cinnamon Toast Crunch list item should move to the top of the list on the UI\
 
 1.2\
-Given that a user with one vote attempts to vote for Cherrios on a list of favorite cereals\
+Given that a user with one vote attempts to vote for Cheerios on a list of favorite cereals\
+# fixed typo in cheerios
 When they have already voted on Cinnamon Toast Crunch/
 Then the vote they placed on Cheerios should be removed, and added to the tally for Cinnamon Toast Crunch\
 
@@ -44,7 +45,8 @@ As a user interesting in earning points in this app, I want to make a prediction
 Firebase, timed notifications and events so that the user can make predictions before a list of the day goes live.
 
 #### Assumptions
-User's predictions can be stored in firbase, and compared with the final results after voting on a list ends.
+User's predictions can be stored in Firebase, and compared with the final results after voting on a list ends.
+# fixed typo in Firebase
 
 #### Examples
 
@@ -91,7 +93,8 @@ Then their attempt to make the purchase should be rejected, and they should only
 
 **MainActivity:** The first screen the user sees. This will have a list of all the list items of the day, and an option to vote for the user's favorite list item.  
 
-**RetrofitInstance:** Boostrap class required for Retrofit.  
+**RetrofitInstance:** Bootstrap class required for Retrofit.
+# fixed typo in Bootstrap
 
 **ListItem:** Noun class that represents a list item.  
 

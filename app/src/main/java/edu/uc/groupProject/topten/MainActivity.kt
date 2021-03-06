@@ -1,21 +1,14 @@
 package edu.uc.groupProject.topten
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
-import com.google.firebase.database.FirebaseDatabase
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.DTO.ListItem
-import edu.uc.groupProject.topten.Service.StrawpollService
+import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.ui.main.MainFragment
-import org.w3c.dom.Text
-
 import java.util.*
 
 /**
@@ -32,8 +25,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, MainFragment.newInstance())
+                .commitNow()
         }
 
         this.supportActionBar?.hide();
@@ -46,29 +39,29 @@ class MainActivity : AppCompatActivity() {
      * Writes the list to the Firebase Database. Currently writes the mocked data below to the
      * database.
      */
-    fun writeListToDatabase(){
+    fun writeListToDatabase() {
 
-        lateinit var firestore : FirebaseFirestore
+        lateinit var firestore: FirebaseFirestore
         firestore = FirebaseFirestore.getInstance()
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
 
         var testList = TestDTO("Top Fifteen Movies", false, true, true, Date())
 
 
-        var  listsReference = (firestore.collection("lists").document(testList.listName))
+        var listsReference = (firestore.collection("lists").document(testList.listName))
 
 
         listsReference.set(testList).addOnSuccessListener {
             Log.d("Firebase", "document saved");
-        }.addOnFailureListener{
+        }.addOnFailureListener {
             Log.d("Firebase", "Save Failed");
         }
 
         var listItemCollectionReference = listsReference.collection("MyListItems")
 
-        var arrayOfListItemsToAdd : Array<ListItem> = createSampleListItems();
+        var arrayOfListItemsToAdd: Array<ListItem> = createSampleListItems();
 
-        for(item in arrayOfListItemsToAdd){
+        for (item in arrayOfListItemsToAdd) {
             listItemCollectionReference.document(item.title).set(item);
         }
 
@@ -78,23 +71,27 @@ class MainActivity : AppCompatActivity() {
      * Creates the mocked data list used by the program for testing purposes
      * @return sampleListItems
      */
-    fun createSampleListItems():Array<ListItem>{
+    fun createSampleListItems(): Array<ListItem> {
 
         var sampleListItems = arrayOf(
-                ListItem("The Dark Knight", "A movie about Batman", 100),
-                ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
-                ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200),
-                ListItem("The Godfather", "n/a", 24),
-                ListItem("The Avengers", "They all team up to fight bad guys", 231),
-                ListItem("Inception", "", 12),
-                ListItem("E.T", "", 124),
-                ListItem("The Matrix", "", 42)
+            ListItem("The Dark Knight", "A movie about Batman", 100),
+            ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
+            ListItem(
+                "The Empire Strikes Back",
+                "A movie about some light wands and parent issues",
+                200
+            ),
+            ListItem("The Godfather", "n/a", 24),
+            ListItem("The Avengers", "They all team up to fight bad guys", 231),
+            ListItem("Inception", "", 12),
+            ListItem("E.T", "", 124),
+            ListItem("The Matrix", "", 42)
         )
         return sampleListItems
     }
 
-    fun getUser(){
-        lateinit var firestore : FirebaseFirestore
+    fun getUser() {
+        lateinit var firestore: FirebaseFirestore
         firestore = FirebaseFirestore.getInstance()
         val docRef = firestore.collection("users").document("testuser")
 
@@ -117,9 +114,6 @@ class MainActivity : AppCompatActivity() {
             }
 
     }
-
-
-
 
 
 }
