@@ -18,7 +18,7 @@ import edu.uc.groupProject.topten.Service.StrawpollService
  * list when a vote is made.
  */
 class MainViewModel : ViewModel() {
-    var list:MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
+    var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var listService: ListService = ListService()
 
     /**
@@ -33,37 +33,43 @@ class MainViewModel : ViewModel() {
         val service = StrawpollService()
         return service.getStrawpoll(id)
     }
-  
+
     /**
      * This function fires every time a vote is added or changed on the generated list. Responsible
      * for creating DTO objects from the database list.
      */
-    private var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
-    init{
+
+    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         waitForListUpdate()
     }
 
     private fun waitForListUpdate() {
-        firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
-            snapshot, e ->
-            if(e != null){
-                Log.w(TAG, "Listen Failed", e)
-                return@addSnapshotListener
-            }
-            if(snapshot != null){
-                val allListItems = ArrayList<ListItem>()
-                val documents = snapshot.documents
-                documents.forEach{
-
-                    //val listItem = it.toObject(ListItem::class.java)
-
-                    val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
-                    allListItems.add(listItem!!)
+        firestore.collection("lists/Top Fifteen Movies/MyListItems")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen Failed", e)
+                    return@addSnapshotListener
                 }
+                if (snapshot != null) {
+                    val allListItems = ArrayList<ListItem>()
+                    val documents = snapshot.documents
+                    documents.forEach {
 
-                list.value = allListItems
+                        //val listItem = it.toObject(ListItem::class.java)
+
+                        val listItem: ListItem = ListItem(
+                            it.getString("title")!!,
+                            "Test",
+                            it.getLong("totalVotes")!!.toInt()
+                        )
+                        allListItems.add(listItem!!)
+                    }
+
+                    list.value = allListItems
+                }
             }
-        }
     }
 }
