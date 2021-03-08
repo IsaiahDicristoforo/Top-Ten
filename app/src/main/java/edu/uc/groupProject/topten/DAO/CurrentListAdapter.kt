@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.R
-
+import org.w3c.dom.Text
 
 class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
@@ -34,6 +35,7 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
             totalVotes = view.findViewById(R.id.txt_TotalVotes)
             currentRank = view.findViewById(R.id.txt_Rank)
             voteButton = view.findViewById(R.id.btn_Vote)
+
         }
     }
 
@@ -55,9 +57,10 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
         }
     }
 
-  fun addVote(listItemToIncrement: String, firestore: FirebaseFirestore) {
+    fun addVote(listItemToIncrement: String, firestore: FirebaseFirestore) {
 
         var listItemDocument = firestore.document("lists/Top Fifteen Movies/MyListItems/" + listItemToIncrement)
+
 
         var totalVotes: Number
 
@@ -65,12 +68,17 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
             totalVotes = it.getLong("totalVotes")!!
             listItemDocument.update("totalVotes", (totalVotes.toLong() + 1))
 
+
         }
+
+
+
     }
 
 
 
     override fun getItemCount(): Int {
+
         return listItems.size
     }
 

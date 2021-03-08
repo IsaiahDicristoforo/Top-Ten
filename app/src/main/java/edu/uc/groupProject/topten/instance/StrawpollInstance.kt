@@ -16,6 +16,7 @@ object StrawpollInstance {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
             }
+
             return retrofit
         }
 }
