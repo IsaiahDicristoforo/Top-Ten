@@ -2,7 +2,6 @@ package edu.uc.groupProject.topten.DTO
 
 /**
  * The ListItem DTO.
- *
  * This DTO holds the name, description, and number of votes of a specific list item.
  * @param title The title of the listItem
  * @param description The description of the listItem

@@ -12,7 +12,7 @@ object StrawpollInstance {
         get() {
             if(retrofit == null) {
                 retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(this.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
             }
