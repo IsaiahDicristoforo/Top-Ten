@@ -3,18 +3,12 @@ package edu.uc.groupProject.topten
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.DTO.ListItem
-import edu.uc.groupProject.topten.Service.StrawpollService
 import edu.uc.groupProject.topten.ui.main.MainFragment
-import org.w3c.dom.Text
 
 import java.util.*
 
