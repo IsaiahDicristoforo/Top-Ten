@@ -11,7 +11,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -28,8 +27,15 @@ class ListItemDataUnitTest {
 
     var listService = mockk<ListService>()
 
-    @Before
-    fun givenAListOfMockItemsAreAvailable(){
+    @Test
+    fun SearchForTheAvengers_ReturnsTheAvengers(){
+        givenAListOfMockItemsAreAvailable()
+        whenSearchForMovies()
+        thenResultContainsAvengers()
+        thenVerifyFunctionsInvoked()
+    }
+
+    private fun givenAListOfMockItemsAreAvailable(){
         mvm = MainViewModel()
         createMockData()
     }
@@ -47,13 +53,11 @@ class ListItemDataUnitTest {
         mvm.listService = listService
     }
 
-    @Test
-    fun SearchForMovies(){
+    private fun whenSearchForMovies(){
         mvm.fetchList("Top Ten Comic Book Movies")
     }
 
-    @Test
-    fun ResultContainsAvengers(){
+    private fun thenResultContainsAvengers(){
         var avengersFound = false
         mvm.list.observeForever{
             assertNotNull(it)
@@ -67,8 +71,8 @@ class ListItemDataUnitTest {
         assertTrue(avengersFound)
     }
 
-    @Test
-    fun VerifyFunctionsInvoked() {
+
+    private fun thenVerifyFunctionsInvoked() {
         verify { listService.fetchList("Top Ten Comic Book Movies") }
         verify (exactly = 0) { listService.fetchList("Top Ten Romance-Comedy Movies")}
        confirmVerified(listService)
