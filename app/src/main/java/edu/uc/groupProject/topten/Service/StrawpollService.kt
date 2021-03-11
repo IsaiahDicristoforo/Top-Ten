@@ -8,6 +8,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * Handles fetching strawpoll
+ *
+ * Makes use of the Retrofit instance
+ */
 class StrawpollService {
 
     fun getStrawpoll(id: Int): MutableLiveData<Strawpoll>? {

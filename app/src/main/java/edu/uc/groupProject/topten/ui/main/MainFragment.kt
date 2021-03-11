@@ -1,12 +1,13 @@
 package edu.uc.groupProject.topten.ui.main
 
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.DAO.CurrentListAdapter
@@ -17,17 +18,13 @@ import edu.uc.groupProject.topten.R
  * MainFragment class.
  *
  * Responsible for creating the view, and additionally contains Observe functionality that
- * connects to the database.
+ * observes live data coming in from MainViewModel
  */
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: CurrentListAdapter
+    private lateinit var adapter : CurrentListAdapter
 
     /**
      * Creates the view.
@@ -36,11 +33,8 @@ class MainFragment : Fragment() {
      * @param savedInstanceState The current instance.
      * @return The layout of the application's UI.
      */
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -53,17 +47,23 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.list.observe(this, Observer {
-            adapter = CurrentListAdapter(viewModel.list.value!!)
+        var recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
+        var userName = view!!.findViewById<TextView>(R.id.username)
+        var userPoints = view!!.findViewById<TextView>(R.id.points)
 
-            view!!.findViewById<RecyclerView>(R.id.rec_currentList).layoutManager =
-                LinearLayoutManager(this.context)
-            view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter
+        recyclerView.layoutManager =  LinearLayoutManager(this.context)
+        userName.text = viewModel.getUserName()
+        userPoints.text = viewModel.getUserPoints()
+
+        viewModel.list.observe(this, Observer {
+            adapter = CurrentListAdapter(viewModel, viewModel.list.value!!)
+            recyclerView.adapter = adapter
         })
 
         viewModel.fetchStrawpoll(1)
-
-
     }
 
+    companion object {
+        fun newInstance() = MainFragment()
+    }
 }
