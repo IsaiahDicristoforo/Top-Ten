@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, MainFragment())
                     .commitNow()
         }
 
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
             when(item.itemId){
                 R.id.currentList->{
-                    changeFragment(MainFragment.newInstance())
+                    changeFragment(MainFragment())
                     true
                 }
 
