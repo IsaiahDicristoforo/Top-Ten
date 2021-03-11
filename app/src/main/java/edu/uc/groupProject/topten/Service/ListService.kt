@@ -13,8 +13,9 @@ class ListService {
     /**
      * Fetches a specific list according to the list's name.
      * @param listName The name of the list being fetched.
+     * @return MutableLiveData<ArrayList<ListItem>>
      */
-    fun  fetchList(listName: String): MutableLiveData<ArrayList<ListItem>> {
-       return MutableLiveData<ArrayList<ListItem>>()
+    fun fetchList(listName: String): MutableLiveData<ArrayList<ListItem>> {
+        return MutableLiveData<ArrayList<ListItem>>()
     }
 }

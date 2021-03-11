@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
-import edu.uc.groupProject.topten.DAO.CurrentListAdapter
 import edu.uc.groupProject.topten.R
 
 
@@ -21,13 +20,10 @@ import edu.uc.groupProject.topten.R
  * MainFragment class.
  *
  * Responsible for creating the view, and additionally contains Observe functionality that
- * connects to the database.
+ * observes live data coming in from MainViewModel
  */
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter : CurrentListAdapter
@@ -41,7 +37,6 @@ class MainFragment : Fragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -52,23 +47,23 @@ class MainFragment : Fragment() {
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.list.observe(this, Observer {
-            adapter = CurrentListAdapter(viewModel.list.value!!)
+        var recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
+        var userName = view!!.findViewById<TextView>(R.id.username)
+        var userPoints = view!!.findViewById<TextView>(R.id.points)
 
-            view!!.findViewById<RecyclerView>(R.id.rec_currentList).layoutManager =  LinearLayoutManager(this.context)
-            view!!.findViewById<RecyclerView>(R.id.rec_currentList).adapter = adapter
+        recyclerView.layoutManager =  LinearLayoutManager(this.context)
+        userName.text = viewModel.getUserName()
+        userPoints.text = viewModel.getUserPoints()
+
+        viewModel.list.observe(this, Observer {
+            adapter = CurrentListAdapter(viewModel, viewModel.list.value!!)
+            recyclerView.adapter = adapter
         })
 
         viewModel.fetchStrawpoll(1)
-
-
-
-
-
-
     }
+
+
 }
