@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.R
 
 
@@ -62,7 +65,5 @@ class MainFragment : Fragment() {
         viewModel.fetchStrawpoll(1)
     }
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
+
 }
