@@ -22,23 +22,24 @@ import org.junit.rules.TestRule
  */
 class ListItemDataUnitTest {
     @get:Rule
-    var rule: TestRule =  InstantTaskExecutorRule()
+    var rule: TestRule = InstantTaskExecutorRule()
     lateinit var mvm: MainViewModel
 
     var listService = mockk<ListService>()
 
     @Test
-    fun SearchForTheAvengers_ReturnsTheAvengers(){
+    fun SearchForTheAvengers_ReturnsTheAvengers() {
         givenAListOfMockItemsAreAvailable()
         whenSearchForMovies()
         thenResultContainsAvengers()
         thenVerifyFunctionsInvoked()
     }
 
-    private fun givenAListOfMockItemsAreAvailable(){
+    private fun givenAListOfMockItemsAreAvailable() {
         mvm = MainViewModel()
         createMockData()
     }
+
     private fun createMockData() {
         var allListItemsLiveData = MutableLiveData<ArrayList<ListItem>>()
         var allListItems = ArrayList<ListItem>()
@@ -53,17 +54,17 @@ class ListItemDataUnitTest {
         mvm.listService = listService
     }
 
-    private fun whenSearchForMovies(){
+    private fun whenSearchForMovies() {
         mvm.fetchList("Top Ten Comic Book Movies")
     }
 
-    private fun thenResultContainsAvengers(){
+    private fun thenResultContainsAvengers() {
         var avengersFound = false
-        mvm.list.observeForever{
+        mvm.list.observeForever {
             assertNotNull(it)
             assertTrue(it.size > 0)
-            it.forEach{
-                if(it.title == "The Avengers" &&  it.description == "They all team up to fight bad guys" && it.totalVotes == 4){
+            it.forEach {
+                if (it.title == "The Avengers" && it.description == "They all team up to fight bad guys" && it.totalVotes == 4) {
                     avengersFound = true
                 }
             }
@@ -74,8 +75,8 @@ class ListItemDataUnitTest {
 
     private fun thenVerifyFunctionsInvoked() {
         verify { listService.fetchList("Top Ten Comic Book Movies") }
-        verify (exactly = 0) { listService.fetchList("Top Ten Romance-Comedy Movies")}
-       confirmVerified(listService)
+        verify(exactly = 0) { listService.fetchList("Top Ten Romance-Comedy Movies") }
+        confirmVerified(listService)
     }
 }
 

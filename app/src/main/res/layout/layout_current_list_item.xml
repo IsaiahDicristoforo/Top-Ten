@@ -9,68 +9,68 @@
     app:cardBackgroundColor="#3F51B5">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="169dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="169dp">
 
-                <TextView
-                    android:id="@+id/txt_Title"
-                    android:layout_width="322dp"
-                    android:layout_height="72dp"
-                    android:fontFamily="@font/bowlby_one_sc"
-                    android:text="Title"
-                    android:textAlignment="center"
-                    android:textColor="#F8F8F8"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_Vote"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.185"
-                    app:layout_constraintStart_toEndOf="@+id/txt_Rank"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.28" />
+        <TextView
+            android:id="@+id/txt_Title"
+            android:layout_width="322dp"
+            android:layout_height="72dp"
+            android:fontFamily="@font/bowlby_one_sc"
+            android:text="Title"
+            android:textAlignment="center"
+            android:textColor="#F8F8F8"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_Vote"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.185"
+            app:layout_constraintStart_toEndOf="@+id/txt_Rank"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.28" />
 
-                <ImageButton
-                    android:id="@+id/btn_Vote"
-                    android:layout_width="81dp"
-                    android:layout_height="73dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/txt_TotalVotes"
-                    app:srcCompat="@android:drawable/btn_star_big_on" />
+        <ImageButton
+            android:id="@+id/btn_Vote"
+            android:layout_width="81dp"
+            android:layout_height="73dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_TotalVotes"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
 
-                <TextView
-                    android:id="@+id/txt_Rank"
-                    android:layout_width="78dp"
-                    android:layout_height="170dp"
-                    android:background="#E6E6E6"
-                    android:fontFamily="@font/bowlby_one_sc"
-                    android:gravity="center"
-                    android:text="7"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="70sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.808" />
+        <TextView
+            android:id="@+id/txt_Rank"
+            android:layout_width="78dp"
+            android:layout_height="170dp"
+            android:background="#E6E6E6"
+            android:fontFamily="@font/bowlby_one_sc"
+            android:gravity="center"
+            android:text="7"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="70sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.808" />
 
-                <TextView
-                    android:id="@+id/txt_TotalVotes"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginEnd="52dp"
-                    android:fontFamily="@font/baloo"
-                    android:text="0"
-                    android:textAlignment="viewStart"
-                    android:textColor="#FFFFFF"
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_Title"
-                    app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txt_TotalVotes"
+            android:layout_width="123dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="52dp"
+            android:fontFamily="@font/baloo"
+            android:text="0"
+            android:textAlignment="viewStart"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_Title"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

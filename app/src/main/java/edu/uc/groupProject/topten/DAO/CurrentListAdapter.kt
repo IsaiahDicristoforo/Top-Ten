@@ -1,26 +1,25 @@
 package edu.uc.groupProject.topten.DAO
 
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.R
-import org.w3c.dom.Text
 
-class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
+class CurrentListAdapter(private val listItems: ArrayList<ListItem>) :
+    RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
     ): CurrentListAdapter.ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_current_list_item,viewGroup, false)
-        return  ViewHolder(view)
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.layout_current_list_item, viewGroup, false)
+        return ViewHolder(view)
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,13 +44,12 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
         holder.totalVotes.text = listItems[position].totalVotes.toString()
         holder.currentRank.text = (position + 1).toString()
 
-        holder.voteButton.setOnClickListener{
-            val firestore : FirebaseFirestore
+        holder.voteButton.setOnClickListener {
+            val firestore: FirebaseFirestore
             firestore = FirebaseFirestore.getInstance()
             firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
 
             addVote(holder.listItemTitle.text.toString(), firestore)
-
 
 
         }
@@ -59,7 +57,8 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
 
     fun addVote(listItemToIncrement: String, firestore: FirebaseFirestore) {
 
-        var listItemDocument = firestore.document("lists/Top Fifteen Movies/MyListItems/" + listItemToIncrement)
+        var listItemDocument =
+            firestore.document("lists/Top Fifteen Movies/MyListItems/" + listItemToIncrement)
 
 
         var totalVotes: Number
@@ -72,9 +71,7 @@ class CurrentListAdapter(private val listItems: ArrayList<ListItem>):RecyclerVie
         }
 
 
-
     }
-
 
 
     override fun getItemCount(): Int {

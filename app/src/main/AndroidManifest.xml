@@ -3,6 +3,7 @@
     package="edu.uc.groupProject.topten">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
        <application
         android:allowBackup="true"

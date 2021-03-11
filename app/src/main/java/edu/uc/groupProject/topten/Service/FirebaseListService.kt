@@ -12,6 +12,4 @@ import kotlinx.coroutines.flow.callbackFlow
 object FirebaseListService {
 
 
-
-
-    }
+}
