@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginTop="15dp"
         android:foregroundGravity="center"
         app:menu="@menu/bottom_navigation_menu"
         tools:layout_editor_absoluteX="420dp">

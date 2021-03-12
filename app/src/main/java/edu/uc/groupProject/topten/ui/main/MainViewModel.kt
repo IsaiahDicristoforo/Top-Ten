@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import edu.uc.groupProject.topten.DTO.TestDTO
 import edu.uc.groupProject.topten.DTO.ListItem
 import edu.uc.groupProject.topten.DTO.Strawpoll
+import edu.uc.groupProject.topten.DTO.TopTenList
 import edu.uc.groupProject.topten.Service.ListService
 import edu.uc.groupProject.topten.Service.StrawpollService
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,8 +38,11 @@ class MainViewModel : ViewModel() {
      * database.
      */
     fun writeListToDatabase(){
-        var testList = TestDTO("Top Fifteen Movies", false, true, true, Date())
-        var  listsReference = (firestore.collection("lists").document(testList.listName))
+
+
+        var testList:TopTenList = TopTenList(0,"Top Ten Movies","A list of movies",true, "Movies",Date(),createSampleListItems(),
+            LocalDateTime.now())
+        var  listsReference = (firestore.collection("lists").document(testList.title))
 
         listsReference.set(testList).addOnSuccessListener {
             Log.d("Firebase", "document saved");
@@ -47,7 +51,7 @@ class MainViewModel : ViewModel() {
         }
 
         var listItemCollectionReference = listsReference.collection("MyListItems")
-        var arrayOfListItemsToAdd : Array<ListItem> = createSampleListItems();
+        var arrayOfListItemsToAdd : List<ListItem> = createSampleListItems();
 
         for(item in arrayOfListItemsToAdd){
             listItemCollectionReference.document(item.title).set(item);
@@ -58,10 +62,10 @@ class MainViewModel : ViewModel() {
      * Creates the mocked data list used by the program for testing purposes
      * @return sampleListItems
      */
-    fun createSampleListItems():Array<ListItem>{
+    fun createSampleListItems():List<ListItem>{
 
-        var sampleListItems = arrayOf(
-            ListItem("The Dark Knight", "A movie about Batman", 100),
+        var sampleListItems = listOf(
+            ListItem("The Dark Knight2", "A movie about Batman", 100),
             ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
             ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200),
             ListItem("The Godfather", "n/a", 24),
@@ -134,7 +138,6 @@ class MainViewModel : ViewModel() {
 
             if(snapshot != null){
                 if(snapshot.getDocumentChanges().size > 1 ){
-
                     val allListItems = ArrayList<ListItem>()
                     val documents = snapshot.documents
                     documents.forEach{
