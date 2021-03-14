@@ -1,6 +1,6 @@
-package edu.uc.groupProject.topten.DAO
+package edu.uc.groupProject.topten.dao
 
-import edu.uc.groupProject.topten.DTO.Strawpoll
+import edu.uc.groupProject.topten.dto.Strawpoll
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

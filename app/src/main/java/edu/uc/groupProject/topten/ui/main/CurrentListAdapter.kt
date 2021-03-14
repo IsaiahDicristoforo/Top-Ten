@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import edu.uc.groupProject.topten.DTO.ListItem
+import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.R
 
 /**
@@ -61,7 +61,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
         holder.voteButton.setOnClickListener(){
             holder.voteButton.isClickable = false
             holder.totalVotes.text = (voteCount + 1).toString()
-            mvm.addListItemVote(holder.listItemTitle.text.toString())
+            //mvm.addListItemVote(holder.listItemTitle.text.toString())
         }
     }
 

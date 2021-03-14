@@ -1,7 +1,7 @@
-package edu.uc.groupProject.topten.Service
+package edu.uc.groupProject.topten.service
 
 import androidx.lifecycle.MutableLiveData
-import edu.uc.groupProject.topten.DTO.ListItem
+import edu.uc.groupProject.topten.dto.ListItem
 
 /**
  * The ListService Class. Handles fetching lists.

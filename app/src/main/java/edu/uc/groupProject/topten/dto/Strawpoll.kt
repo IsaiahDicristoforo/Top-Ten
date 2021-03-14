@@ -1,6 +1,4 @@
-package edu.uc.groupProject.topten.DTO
-
-import com.google.gson.annotations.SerializedName
+package edu.uc.groupProject.topten.dto
 
 /**
  * Data class that represents a strawpoll

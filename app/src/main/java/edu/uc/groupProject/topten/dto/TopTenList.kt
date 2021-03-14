@@ -1,4 +1,4 @@
-package edu.uc.groupProject.topten.DTO
+package edu.uc.groupProject.topten.dto
 
 import com.google.type.DateTime
 import java.util.*
