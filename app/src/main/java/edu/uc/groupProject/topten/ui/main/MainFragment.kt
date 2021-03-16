@@ -54,11 +54,14 @@ class MainFragment : Fragment() {
         var userPoints = view!!.findViewById<TextView>(R.id.points)
 
         recyclerView.layoutManager =  LinearLayoutManager(this.context)
-        userName.text = viewModel.getUserName()
-        userPoints.text = viewModel.getUserPoints()
+        //userName.text = viewModel.getUserName()
+        //userPoints.text = viewModel.getUserPoints()
 
-        viewModel.list.observe(this, Observer {
-            adapter = CurrentListAdapter(viewModel, viewModel.list.value!!)
+        viewModel.fetchFirestoreList()
+
+        viewModel.firestoreService.list.observe(this, Observer {
+
+            adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             recyclerView.adapter = adapter
         })
 

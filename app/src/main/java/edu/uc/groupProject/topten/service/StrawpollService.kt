@@ -1,8 +1,8 @@
-package edu.uc.groupProject.topten.Service
+package edu.uc.groupProject.topten.service
 
 import androidx.lifecycle.MutableLiveData
-import edu.uc.groupProject.topten.DAO.IStrawpollDAO
-import edu.uc.groupProject.topten.DTO.Strawpoll
+import edu.uc.groupProject.topten.dao.IStrawpollDAO
+import edu.uc.groupProject.topten.dto.Strawpoll
 import edu.uc.groupProject.topten.instance.StrawpollInstance
 import retrofit2.Call
 import retrofit2.Callback
