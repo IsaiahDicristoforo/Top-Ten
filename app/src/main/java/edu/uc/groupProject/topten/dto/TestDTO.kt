@@ -1,4 +1,4 @@
-package edu.uc.groupProject.topten.DTO
+package edu.uc.groupProject.topten.dto
 
 import java.util.*
 

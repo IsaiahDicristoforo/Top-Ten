@@ -4,16 +4,11 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import edu.uc.groupProject.topten.DTO.ListItem
-import edu.uc.groupProject.topten.DTO.Strawpoll
-import edu.uc.groupProject.topten.DTO.TopTenList
-import edu.uc.groupProject.topten.Service.ListService
-import edu.uc.groupProject.topten.Service.StrawpollService
-import java.time.LocalDateTime
-import java.util.*
-import kotlin.collections.ArrayList
+import edu.uc.groupProject.topten.dto.ListItem
+import edu.uc.groupProject.topten.dto.Strawpoll
+import edu.uc.groupProject.topten.service.FirestoreService
+import edu.uc.groupProject.topten.service.ListService
+import edu.uc.groupProject.topten.service.StrawpollService
 
 /**
  * MainViewModel class. Does most of the heavy lifting for the database work.
@@ -22,157 +17,24 @@ import kotlin.collections.ArrayList
  * list when a vote is made.
  */
 class MainViewModel : ViewModel() {
-    var list:MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
-    var listService: ListService = ListService()
-    private var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+    var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
+    var listService : ListService = ListService()
+    var firestoreService : FirestoreService =  FirestoreService()
 
-    init{
-        firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-
-        writeListToDatabase()
-        waitForListUpdate()
+    fun fetchFirestoreList(){
+        list = firestoreService.fetchList()
     }
 
-    /**
-     * Writes the list to the Firebase Database. Currently writes the mocked data below to the
-     * database.
-     */
-    fun writeListToDatabase(){
-
-
-        var testList:TopTenList = TopTenList(0,"Top Ten Movies","A list of movies",true, "Movies",Date(),createSampleListItems(),
-            LocalDateTime.now())
-        var  listsReference = (firestore.collection("lists").document(testList.title))
-
-        listsReference.set(testList).addOnSuccessListener {
-            Log.d("Firebase", "document saved");
-        }.addOnFailureListener{
-            Log.d("Firebase", "Save Failed");
-        }
-
-        var listItemCollectionReference = listsReference.collection("MyListItems")
-        var arrayOfListItemsToAdd : List<ListItem> = createSampleListItems();
-
-        for(item in arrayOfListItemsToAdd){
-            listItemCollectionReference.document(item.title).set(item);
-        }
+    fun fetchFirestoreListItem(){
+        list = firestoreService.fetchDocument()
     }
 
-    /**
-     * Creates the mocked data list used by the program for testing purposes
-     * @return sampleListItems
-     */
-    fun createSampleListItems():List<ListItem>{
-
-        var sampleListItems = listOf(
-            ListItem("The Dark Knight2", "A movie about Batman", 100),
-            ListItem("The Return of the King", "A movie about a ring and some eagles", 150),
-            ListItem("The Empire Strikes Back", "A movie about some light wands and parent issues", 200),
-            ListItem("The Godfather", "n/a", 24),
-            ListItem("The Avengers", "They all team up to fight bad guys", 231),
-            ListItem("Inception", "", 12),
-            ListItem("E.T", "", 124),
-            ListItem("The Matrix", "", 42)
-        )
-        return sampleListItems
-    }
-
-    /**
-     * Provide the user name from the firebase database
-     * @return userName
-     */
-    fun getUserName(): String {
-        val docRef = firestore.collection("users").document("testuser")
-        var userName: String = ""
-
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    Log.d("document", "DocumentSnapshot data: ${document.data}")
-                    userName = document.getString("username").toString()
-                } else {
-                    Log.d("no document", "No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("error", "get failed with ", exception)
-            }
-
-        return userName
-    }
-
-    /**
-     * Provide the user points from the firebase database
-     * @return userPoints
-     */
-    fun getUserPoints(): String{
-        val docRef = firestore.collection("users").document("testuser")
-        var userPoints: String = ""
-
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    Log.d("document", "DocumentSnapshot data: ${document.data}")
-                    userPoints = document.getString("points").toString()
-                } else {
-                    Log.d("no document", "No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("error", "get failed with ", exception)
-            }
-
-        return userPoints
-    }
-
-    /**
-     * gets the list items from firebase
-     */
-    private fun waitForListUpdate() {
-        firestore.collection("lists/Top Fifteen Movies/MyListItems").addSnapshotListener{
-                snapshot, e ->
-            if(e != null){
-                Log.w(TAG, "Listen Failed", e)
-                return@addSnapshotListener
-            }
-
-            if(snapshot != null){
-                if(snapshot.getDocumentChanges().size > 1 ){
-                    val allListItems = ArrayList<ListItem>()
-                    val documents = snapshot.documents
-                    documents.forEach{
-                        //val listItem = it.toObject(ListItem::class.java)
-                        val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.getLong("totalVotes")!!.toInt())
-                        allListItems.add(listItem!!)
-                    }
-
-                    list.value = allListItems
-                }
-            }
-        }
-    }
-
-    /**
-     * Passes the fetchList function down to the service layer.
-     */
-    fun fetchList(listName: String) {
+    fun fetchListServiceList(listName: String) {
         list = listService.fetchList(listName)
     }
 
     fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
         val service = StrawpollService()
         return service.getStrawpoll(id)
-    }
-
-    /**
-     * Updates user vote in firebase
-     */
-    fun addListItemVote(listItemToIncrement: String) {
-        var listItemDocument = firestore.document("lists/Top Fifteen Movies/MyListItems/" + listItemToIncrement)
-        var totalVotes: Number
-        listItemDocument.get().addOnSuccessListener {
-            totalVotes = it.getLong("totalVotes")!!
-            listItemDocument.update("totalVotes", (totalVotes.toLong() + 1))
-        }
     }
 }
