@@ -18,22 +18,30 @@ class FirestoreService {
         val db = FirebaseFirestore.getInstance()
 
         db.collection("lists").document("Movies").collection("allMovies")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val allListItems = ArrayList<ListItem>()
+            .addSnapshotListener{
+                snapshot, e ->
+                if(e != null){
 
-                    var listItem: ListItem = ListItem(document.getString("title").toString(),
-                        document.getString("description").toString(),
-                        document.getString("totalVotes").toString())
+                    Log.w("Error", "Listen Failed", e)
+                    return@addSnapshotListener
 
-                    allListItems.add(listItem)
-                    list.value = allListItems
                 }
+                if(snapshot != null){
+                   // if(snapshot.getDocumentChanges().size > 1 ){
+                        val allListItems = ArrayList<ListItem>()
+                        val documents = snapshot.documents
+
+                        documents.forEach{
+                            val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.get("totalVotes").toString()!!)
+                            allListItems.add(listItem!!)
+                        }
+
+                        list.value = allListItems;
+
+                    }
+            //   }
             }
-            .addOnFailureListener { exception ->
-                Log.d("Error", "Error getting documents: ", exception)
-            }
+
 
         return list
     }
@@ -70,7 +78,7 @@ class FirestoreService {
     fun addListItemVote(listItemToIncrement: String) {
         val db = FirebaseFirestore.getInstance()
 
-        var listItemDocument = db.document("lists/Top Fifteen Movies/MyListItems/" + listItemToIncrement)
+        var listItemDocument = db.document("lists/Movies/allMovies/" + listItemToIncrement)
         var totalVotes: Number
         listItemDocument.get().addOnSuccessListener {
             totalVotes = it.getLong("totalVotes")!!

@@ -2,6 +2,8 @@ package edu.uc.groupProject.topten
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.service.ListService
 import edu.uc.groupProject.topten.ui.main.MainViewModel
@@ -26,6 +28,7 @@ class ListItemDataUnitTest {
 
     @Test
     fun SearchForTheAvengers_ReturnsTheAvengers() {
+
         givenAListOfMockItemsAreAvailable()
         whenSearchForMovies()
         thenResultContainsAvengers()

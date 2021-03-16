@@ -1,5 +1,7 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import edu.uc.groupProject.topten.dto.ListItem

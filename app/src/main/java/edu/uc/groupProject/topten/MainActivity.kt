@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                     .commitNow()
         }
 
-        val textView = findViewById<TextView>(R.id.textview)
+       /* val textView = findViewById<TextView>(R.id.textview)
         textView.setText("")
 
         mvm.fetchFirestoreList()
@@ -42,6 +42,9 @@ class MainActivity : AppCompatActivity() {
                 textView.append("\n")
             }
         }
+
+        */
+
 
         this.supportActionBar?.hide();
         supportActionBar?.setDisplayShowTitleEnabled(false)

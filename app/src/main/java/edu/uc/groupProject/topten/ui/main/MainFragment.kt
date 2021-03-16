@@ -57,8 +57,11 @@ class MainFragment : Fragment() {
         //userName.text = viewModel.getUserName()
         //userPoints.text = viewModel.getUserPoints()
 
-        viewModel.list.observe(this, Observer {
-            adapter = CurrentListAdapter(viewModel, viewModel.list.value!!)
+        viewModel.fetchFirestoreList()
+
+        viewModel.firestoreService.list.observe(this, Observer {
+
+            adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             recyclerView.adapter = adapter
         })
 
