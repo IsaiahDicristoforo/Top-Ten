@@ -20,6 +20,8 @@ class MainViewModel : ViewModel() {
     var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var listService : ListService = ListService()
     var firestoreService : FirestoreService =  FirestoreService()
+    var playAnimation:Boolean = true
+
 
     fun fetchFirestoreList(){
         list = firestoreService.fetchList()

@@ -10,11 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.R
+import edu.uc.groupProject.topten.dto.ListItem
 
 
 /**
@@ -28,6 +30,7 @@ class MainFragment : Fragment() {
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter : CurrentListAdapter
+
 
     /**
      * Creates the view.
@@ -48,6 +51,7 @@ class MainFragment : Fragment() {
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
 
+
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -59,20 +63,27 @@ class MainFragment : Fragment() {
         //userName.text = viewModel.getUserName()
         //userPoints.text = viewModel.getUserPoints()
 
-
-
         viewModel.fetchFirestoreList()
+
+        var testList = ArrayList<ListItem>()
+        adapter = CurrentListAdapter(viewModel, testList)
+        recyclerView.adapter = adapter
 
         viewModel.firestoreService.list.observe(this, Observer {
 
-            adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
-            recyclerView.adapter = adapter
+            adapter.setItemList(viewModel.firestoreService.list.value!!)
+            // adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
 
-            recyclerView.startLayoutAnimation()
+            //adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
+            //Stops the animation from playing each time the recycler view is updated/a vote changes
+            if (viewModel.playAnimation){
+                recyclerView.startLayoutAnimation()
+                viewModel.playAnimation = false
+
+            }
 
 
         })
-
 
 
 

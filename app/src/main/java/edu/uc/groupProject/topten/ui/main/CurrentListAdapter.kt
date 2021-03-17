@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.R
@@ -16,7 +17,7 @@ import edu.uc.groupProject.topten.R
  * @param listItems an array list of incoming data
  * @return RecyclerView.Adapter<CurrentListAdapter.ViewHolder>
  */
-class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
+class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
@@ -24,6 +25,50 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_current_list_item,viewGroup, false)
         return  ViewHolder(view)
     }
+
+  fun setItemList(list:ArrayList<ListItem>){
+        if(list == null){
+            listItems = list
+            notifyItemRangeInserted(0,list.size)
+        }else{
+            var result: DiffUtil.DiffResult = DiffUtil.calculateDiff(object: DiffUtil.Callback(){
+                override fun getOldListSize(): Int {
+
+                    return listItems.size
+                }
+
+                override fun getNewListSize(): Int {
+                    return list.size;
+                }
+
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+
+                    return listItems[oldItemPosition].id == list[newItemPosition].id
+                }
+
+                override fun areContentsTheSame(
+                    oldItemPosition: Int,
+                    newItemPosition: Int
+                ): Boolean {
+                    var oldItem:ListItem = listItems[oldItemPosition]
+                    var newItem:ListItem = list[newItemPosition]
+
+                    return oldItem.id == newItem.id && oldItem.title == newItem.title && oldItem.totalVotes == newItem.totalVotes
+                }
+
+
+            })
+
+            listItems = list
+            result.dispatchUpdatesTo(this)
+
+            }
+
+
+
+            }
+
+
 
     /**
      * Populates a list item
