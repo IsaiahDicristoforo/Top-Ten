@@ -53,8 +53,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-       holder.listItemTitle.text = listItems[position].title
-        holder.totalVotes.text = listItems[position].totalVotes.toString()
+        holder.listItemTitle.text = listItems[position].title
+        holder.totalVotes.text = listItems[position].totalVotes + " votes"
         holder.currentRank.text = (position + 1).toString()
         //var voteCount:Int = listItems[position].totalVotes.toInt()
 
@@ -64,6 +64,9 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
             //holder.totalVotes.text = (voteCount + 1).toString()
             mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
         }
+
+
+
     }
 
     /**

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +47,7 @@ class MainFragment : Fragment() {
      * @param savedInstanceState The current instance.
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -57,13 +59,22 @@ class MainFragment : Fragment() {
         //userName.text = viewModel.getUserName()
         //userPoints.text = viewModel.getUserPoints()
 
+
+
         viewModel.fetchFirestoreList()
 
         viewModel.firestoreService.list.observe(this, Observer {
 
             adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             recyclerView.adapter = adapter
+
+            recyclerView.startLayoutAnimation()
+
+
         })
+
+
+
 
         viewModel.fetchStrawpoll(1)
     }
