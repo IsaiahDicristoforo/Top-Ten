@@ -117,7 +117,6 @@ class MainViewModel : ViewModel() {
             .addOnFailureListener { exception ->
                 Log.d("error", "get failed with ", exception)
             }
-
         return userPoints
     }
 

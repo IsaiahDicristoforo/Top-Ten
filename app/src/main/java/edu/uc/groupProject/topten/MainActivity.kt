@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,15 +28,15 @@ import java.util.*
  * MainActivity class.
  */
 class MainActivity : AppCompatActivity() {
-
     private lateinit var bottomMenu:BottomNavigationView
-
+    //private val btn_click_me = findViewById<ImageButton>(R.id.btn_Vote)
     /**
      * onCreate function
      * @param savedInstanceState the saved instance state
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createSignInIntent()
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -68,12 +69,28 @@ class MainActivity : AppCompatActivity() {
 
                 else -> false
             }
-
-
         }
+
     }
 
-    public fun changeFragment(newFragment:Fragment){
+    private fun changeFragment(newFragment:Fragment){
         supportFragmentManager?.beginTransaction()?.replace(R.id.container,newFragment)?.commit()
+    }
+    private fun createSignInIntent() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            RC_SIGN_IN)
+    }
+    companion object {
+
+        private const val RC_SIGN_IN = 123
     }
 }

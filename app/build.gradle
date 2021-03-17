@@ -65,4 +65,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
 }

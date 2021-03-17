@@ -23,6 +23,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
     ): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_current_list_item,viewGroup, false)
         return  ViewHolder(view)
+
     }
 
     /**
@@ -73,4 +74,5 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
     override fun getItemCount(): Int {
         return listItems.size
     }
+
 }
