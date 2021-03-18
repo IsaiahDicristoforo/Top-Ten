@@ -27,6 +27,7 @@ class RecyclerCallback : ListUpdateCallback {
         adapter?.notifyItemChanged(fromPosition)
 
 
+
     }
 
     override fun onRemoved(position: Int, count: Int) {

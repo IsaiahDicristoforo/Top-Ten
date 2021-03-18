@@ -74,11 +74,7 @@ class MainFragment : Fragment() {
 
 
             val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
-
-
-
             adapter.setItemList(viewModel.firestoreService.list.value!!)
-
             recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
 
 
