@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.TestDTO
+import okhttp3.internal.notify
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,19 +28,31 @@ class FirestoreService {
 
                 }
                 if(snapshot != null){
-                   // if(snapshot.getDocumentChanges().size > 1 ){
-                        val allListItems = ArrayList<ListItem>()
+                   //if(snapshot.getDocumentChanges().size > 1 ){
+                        var allListItems = ArrayList<ListItem>()
                         val documents = snapshot.documents
 
                         documents.forEach{
-                            val listItem :ListItem = ListItem(it.getString("title")!!, "Test", it.get("totalVotes").toString()!!)
+                            val listItem :ListItem = ListItem(it.getLong("id")!!.toInt(),
+                                it.getLong("rank")!!.toInt(),it.getString("title")!!, "Test", it.get("totalVotes").toString()!!)
                             allListItems.add(listItem!!)
                         }
+                        allListItems = sortListItemsByVoteDesc((allListItems))
 
-                        list.value = allListItems;
 
+                    for (i in allListItems.indices){
+                        allListItems[i].rank = i
                     }
-            //   }
+
+
+                        list.value = allListItems
+
+
+
+
+
+                //  }
+              }
             }
 
 
@@ -57,11 +70,14 @@ class FirestoreService {
                 if (document != null) {
                     val allListItems = ArrayList<ListItem>()
 
-                    var listItem: ListItem = ListItem(document.getString("title").toString(),
+                    var listItem: ListItem = ListItem(document.getLong("id")!!.toInt(),
+                        document.getLong("rank")!!.toInt(), document.getString("title").toString(),
                         document.getString("description").toString(),
                         document.getString("totalVotes").toString())
 
                     allListItems.add(listItem)
+
+
                     list.value = allListItems
                 }
             }
@@ -69,8 +85,17 @@ class FirestoreService {
                 Log.d("error", "get failed with ", exception)
             }
 
+
+
         return list
     }
+
+
+    fun sortListItemsByVoteDesc(listItemsToSort: ArrayList<ListItem>): ArrayList<ListItem> {
+       return ArrayList(listItemsToSort.sortedWith(compareByDescending{it.totalVotes.toInt()}))
+    }
+
+
 
     /**
      * Updates user vote in firebase

@@ -8,14 +8,14 @@ package edu.uc.groupProject.topten.dto
  * @param description The description of the listItem
  * @param totalVotes The total number of votes counted towards this listItem. Handled by Firebase.
  */
-data class ListItem(var title: String, var description: String = "", var totalVotes: String) {
+data class ListItem(var id:Int, var rank:Int, var title: String, var description: String = "", var totalVotes: String) {
 
     /**
      * returns a string representing an object
      * @return title
      */
     override fun toString(): String {
-        return title;
+        return title
     }
 
 }

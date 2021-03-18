@@ -1,20 +1,17 @@
 package edu.uc.groupProject.topten.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DiffUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.recyclerview.widget.SimpleItemAnimator
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 
@@ -39,8 +36,10 @@ class MainFragment : Fragment() {
      * @param savedInstanceState The current instance.
      * @return The layout of the application's UI.
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -60,6 +59,8 @@ class MainFragment : Fragment() {
         var userPoints = view!!.findViewById<TextView>(R.id.points)
 
         recyclerView.layoutManager =  LinearLayoutManager(this.context)
+        (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
+
         //userName.text = viewModel.getUserName()
         //userPoints.text = viewModel.getUserPoints()
 
@@ -71,12 +72,22 @@ class MainFragment : Fragment() {
 
         viewModel.firestoreService.list.observe(this, Observer {
 
+
+            val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
+
+
+
             adapter.setItemList(viewModel.firestoreService.list.value!!)
+
+            recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+
+
+
             // adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
 
             //adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             //Stops the animation from playing each time the recycler view is updated/a vote changes
-            if (viewModel.playAnimation){
+            if (viewModel.playAnimation) {
                 recyclerView.startLayoutAnimation()
                 viewModel.playAnimation = false
 

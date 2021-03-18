@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
-import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.R
+import edu.uc.groupProject.topten.dto.ListItem
+
 
 /**
  * Populates a list of data into a container.
@@ -22,18 +24,21 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         viewGroup: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_current_list_item,viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context).inflate(
+            R.layout.layout_current_list_item,
+            viewGroup,
+            false
+        )
         return  ViewHolder(view)
     }
 
-  fun setItemList(list:ArrayList<ListItem>){
+  fun setItemList(list: ArrayList<ListItem>){
         if(list == null){
             listItems = list
-            notifyItemRangeInserted(0,list.size)
+            notifyItemRangeInserted(0, list.size)
         }else{
-            var result: DiffUtil.DiffResult = DiffUtil.calculateDiff(object: DiffUtil.Callback(){
+            var result: DiffUtil.DiffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize(): Int {
-
                     return listItems.size
                 }
 
@@ -50,8 +55,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
                     oldItemPosition: Int,
                     newItemPosition: Int
                 ): Boolean {
-                    var oldItem:ListItem = listItems[oldItemPosition]
-                    var newItem:ListItem = list[newItemPosition]
+                    var oldItem: ListItem = listItems[oldItemPosition]
+                    var newItem: ListItem = list[newItemPosition]
 
                     return oldItem.id == newItem.id && oldItem.title == newItem.title && oldItem.totalVotes == newItem.totalVotes
                 }
@@ -60,15 +65,17 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
             })
 
             listItems = list
-            result.dispatchUpdatesTo(this)
+
+            var theCallback = RecyclerCallback()
+            theCallback.bind(this)
+
+            result.dispatchUpdatesTo(theCallback)
 
             }
 
 
 
             }
-
-
 
     /**
      * Populates a list item
@@ -77,6 +84,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
      * @return RecyclerView.ViewHolder
      */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+
         val listItemTitle: TextView
         val totalVotes: TextView
         val currentRank: TextView
@@ -90,6 +99,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         }
     }
 
+
+
     /**
      * Populates a list item
      *
@@ -97,21 +108,18 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
      * @param position its current position in the list
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.listItemTitle.text = listItems[position].title
         holder.totalVotes.text = listItems[position].totalVotes + " votes"
         holder.currentRank.text = (position + 1).toString()
         //var voteCount:Int = listItems[position].totalVotes.toInt()
 
 
+
+
         holder.voteButton.setOnClickListener(){
             //holder.voteButton.isClickable = false
-            //holder.totalVotes.text = (voteCount + 1).toString()
             mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
         }
-
-
-
     }
 
     /**
