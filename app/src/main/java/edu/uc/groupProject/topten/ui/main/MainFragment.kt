@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
-import java.util.concurrent.TimeUnit
+import edu.uc.groupProject.topten.dto.TopTenList
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -29,6 +31,7 @@ class MainFragment : Fragment() {
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter : CurrentListAdapter
+    private var countdownTime:Long = 10000
 
 
     /**
@@ -68,6 +71,33 @@ class MainFragment : Fragment() {
 
         viewModel.loadNextList()
 
+     /*   var listItemsToAdd = ArrayList<ListItem>()
+        listItemsToAdd.add(ListItem(0,"Batman","",0))
+        listItemsToAdd.add(ListItem(1,"Superman","",0))
+        listItemsToAdd.add(ListItem(2,"Captain America","",0))
+        listItemsToAdd.add(ListItem(3,"Iron Man","",0))
+        listItemsToAdd.add(ListItem(4,"Thor","",0))
+        listItemsToAdd.add(ListItem(5,"Black Panther","",0))
+        listItemsToAdd.add(ListItem(6,"Hulk","",0))
+        listItemsToAdd.add(ListItem(6,"Wonder Woman","",0))
+        listItemsToAdd.add(ListItem(6,"Captain Marvel","",0))
+
+
+        var list: TopTenList = TopTenList(
+            1,
+            "Top Ten Superheros",
+            "A list of favorite superheros",
+            true,
+            "Entertainment",
+            Date(),
+            Date()
+        )
+        list.listItems = listItemsToAdd
+        viewModel.firestoreService.writeListToDatabase(list)
+
+
+      */
+
         var testList = ArrayList<ListItem>()
         adapter = CurrentListAdapter(viewModel, testList)
         recyclerView.adapter = adapter
@@ -81,6 +111,7 @@ class MainFragment : Fragment() {
                 Runnable {
                     val recyclerViewState: Parcelable? =
                         recyclerView.layoutManager!!.onSaveInstanceState()
+
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
@@ -100,10 +131,7 @@ class MainFragment : Fragment() {
 
         })
 
-
-
-
-        startCountdownTimer(300000)
+        startCountdownTimer(countdownTime)
 
 
         viewModel.fetchStrawpoll(1)
@@ -125,6 +153,8 @@ class MainFragment : Fragment() {
             override fun onFinish() {
                 timerTextView.setText("Voting is Closed On The List!")
                 viewModel.loadNextList()
+                startCountdownTimer(countdownTime)
+
 
             }
         }.start()

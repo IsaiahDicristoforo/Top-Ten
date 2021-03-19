@@ -107,7 +107,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.listItemTitle.text = listItems[position].title
-        holder.totalVotes.text = listItems[position].totalVotes + " votes"
+        holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
         holder.currentRank.text = (position + 1).toString()
 
 
