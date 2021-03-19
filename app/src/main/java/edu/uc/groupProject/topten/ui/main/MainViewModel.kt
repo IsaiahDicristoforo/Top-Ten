@@ -23,9 +23,10 @@ class MainViewModel : ViewModel() {
     var playAnimation:Boolean = true
 
 
-    fun fetchFirestoreList(){
-        list = firestoreService.fetchList()
+    fun loadNextList(){
+            list = firestoreService.fetchList()
     }
+
 
     fun fetchFirestoreListItem(){
         list = firestoreService.fetchDocument()
@@ -39,4 +40,6 @@ class MainViewModel : ViewModel() {
         val service = StrawpollService()
         return service.getStrawpoll(id)
     }
+
+   
 }

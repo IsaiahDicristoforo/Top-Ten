@@ -1,7 +1,7 @@
 package edu.uc.groupProject.topten.ui.main
 
-import android.app.Activity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -65,25 +66,25 @@ class MainFragment : Fragment() {
         //userName.text = viewModel.getUserName()
         //userPoints.text = viewModel.getUserPoints()
 
-        viewModel.fetchFirestoreList()
+        viewModel.loadNextList()
 
         var testList = ArrayList<ListItem>()
         adapter = CurrentListAdapter(viewModel, testList)
         recyclerView.adapter = adapter
 
+
+
         viewModel.firestoreService.list.observe(this, Observer {
 
             activity?.runOnUiThread(
 
-                Runnable{
-                    val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
+                Runnable {
+                    val recyclerViewState: Parcelable? =
+                        recyclerView.layoutManager!!.onSaveInstanceState()
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
             )
-
-
-
 
 
             // adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
@@ -101,7 +102,33 @@ class MainFragment : Fragment() {
 
 
 
+
+        startCountdownTimer(300000)
+
+
         viewModel.fetchStrawpoll(1)
+    }
+
+    fun startCountdownTimer(totalTimeInMilli: Long){
+
+        var timerTextView:TextView = view!!.findViewById(R.id.tv_mainListTimer)
+
+        object : CountDownTimer(totalTimeInMilli, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+
+                val hours = (millisUntilFinished / 1000 / 3600)
+                val minutes = (millisUntilFinished / 1000 / 60 % 60)
+                val seconds = (millisUntilFinished / 1000 % 60)
+                timerTextView.setText("VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec")
+            }
+
+            override fun onFinish() {
+                timerTextView.setText("Voting is Closed On The List!")
+                viewModel.loadNextList()
+
+            }
+        }.start()
+
     }
 
 
