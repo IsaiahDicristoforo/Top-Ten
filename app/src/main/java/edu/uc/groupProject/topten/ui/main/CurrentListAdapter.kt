@@ -73,8 +73,6 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
             }
 
-
-
             }
 
     /**
@@ -111,9 +109,16 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         holder.listItemTitle.text = listItems[position].title
         holder.totalVotes.text = listItems[position].totalVotes + " votes"
         holder.currentRank.text = (position + 1).toString()
-        //var voteCount:Int = listItems[position].totalVotes.toInt()
 
 
+        val maxTitleLengthBeforeFontSizeNeedsToBeLowered = 20
+        if(listItems[position].title.length > maxTitleLengthBeforeFontSizeNeedsToBeLowered){
+
+            holder.listItemTitle.textSize = 17.0F
+
+        }else{
+            holder.listItemTitle.textSize = 24.0f
+        }
 
 
         holder.voteButton.setOnClickListener(){

@@ -33,17 +33,10 @@ class FirestoreService {
                         val documents = snapshot.documents
 
                         documents.forEach{
-                            val listItem :ListItem = ListItem(it.getLong("id")!!.toInt(),
-                                it.getLong("rank")!!.toInt(),it.getString("title")!!, "Test", it.get("totalVotes").toString()!!)
+                            val listItem :ListItem = ListItem(it.getLong("id")!!.toInt(), it.getString("title")!!, "Test", it.get("totalVotes").toString()!!)
                             allListItems.add(listItem!!)
                         }
                         allListItems = sortListItemsByVoteDesc((allListItems))
-
-
-                    for (i in allListItems.indices){
-                        allListItems[i].rank = i
-                    }
-
 
                         list.value = allListItems
 
@@ -70,8 +63,7 @@ class FirestoreService {
                 if (document != null) {
                     val allListItems = ArrayList<ListItem>()
 
-                    var listItem: ListItem = ListItem(document.getLong("id")!!.toInt(),
-                        document.getLong("rank")!!.toInt(), document.getString("title").toString(),
+                    var listItem: ListItem = ListItem(document.getLong("id")!!.toInt(), document.getString("title").toString(),
                         document.getString("description").toString(),
                         document.getString("totalVotes").toString())
 

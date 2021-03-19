@@ -1,5 +1,6 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -72,10 +73,16 @@ class MainFragment : Fragment() {
 
         viewModel.firestoreService.list.observe(this, Observer {
 
+            activity?.runOnUiThread(
 
-            val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
-            adapter.setItemList(viewModel.firestoreService.list.value!!)
-            recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+                Runnable{
+                    val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
+                    adapter.setItemList(viewModel.firestoreService.list.value!!)
+                    recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+                }
+            )
+
+
 
 
 
