@@ -20,10 +20,13 @@ class MainViewModel : ViewModel() {
     var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var listService : ListService = ListService()
     var firestoreService : FirestoreService =  FirestoreService()
+    var playAnimation:Boolean = true
 
-    fun fetchFirestoreList(){
-        list = firestoreService.fetchList()
+
+    fun loadNextList(generateNewList:Boolean){
+            list = firestoreService.fetchList(generateNewList)
     }
+
 
     fun fetchFirestoreListItem(){
         list = firestoreService.fetchDocument()
@@ -37,4 +40,6 @@ class MainViewModel : ViewModel() {
         val service = StrawpollService()
         return service.getStrawpoll(id)
     }
+
+   
 }

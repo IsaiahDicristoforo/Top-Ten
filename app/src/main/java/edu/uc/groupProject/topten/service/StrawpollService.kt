@@ -22,7 +22,6 @@ class StrawpollService {
 
         call?.enqueue(object : Callback<Strawpoll> {
             override fun onFailure(call: Call<Strawpoll>, t: Throwable) {
-                TODO("Not yet implemented")
             }
 
             override fun onResponse(call: Call<Strawpoll>?, response: Response<Strawpoll>?) {
