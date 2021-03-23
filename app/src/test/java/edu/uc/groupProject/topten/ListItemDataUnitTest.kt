@@ -40,7 +40,7 @@ class ListItemDataUnitTest {
     }
 
     private fun whenSearchForMovies() {
-        mvm.fetchListServiceList("Top Ten Comic Book Movies")
+        mvm.fetchListServiceList("Top Ten Superheros")
     }
 
     private fun thenResultContainsAvengers() {
@@ -49,7 +49,7 @@ class ListItemDataUnitTest {
             assertNotNull(it)
             assertTrue(it.size > 0)
             it.forEach {
-                if (it.title == "The Avengers") {
+                if (it.title == "Avengers") {
                     avengersFound = true
                 }
             }
@@ -58,8 +58,8 @@ class ListItemDataUnitTest {
     }
 
     private fun thenVerifyFunctionsInvoked() {
-        verify { listService.fetchList("Top Ten Comic Book Movies") }
-        verify(exactly = 0) { listService.fetchList("Top Ten Romance-Comedy Movies") }
+        verify { listService.fetchList("Top Ten Superheros") }
+        verify(exactly = 0) { listService.fetchList("Top Ten Movies") }
         confirmVerified(listService)
     }
 
@@ -67,14 +67,14 @@ class ListItemDataUnitTest {
         var allListItemsLiveData = MutableLiveData<ArrayList<ListItem>>()
         var allListItems = ArrayList<ListItem>()
 
-        var m1 = ListItem(0,"The Dark Knight", "A movie about Batman", "100")
-        var m2 = ListItem(1,"The Return of the King", "A movie about a ring and some eagles", "150")
-        var m3 = ListItem(2,"The Empire Strikes Back", "A movie about some light wands and parent issues", "200")
-        var m4 = ListItem(3,"The Godfather", "n/a", "24")
-        var m5 = ListItem(4,"The Avengers", "They all team up to fight bad guys", "231")
-        var m6 = ListItem(5,"Inception", "", "12")
-        var m7 = ListItem(6,"E.T", "", "124")
-        var m8 = ListItem(7,"The Matrix", "", "42")
+        var m1 = ListItem(0,"Avengers", "A movie about Batman", 100)
+        var m2 = ListItem(1,"The Return of the King", "A movie about a ring and some eagles", 150)
+        var m3 = ListItem(2,"The Empire Strikes Back", "A movie about some light wands and parent issues", 200)
+        var m4 = ListItem(3,"The Godfather", "n/a", 24)
+        var m5 = ListItem(4,"The Avengers", "They all team up to fight bad guys", 231)
+        var m6 = ListItem(5,"Inception", "", 12)
+        var m7 = ListItem(6,"E.T", "", 124)
+        var m8 = ListItem(7,"The Matrix", "", 42)
 
         allListItems.add(m1)
         allListItems.add(m2)
