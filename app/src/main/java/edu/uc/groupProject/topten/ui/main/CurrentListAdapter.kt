@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import edu.uc.groupProject.topten.DTO.ListItem
+import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.R
 
 /**
@@ -53,15 +53,16 @@ class CurrentListAdapter(private val mvm: MainViewModel, private val listItems: 
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.listItemTitle.text = listItems[position].title
+       holder.listItemTitle.text = listItems[position].title
         holder.totalVotes.text = listItems[position].totalVotes.toString()
         holder.currentRank.text = (position + 1).toString()
-        var voteCount = listItems[position].totalVotes
+        //var voteCount:Int = listItems[position].totalVotes.toInt()
+
 
         holder.voteButton.setOnClickListener(){
-            holder.voteButton.isClickable = false
-            holder.totalVotes.text = (voteCount + 1).toString()
-            mvm.addListItemVote(holder.listItemTitle.text.toString())
+            //holder.voteButton.isClickable = false
+            //holder.totalVotes.text = (voteCount + 1).toString()
+            mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
         }
     }
 
