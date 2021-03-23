@@ -23,8 +23,8 @@ class MainViewModel : ViewModel() {
     var playAnimation:Boolean = true
 
 
-    fun loadNextList(){
-            list = firestoreService.fetchList()
+    fun loadNextList(generateNewList:Boolean){
+            list = firestoreService.fetchList(generateNewList)
     }
 
 
