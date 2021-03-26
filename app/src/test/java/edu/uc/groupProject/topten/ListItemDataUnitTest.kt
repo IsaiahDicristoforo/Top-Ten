@@ -28,7 +28,6 @@ class ListItemDataUnitTest {
 
     @Test
     fun SearchForTheAvengers_ReturnsTheAvengers() {
-
         givenAListOfMockItemsAreAvailable()
         whenSearchForMovies()
         thenResultContainsAvengers()
@@ -67,14 +66,14 @@ class ListItemDataUnitTest {
         var allListItemsLiveData = MutableLiveData<ArrayList<ListItem>>()
         var allListItems = ArrayList<ListItem>()
 
-        var m1 = ListItem(0,"The Dark Knight", "A movie about Batman", "100")
-        var m2 = ListItem(1,"The Return of the King", "A movie about a ring and some eagles", "150")
-        var m3 = ListItem(2,"The Empire Strikes Back", "A movie about some light wands and parent issues", "200")
-        var m4 = ListItem(3,"The Godfather", "n/a", "24")
-        var m5 = ListItem(4,"The Avengers", "They all team up to fight bad guys", "231")
-        var m6 = ListItem(5,"Inception", "", "12")
-        var m7 = ListItem(6,"E.T", "", "124")
-        var m8 = ListItem(7,"The Matrix", "", "42")
+        var m1 = ListItem(0,"The Dark Knight", "A movie about Batman", 10)
+        var m2 = ListItem(1,"The Return of the King", "A movie about a ring and some eagles", 150)
+        var m3 = ListItem(2,"The Empire Strikes Back", "A movie about some light wands and parent issues", 200)
+        var m4 = ListItem(3,"The Godfather", "n/a", 24)
+        var m5 = ListItem(4,"The Avengers", "They all team up to fight bad guys", 231)
+        var m6 = ListItem(5,"Inception", "", 12)
+        var m7 = ListItem(6,"E.T", "", 124)
+        var m8 = ListItem(7,"The Matrix", "", 42)
 
         allListItems.add(m1)
         allListItems.add(m2)
