@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/pastList"
+        android:icon="@drawable/ic_past_lists"
+        android:title="@string/pastList"></item>
+    <item
+        android:id="@+id/currentList"
+        android:checked="false"
+        android:icon="@drawable/ic_current_list"
+        android:title="@string/currentListView" />
+
+    <item
+        android:id="@+id/privateList"
+        android:icon="@drawable/ic_private_lists"
+        android:title="@string/privateList"></item>
+
+
+
+
+</menu>
