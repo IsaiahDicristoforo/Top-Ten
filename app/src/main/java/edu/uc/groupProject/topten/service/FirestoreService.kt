@@ -13,6 +13,7 @@ import kotlin.collections.ArrayList
 
 class FirestoreService {
     var listIncrementTime: Long = 0
+    var listOfLists: ArrayList<String> = ArrayList<String>()
     var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var currentList = ""
 
@@ -34,6 +35,7 @@ class FirestoreService {
                     for (document in task.result!!) {
 
                         myList.add(document.id)
+                        listOfLists.add(currentList)
 
                         if (document.getBoolean("active") == true && !generateNewList) {
                             currentList = document.id
