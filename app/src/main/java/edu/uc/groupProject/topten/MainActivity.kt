@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -29,14 +30,12 @@ import java.util.*
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomMenu:BottomNavigationView
-    //private val btn_click_me = findViewById<ImageButton>(R.id.btn_Vote)
     /**
      * onCreate function
      * @param savedInstanceState the saved instance state
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        createSignInIntent()
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -70,8 +69,12 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
+        val loginButton = findViewById<Button>(R.id.loginButton)
+        loginButton.setOnClickListener {
+            createSignInIntent()
+        }
     }
+
 
     private fun changeFragment(newFragment:Fragment){
         supportFragmentManager?.beginTransaction()?.replace(R.id.container,newFragment)?.commit()
@@ -86,6 +89,8 @@ class MainActivity : AppCompatActivity() {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setLogo((R.drawable.top10logo))
+                .setTheme((R.style.Theme_TopTen))
                 .build(),
             RC_SIGN_IN)
     }
