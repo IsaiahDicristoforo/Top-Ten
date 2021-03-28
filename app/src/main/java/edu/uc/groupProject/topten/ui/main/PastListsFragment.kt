@@ -16,11 +16,7 @@ class PastListsFragment : Fragment() {
 
     private lateinit var viewModel: PastListsViewModel
     private lateinit var adapter : ArrayAdapter<String>
-    //lateinit var recyclerView:RecyclerView
-    //var testList = ArrayList<ListItem>()
     lateinit var spinnerList : Spinner //spinner variable
-    //var listOfListNames: MutableList<String> = ArrayList()
-    //var viewModel.fireStoreService.listOfListNames = viewModel.loadLists()
 
     companion object {
         fun newInstance() = PastListsFragment()
@@ -38,13 +34,6 @@ class PastListsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PastListsViewModel::class.java)
-
-        //recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_pastList)
-
-        //spinnerList.adapter = adapter
-        //recyclerView.layoutManager =  LinearLayoutManager(this.context)
-        //adapter = PastListAdapter(viewModel, testList)
-        //recyclerView.adapter = adapter
         viewModel.firestoreService.fetchListNames()
         viewModel.firestoreService.listOfLists.observe(this, Observer{
 
@@ -60,16 +49,6 @@ class PastListsFragment : Fragment() {
             activity?.runOnUiThread(
 
                 Runnable {
-//                    val recyclerViewState: Parcelable? =
-//                        recyclerView.layoutManager!!.onSaveInstanceState()
-
-
-                    //adapter.setItemList(viewModel.firestoreService.list.value!!)
-                    //listTitleLabel.text = viewModel.firestoreService.currentList
-
-
-
-                    //recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
             )
         })

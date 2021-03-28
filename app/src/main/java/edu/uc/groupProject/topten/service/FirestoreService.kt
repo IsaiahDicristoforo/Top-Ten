@@ -82,20 +82,6 @@ class FirestoreService {
                         db.document("lists/$currentList").update("active", true)
                     }
 
-
-                        /*
-                    //Suffle the array list here
-                    if(currentList != myList[0]){
-                        currentList = myList[0]
-
-                    }else{
-                        currentList = myList[1]
-                    }
-
-
-                     */
-
-
                         db.collection("lists").document(currentList).collection("listItems")
                             .addSnapshotListener { snapshot, e ->
                                 if (e != null) {

@@ -66,7 +66,7 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.listName.text = listItems[position].title //THIS NEEDS TO BE CHANGED! CURRENTLY ONLY PRODUCES THE NAME OF A LIST ITEM, NOT THE LIST TITLE
+        holder.listName.text = listItems[position].title //CURRENTLY ONLY PRODUCES THE NAME OF A LIST ITEM, NOT THE LIST TITLE
     }
 
     override fun getItemCount(): Int {
