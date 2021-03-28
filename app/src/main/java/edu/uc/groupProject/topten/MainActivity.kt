@@ -81,10 +81,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun changeFragment(newFragment: Fragment) {
-        fun changeFragment(newFragment: Fragment) {
             supportFragmentManager?.beginTransaction()?.replace(R.id.container, newFragment)
                 ?.commit()
-        }
     }
     private fun createSignInIntent() {
         val providers = arrayListOf(
