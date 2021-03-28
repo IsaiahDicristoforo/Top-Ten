@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
@@ -103,7 +102,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
     /**
      * Populates a list item
      *
-     * @param holder reprenet the list item
+     * @param holder represent the list item
      * @param position its current position in the list
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
