@@ -31,21 +31,6 @@ class MainActivity : AppCompatActivity() {
                     .commitNow()
         }
 
-       /* val textView = findViewById<TextView>(R.id.textview)
-        textView.setText("")
-
-        mvm.fetchFirestoreList()
-
-        mvm.list.observeForever {
-            it.forEach {
-                textView.append(it.title)
-                textView.append("\n")
-            }
-        }
-
-        */
-
-
         this.supportActionBar?.hide();
         supportActionBar?.setDisplayShowTitleEnabled(false)
 

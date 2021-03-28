@@ -28,7 +28,6 @@ class ListItemDataUnitTest {
 
     @Test
     fun SearchForTheAvengers_ReturnsTheAvengers() {
-
         givenAListOfMockItemsAreAvailable()
         whenSearchForMovies()
         thenResultContainsAvengers()
