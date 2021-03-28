@@ -17,7 +17,8 @@ import edu.uc.groupProject.topten.ui.main.PrivateListFragment
  */
 class MainActivity : AppCompatActivity() {
     var mvm: MainViewModel = MainViewModel()
-    private lateinit var bottomMenu:BottomNavigationView
+    private lateinit var bottomMenu: BottomNavigationView
+
     /**
      * onCreate function
      * @param savedInstanceState the saved instance state
@@ -27,11 +28,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment())
-                    .commitNow()
+                .replace(R.id.container, MainFragment())
+                .commitNow()
         }
 
-       /* val textView = findViewById<TextView>(R.id.textview)
+        /* val textView = findViewById<TextView>(R.id.textview)
         textView.setText("")
 
         mvm.fetchFirestoreList()
@@ -53,18 +54,18 @@ class MainActivity : AppCompatActivity() {
         bottomMenu.selectedItemId = R.id.currentList
         bottomMenu.setOnNavigationItemSelectedListener { item: MenuItem ->
 
-            when(item.itemId){
-                R.id.currentList->{
+            when (item.itemId) {
+                R.id.currentList -> {
                     changeFragment(MainFragment())
                     true
                 }
 
-                R.id.pastList->{
+                R.id.pastList -> {
                     changeFragment(PastListsFragment.newInstance())
                     true
                 }
 
-                R.id.privateList->{
+                R.id.privateList -> {
                     changeFragment(PrivateListFragment.newInstance())
                     true
                 }
@@ -79,9 +80,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun changeFragment(newFragment:Fragment){
-    fun changeFragment(newFragment:Fragment){
-        supportFragmentManager?.beginTransaction()?.replace(R.id.container,newFragment)?.commit()
+    private fun changeFragment(newFragment: Fragment) {
+        fun changeFragment(newFragment: Fragment) {
+            supportFragmentManager?.beginTransaction()?.replace(R.id.container, newFragment)
+                ?.commit()
+        }
     }
     private fun createSignInIntent() {
         val providers = arrayListOf(
