@@ -28,13 +28,15 @@
             android:id="@+id/tv_listName"
             android:layout_width="252dp"
             android:layout_height="45dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/bowlby_one_sc"
             android:text="Title"
             android:textAlignment="viewStart"
             android:textColor="#F8F8F8"
             android:textSize="24sp"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="68dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
