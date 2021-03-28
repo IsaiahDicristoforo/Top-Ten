@@ -30,6 +30,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
             false
         )
         return  ViewHolder(view)
+
     }
 
   fun setItemList(list: ArrayList<ListItem>){
@@ -135,4 +136,5 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
     override fun getItemCount(): Int {
         return listItems.size
     }
+
 }

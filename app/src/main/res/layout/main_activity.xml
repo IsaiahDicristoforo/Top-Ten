@@ -19,7 +19,9 @@
         tools:layout_editor_absoluteX="420dp">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
 </FrameLayout>
 

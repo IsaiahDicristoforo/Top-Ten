@@ -24,7 +24,7 @@ class MainViewModel : ViewModel() {
 
 
     fun loadNextList(generateNewList:Boolean){
-            list = firestoreService.fetchList(generateNewList)
+        list = firestoreService.fetchList(generateNewList)
     }
 
 
@@ -41,5 +41,5 @@ class MainViewModel : ViewModel() {
         return service.getStrawpoll(id)
     }
 
-   
+
 }
