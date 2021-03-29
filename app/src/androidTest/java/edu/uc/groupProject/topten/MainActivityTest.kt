@@ -16,14 +16,16 @@ class MainActivityTest {
     fun test_isActivityInView() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
 
-        onView(withId(R.id.main)).check(matches(isDisplayed()))
+        onView(withId(R.id.main))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun test_visibility_bottomNav() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
 
-        onView(withId(R.id.bottomNav)).check(matches(isDisplayed()))
+        onView(withId(R.id.bottomNav))
+            .check(matches(isDisplayed()))
     }
 
 }
