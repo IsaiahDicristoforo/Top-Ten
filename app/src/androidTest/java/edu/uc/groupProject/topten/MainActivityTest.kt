@@ -27,5 +27,4 @@ class MainActivityTest {
         onView(withId(R.id.bottomNav))
             .check(matches(isDisplayed()))
     }
-
 }
