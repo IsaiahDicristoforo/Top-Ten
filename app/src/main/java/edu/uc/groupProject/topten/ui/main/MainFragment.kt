@@ -73,10 +73,11 @@ class MainFragment : Fragment() {
 
         super.onActivityCreated(savedInstanceState)
 
+        activity.let {
+            viewModel = ViewModelProvider(it!!).get(MainViewModel::class.java)
+        }
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        viewModel.firestoreService.listIncrementTime = countdownTime
+        viewModel.setIncrementTime(countdownTime)
 
 
         recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
@@ -124,9 +125,9 @@ class MainFragment : Fragment() {
         adapter = CurrentListAdapter(viewModel, testList)
         recyclerView.adapter = adapter
 
+        var itemList = viewModel.getItemList()
 
-
-        viewModel.firestoreService.list.observe(this, Observer {
+        itemList.observe(this, Observer {
 
             activity?.runOnUiThread(
 
@@ -134,9 +135,9 @@ class MainFragment : Fragment() {
                     val recyclerViewState: Parcelable? =
                         recyclerView.layoutManager!!.onSaveInstanceState()
 
-                    adapter.setItemList(viewModel.firestoreService.list.value!!)
+                    adapter.setItemList(it)
 
-                    listTitleLabel.text = viewModel.firestoreService.currentList
+                    listTitleLabel.text = viewModel.getCurrentListId()
 
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
@@ -212,7 +213,7 @@ class MainFragment : Fragment() {
 
         var expiryDate:Date
 
-        var path:String = "lists/" + viewModel.firestoreService.currentList
+       var path:String = "lists/" + viewModel.getCurrentListId()
 
         var result:Long= 0
 
