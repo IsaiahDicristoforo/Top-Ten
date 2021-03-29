@@ -21,12 +21,17 @@ class MainViewModel : ViewModel() {
     var listService : ListService = ListService()
     var firestoreService : FirestoreService =  FirestoreService()
     var playAnimation:Boolean = true
+    var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
 
 
     fun loadNextList(generateNewList:Boolean){
         list = firestoreService.fetchList(generateNewList)
     }
 
+    fun loadLists(): MutableLiveData<ArrayList<String>> {
+        lists = firestoreService.listOfLists
+        return lists
+    }
 
     fun fetchFirestoreListItem(){
         list = firestoreService.fetchDocument()
@@ -41,5 +46,23 @@ class MainViewModel : ViewModel() {
         return service.getStrawpoll(id)
     }
 
+    fun setIncrementTime(countdownTime: Long) {
+        firestoreService.setIncrementTime(countdownTime)
+    }
 
+    fun getItemList(): MutableLiveData<ArrayList<ListItem>> {
+        return  firestoreService.list
+    }
+
+    fun getCurrentListId(): String{
+        return  firestoreService.currentList
+    }
+
+    fun fetchListNames(){
+        return  firestoreService.fetchListNames()
+    }
+
+    fun getListOfLists(): MutableLiveData<ArrayList<String>> {
+        return  firestoreService.listOfLists
+    }
 }
