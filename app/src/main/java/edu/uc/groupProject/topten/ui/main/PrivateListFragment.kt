@@ -14,7 +14,7 @@ class PrivateListFragment : Fragment() {
         fun newInstance() = PrivateListFragment()
     }
 
-    private lateinit var viewModel: PrivateListViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +25,10 @@ class PrivateListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PrivateListViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        activity.let {
+            viewModel = ViewModelProvider(it!!).get(MainViewModel::class.java)
+        }
     }
 
 }
