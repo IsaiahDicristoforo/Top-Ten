@@ -41,8 +41,6 @@ class MainFragment : Fragment() {
     private var isCanceled = false
 
 
-
-
     /**
      * Creates the view.
      * @param inflater The layout inflater
@@ -51,15 +49,9 @@ class MainFragment : Fragment() {
      * @return The layout of the application's UI.
      */
     override fun onCreateView(
-
-
-
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
-
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -69,7 +61,6 @@ class MainFragment : Fragment() {
      * @param savedInstanceState The current instance.
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
 
         super.onActivityCreated(savedInstanceState)
 
@@ -154,17 +145,13 @@ class MainFragment : Fragment() {
                 getTimeRemainingOnCurrentList()
             }
 
-
-
         })
-
 
         isCanceled = true
 
         viewModel.fetchStrawpoll(1)
 
     }
-
 
 
     fun startCountdownTimer(totalTimeInMilli: Long){
@@ -196,14 +183,9 @@ class MainFragment : Fragment() {
 
                 }
 
-                }
-
-
-
-
+            }
 
         }.start()
-
 
     }
 
@@ -234,9 +216,6 @@ class MainFragment : Fragment() {
 
         return result
 
-
-
    }
-
 
 }

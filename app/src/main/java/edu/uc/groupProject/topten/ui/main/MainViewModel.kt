@@ -65,4 +65,5 @@ class MainViewModel : ViewModel() {
     fun getListOfLists(): MutableLiveData<ArrayList<String>> {
         return  firestoreService.listOfLists
     }
+
 }

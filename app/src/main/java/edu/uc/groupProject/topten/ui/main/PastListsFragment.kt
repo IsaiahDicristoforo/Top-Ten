@@ -29,8 +29,6 @@ class PastListsFragment : Fragment() {
         return inflater.inflate(R.layout.past_lists_fragment, container, false)
     }
 
-
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity.let {

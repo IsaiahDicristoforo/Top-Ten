@@ -71,9 +71,9 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
             result.dispatchUpdatesTo(theCallback)
 
-            }
+        }
 
-            }
+    }
 
     /**
      * Populates a list item
