@@ -14,6 +14,8 @@ import edu.uc.groupProject.topten.ui.main.PrivateListFragment
 
 /**
  * MainActivity class.
+ *
+ * Manages the display of the different fragments
  */
 class MainActivity : AppCompatActivity() {
     var mvm: MainViewModel = MainViewModel()
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager?.beginTransaction()?.replace(R.id.container, newFragment)
                 ?.commit()
     }
+
     private fun createSignInIntent() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
@@ -99,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                 .build(),
             RC_SIGN_IN)
     }
+
     companion object {
 
         private const val RC_SIGN_IN = 123

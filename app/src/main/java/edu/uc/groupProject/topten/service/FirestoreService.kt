@@ -10,7 +10,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-
+/**
+ * FirestoreService class.
+ *
+ * Centralizes the logic and functions for using Firebase Firestore
+ */
 class FirestoreService {
     var listIncrementTime: Long = 0
     var listOfLists: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
