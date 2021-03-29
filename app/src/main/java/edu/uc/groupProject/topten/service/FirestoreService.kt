@@ -297,6 +297,9 @@ class FirestoreService {
         return result
 
 
+    }
 
+    fun setIncrementTime(countdownTime: Long){
+        listIncrementTime = countdownTime
     }
 }
