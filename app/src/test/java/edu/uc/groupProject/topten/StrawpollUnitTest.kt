@@ -24,5 +24,6 @@ class StrawpollUnitTest {
 
     fun whenJSONDataAreReadAndParsed() {
         mvm.fetchStrawpoll(1)
+        mvm.createStrawpoll()
     }
 }
