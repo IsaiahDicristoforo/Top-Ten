@@ -28,5 +28,4 @@ class PrivateListFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(PrivateListViewModel::class.java)
         // TODO: Use the ViewModel
     }
-
 }

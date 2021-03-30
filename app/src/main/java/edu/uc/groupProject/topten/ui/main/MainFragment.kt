@@ -64,9 +64,5 @@ class MainFragment : Fragment() {
             adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             recyclerView.adapter = adapter
         })
-
-        viewModel.fetchStrawpoll(1)
     }
-
-
 }

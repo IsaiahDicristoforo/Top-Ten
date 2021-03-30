@@ -1,7 +1,7 @@
 package edu.uc.groupProject.topten
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import edu.uc.groupProject.topten.ui.main.MainViewModel
+import edu.uc.groupProject.topten.ui.main.PrivateListViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -10,11 +10,11 @@ import org.junit.rules.TestRule
 class StrawpollUnitTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
-    lateinit var mvm: MainViewModel
+    lateinit var pvm: PrivateListViewModel
 
     @Before
     fun populateStrawpoll() {
-        mvm = MainViewModel()
+        pvm = PrivateListViewModel()
     }
 
     @Test
@@ -23,7 +23,7 @@ class StrawpollUnitTest {
     }
 
     fun whenJSONDataAreReadAndParsed() {
-        mvm.fetchStrawpoll(1)
-        mvm.createStrawpoll()
+        pvm.fetchStrawpoll(1)
+        pvm.createStrawpoll()
     }
 }
