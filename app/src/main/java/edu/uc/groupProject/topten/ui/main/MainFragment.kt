@@ -174,7 +174,7 @@ class MainFragment : Fragment() {
                 val hours = (millisUntilFinished / 1000 / 3600)
                 val minutes = (millisUntilFinished / 1000 / 60 % 60)
                 val seconds = (millisUntilFinished / 1000 % 60)
-                timerTextView.setText("VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec")
+                timerTextView.setText("${hours} hrs  ${minutes} min  ${seconds} sec")
             }
 
             override fun onFinish() {
