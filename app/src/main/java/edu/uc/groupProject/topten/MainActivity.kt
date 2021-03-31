@@ -16,7 +16,7 @@ import edu.uc.groupProject.topten.ui.main.PrivateListFragment
  * MainActivity class.
  */
 class MainActivity : AppCompatActivity() {
-    var mvm: MainViewModel = MainViewModel()
+
     private lateinit var bottomMenu: BottomNavigationView
 
     /**
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         */
 
 
-        this.supportActionBar?.hide();
+        this.supportActionBar?.hide()
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         bottomMenu = findViewById<BottomNavigationView>(R.id.bottomNav)

@@ -131,7 +131,7 @@ class FirestoreService {
                 if (document != null) {
                     val allListItems = ArrayList<ListItem>()
 
-                    var listItem: ListItem = ListItem(
+                    val listItem: ListItem = ListItem(
                         document.getLong("id")!!.toInt(), document.getString(
                             "title"
                         ).toString(),
@@ -180,7 +180,7 @@ class FirestoreService {
     fun writeListToDatabase(listToAdd: TopTenList) {
         val db = FirebaseFirestore.getInstance()
 
-        var listsReference = (db.collection("lists").document(listToAdd.title))
+        val listsReference = (db.collection("lists").document(listToAdd.title))
 
         listsReference.set(listToAdd).addOnSuccessListener {
             Log.d("Firebase", "document saved")
@@ -189,9 +189,9 @@ class FirestoreService {
         }
 
 
-        var listItemCollectionReference = listsReference.collection("listItems")
+        val listItemCollectionReference = listsReference.collection("listItems")
 
-        var arrayOfListItemsToAdd: Array<ListItem> = listToAdd.listItems.toTypedArray()
+        val arrayOfListItemsToAdd: Array<ListItem> = listToAdd.listItems.toTypedArray()
 
         for (item in arrayOfListItemsToAdd) {
             listItemCollectionReference.document(item.title).set(item)
@@ -253,7 +253,7 @@ class FirestoreService {
     fun resetExpirationDateOnAllLists(timeIncrementInMilli:Int) {
         val db = FirebaseFirestore.getInstance()
 
-        var calendar:Calendar = Calendar.getInstance()
+        val calendar:Calendar = Calendar.getInstance()
 
         var allLists = db.collection("lists").get()
             .addOnCompleteListener { task ->
@@ -276,7 +276,7 @@ class FirestoreService {
 
        var expiryDate:Date
 
-        var path:String = "lists/" + currentList
+        val path:String = "lists/" + currentList
 
         var result:Long= 0
 
