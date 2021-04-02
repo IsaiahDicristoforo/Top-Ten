@@ -181,6 +181,8 @@ class MainFragment : Fragment() {
 
                 if(isCanceled){
 
+                    launchListResultsDialog()
+
                     timerTextView.setText("Voting is Closed On The List!")
 
                     viewModel.loadNextList(true)
@@ -193,18 +195,24 @@ class MainFragment : Fragment() {
 
                     startCountdownTimer(countdownTime)
 
-                }
 
                 }
 
-
-
-
+                }
 
         }.start()
 
 
     }
+
+    fun launchListResultsDialog(){
+
+      var dialogToDisplay:ListExpirationDialog = ListExpirationDialog()
+      dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
+
+    }
+
+
 
    private fun getTimeRemainingOnCurrentList(): Long {
 
