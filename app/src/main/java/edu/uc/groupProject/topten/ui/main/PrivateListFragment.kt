@@ -10,6 +10,7 @@ import edu.uc.groupProject.topten.R
 
 class PrivateListFragment : Fragment() {
 
+
     companion object {
         fun newInstance() = PrivateListFragment()
     }
