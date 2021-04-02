@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/listResultTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/baloo"
         android:text="Voting Has Ended!"
         android:textColor="#000000"
         android:textSize="36sp"
@@ -28,16 +30,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listResultTextView" />
 
+    <TextView
+        android:id="@+id/listTitleDialogView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/baloo"
+        android:gravity="left"
+        android:text="List Title"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialogProgressBar" />
+
+
+    <TextView
+        android:id="@+id/tv_winningItem"
+        android:layout_width="264dp"
+        android:layout_height="88dp"
+        android:fontFamily="@font/baloo"
+        android:gravity="left|center_vertical"
+        android:text="TextView"
+        android:textAlignment="gravity"
+        android:textColor="#BD9314"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listTitleDialogView" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/firstPlaceAnimation"
+        android:layout_width="85dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_winningItem"
+        app:layout_constraintEnd_toStartOf="@+id/tv_winningItem"
+        app:layout_constraintTop_toBottomOf="@+id/listTitleDialogView"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_url="https://assets3.lottiefiles.com/packages/lf20_qtt2dv.json" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/podiumAnimationView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="600px"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/tv_winningItem"
         app:layout_constraintVertical_bias="0.044"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"

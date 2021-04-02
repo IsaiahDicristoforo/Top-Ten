@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.airbnb.lottie.LottieAnimationView
 import edu.uc.groupProject.topten.R
+import edu.uc.groupProject.topten.service.FirestoreService
 
 
 class ListExpirationDialog : DialogFragment() {
@@ -24,7 +26,14 @@ class ListExpirationDialog : DialogFragment() {
            var  dialogView: View = inflater.inflate(R.layout.pop_up_list_expired, null)
             dialogView.findViewById<LottieAnimationView>(R.id.podiumAnimationView).playAnimation()
 
+
             var progressBar:ProgressBar =  dialogView.findViewById<ProgressBar>(R.id.dialogProgressBar)
+
+            var listTitleTextBox:TextView = dialogView.findViewById(R.id.listTitleDialogView)
+            listTitleTextBox.text = arguments!!.getString("ListTitle")
+
+            dialogView.findViewById<TextView>(R.id.tv_winningItem).text = arguments!!.getString("FirstPlace")
+
 
             object : CountDownTimer(10000, 100) {
                 override fun onTick(millisUntilFinished: Long) {

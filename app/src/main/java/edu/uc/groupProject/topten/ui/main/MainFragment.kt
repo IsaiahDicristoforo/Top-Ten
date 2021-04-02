@@ -40,6 +40,9 @@ class MainFragment : Fragment() {
     private lateinit var countDownTimer:CountDownTimer
     private var isCanceled = false
     lateinit var dialogToDisplay:ListExpirationDialog
+    lateinit var previousListTitle:String
+    lateinit var winningItem:String
+
 
 
 
@@ -138,6 +141,8 @@ class MainFragment : Fragment() {
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
 
                     listTitleLabel.text = viewModel.firestoreService.currentList
+                    previousListTitle = viewModel.firestoreService.currentList
+                    winningItem = viewModel.firestoreService.list.value!![0].title
 
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
@@ -182,7 +187,6 @@ class MainFragment : Fragment() {
 
                 if(isCanceled){
 
-
                     timerTextView.setText("Voting is Closed On The List!")
 
                     viewModel.loadNextList(true)
@@ -215,6 +219,10 @@ class MainFragment : Fragment() {
       dialogToDisplay = ListExpirationDialog()
 
       if(this.fragmentManager != null && this.isVisible()){
+      var infoForDialog:Bundle = Bundle()
+      infoForDialog.putString("ListTitle", previousListTitle)
+      infoForDialog.putString("FirstPlace",winningItem)
+      dialogToDisplay.setArguments(infoForDialog)
          dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
       }
 
@@ -226,8 +234,6 @@ class MainFragment : Fragment() {
 
 
     }
-
-
 
    private fun getTimeRemainingOnCurrentList(): Long {
 
