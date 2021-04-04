@@ -4,8 +4,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
-* Retrofit instance manages HTTP requests
-*/
+ * Retrofit instance manages HTTP requests
+ */
 object StrawpollInstance {
 
     private var retrofit: Retrofit? = null

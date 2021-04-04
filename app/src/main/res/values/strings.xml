@@ -8,5 +8,5 @@
     <string name="privateList">Private</string>
     <string name="currentListView">CurrentList</string>
 
-    <style name="app_name" parent="Theme.AppCompat.NoActionBar"></style>
+    <style name="app_name" parent="Theme.AppCompat.NoActionBar" />
 </resources>

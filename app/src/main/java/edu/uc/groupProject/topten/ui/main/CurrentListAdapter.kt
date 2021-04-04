@@ -18,7 +18,10 @@ import edu.uc.groupProject.topten.dto.ListItem
  * @param listItems an array list of incoming data
  * @return RecyclerView.Adapter<CurrentListAdapter.ViewHolder>
  */
-class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
+class CurrentListAdapter(
+    private val mvm: MainViewModel,
+    private var listItems: ArrayList<ListItem>
+) : RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
@@ -28,15 +31,15 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
             viewGroup,
             false
         )
-        return  ViewHolder(view)
+        return ViewHolder(view)
 
     }
 
-  fun setItemList(list: ArrayList<ListItem>){
-        if(list == null){
+    fun setItemList(list: ArrayList<ListItem>) {
+        if (list == null) {
             listItems = list
             notifyItemRangeInserted(0, list.size)
-        }else{
+        } else {
             var result: DiffUtil.DiffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize(): Int {
                     return listItems.size
@@ -71,9 +74,9 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
             result.dispatchUpdatesTo(theCallback)
 
-            }
+        }
 
-            }
+    }
 
     /**
      * Populates a list item
@@ -98,7 +101,6 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
     }
 
 
-
     /**
      * Populates a list item
      *
@@ -112,16 +114,16 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
 
         val maxTitleLengthBeforeFontSizeNeedsToBeLowered = 20
-        if(listItems[position].title.length > maxTitleLengthBeforeFontSizeNeedsToBeLowered){
+        if (listItems[position].title.length > maxTitleLengthBeforeFontSizeNeedsToBeLowered) {
 
             holder.listItemTitle.textSize = 17.0F
 
-        }else{
+        } else {
             holder.listItemTitle.textSize = 24.0f
         }
 
 
-        holder.voteButton.setOnClickListener(){
+        holder.voteButton.setOnClickListener() {
             //holder.voteButton.isClickable = false
             mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
         }

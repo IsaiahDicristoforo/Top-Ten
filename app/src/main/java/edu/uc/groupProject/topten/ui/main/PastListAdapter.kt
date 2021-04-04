@@ -10,7 +10,10 @@ import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 
 //Handles the items put INTO the recyclerview, and connects to the PastListFragments class
-class PastListAdapter(private val mvm: PastListsViewModel, private var listItems: ArrayList<ListItem>): RecyclerView.Adapter<PastListAdapter.ViewHolder>() {
+class PastListAdapter(
+    private val mvm: PastListsViewModel,
+    private var listItems: ArrayList<ListItem>
+) : RecyclerView.Adapter<PastListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
@@ -59,14 +62,16 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
     //identifies the IDs of the items in the layout_past_list_item fragment
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val listName: TextView
-        init{
+
+        init {
             listName = view.findViewById(R.id.tv_listName)
         }
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.listName.text = listItems[position].title //CURRENTLY ONLY PRODUCES THE NAME OF A LIST ITEM, NOT THE LIST TITLE
+        holder.listName.text =
+            listItems[position].title //CURRENTLY ONLY PRODUCES THE NAME OF A LIST ITEM, NOT THE LIST TITLE
     }
 
     override fun getItemCount(): Int {

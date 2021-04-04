@@ -1,7 +1,5 @@
 package edu.uc.groupProject.topten.ui.main
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import edu.uc.groupProject.topten.dto.ListItem
@@ -17,18 +15,18 @@ import edu.uc.groupProject.topten.service.StrawpollService
  * list when a vote is made.
  */
 class MainViewModel : ViewModel() {
-    var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
-    var listService : ListService = ListService()
-    var firestoreService : FirestoreService =  FirestoreService()
-    var playAnimation:Boolean = true
+    var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
+    var listService: ListService = ListService()
+    var firestoreService: FirestoreService = FirestoreService()
+    var playAnimation: Boolean = true
 
 
-    fun loadNextList(generateNewList:Boolean){
+    fun loadNextList(generateNewList: Boolean) {
         list = firestoreService.fetchList(generateNewList)
     }
 
 
-    fun fetchFirestoreListItem(){
+    fun fetchFirestoreListItem() {
         list = firestoreService.fetchDocument()
     }
 

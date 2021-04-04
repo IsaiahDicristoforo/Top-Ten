@@ -8,6 +8,8 @@ package edu.uc.groupProject.topten.dto
  * @param votes
  * @param topTenListID
  */
-data class Strawpoll(var id: Int, var title: String,
-                     var votes: ArrayList<Int>, var topTenListID: Int = 0) {
+data class Strawpoll(
+    var id: Int, var title: String,
+    var votes: ArrayList<Int>, var topTenListID: Int = 0
+) {
 }

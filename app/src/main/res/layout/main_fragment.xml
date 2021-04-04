@@ -14,7 +14,7 @@
         android:background="@color/black"
         android:orientation="vertical"
         android:paddingStart="10sp"
-        android:paddingRight="10sp"
+        android:paddingEnd="10sp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:layout_editor_absoluteX="10dp">
 

@@ -22,7 +22,7 @@ class StrawpollUnitTest {
         whenJSONDataAreReadAndParsed()
     }
 
-    fun whenJSONDataAreReadAndParsed() {
+    private fun whenJSONDataAreReadAndParsed() {
         mvm.fetchStrawpoll(1)
     }
 }

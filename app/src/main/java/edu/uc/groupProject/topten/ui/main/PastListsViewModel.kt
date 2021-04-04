@@ -9,10 +9,10 @@ import edu.uc.groupProject.topten.service.ListService
 import edu.uc.groupProject.topten.service.StrawpollService
 
 class PastListsViewModel : ViewModel() {
-    var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
-    var listService : ListService = ListService()
-    var firestoreService : FirestoreService =  FirestoreService()
-    var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
+    var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
+    var listService: ListService = ListService()
+    var firestoreService: FirestoreService = FirestoreService()
+    var lists: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
 
 
     fun loadLists(): MutableLiveData<ArrayList<String>> {
@@ -21,7 +21,7 @@ class PastListsViewModel : ViewModel() {
     }
 
 
-    fun fetchFirestoreListItem(){
+    fun fetchFirestoreListItem() {
         list = firestoreService.fetchDocument()
     }
 
