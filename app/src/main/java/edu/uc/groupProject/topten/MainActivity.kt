@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         */
 
 
-        this.supportActionBar?.hide();
+        this.supportActionBar?.hide()
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         bottomMenu = findViewById<BottomNavigationView>(R.id.bottomNav)

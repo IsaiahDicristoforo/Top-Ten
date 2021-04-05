@@ -43,7 +43,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
                 }
 
                 override fun getNewListSize(): Int {
-                    return list.size;
+                    return list.size
                 }
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
