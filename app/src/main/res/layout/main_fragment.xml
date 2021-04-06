@@ -26,7 +26,7 @@
             android:textColor="#DFDEDE"
             android:textSize="22sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_mainListTimer"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_shareList" />
 
         <TextView
             android:id="@+id/tv_mainListTimer"
@@ -40,12 +40,12 @@
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintEnd_toStartOf="@+id/btn_shareList"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_mainListTitle" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btn_shareList"
             android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
