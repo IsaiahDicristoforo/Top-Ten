@@ -1,13 +1,15 @@
 package edu.uc.groupProject.topten.dto
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Data class that represents a strawpoll
  *
- * @param id
+ * REQUIRED POST FIELDS
  * @param title
- * @param votes
- * @param topTenListID
+ * @param options
  */
-data class Strawpoll(var id: Int, var title: String,
-                     var votes: ArrayList<Int>, var topTenListID: Int = 0) {
+data class Strawpoll(var id: Int? = 0, var title: String?,
+                     var options: ArrayList<String>?, var votes: ArrayList<Int>? = null,
+                     var multi: Boolean? = true, var dupcheck: String? = "normal", var captcha: Boolean? = true) {
 }
