@@ -32,15 +32,13 @@ class MainFragment : Fragment() {
 
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter : CurrentListAdapter
-    private var countdownTime:Long = 30000
-    lateinit var timerTextView:TextView
-    lateinit var recyclerView:RecyclerView
+    private lateinit var adapter: CurrentListAdapter
+    private var countdownTime: Long = 30000
+    lateinit var timerTextView: TextView
+    lateinit var recyclerView: RecyclerView
     var testList = ArrayList<ListItem>()
-    private lateinit var countDownTimer:CountDownTimer
+    private lateinit var countDownTimer: CountDownTimer
     private var isCanceled = false
-
-
 
 
     /**
@@ -53,11 +51,9 @@ class MainFragment : Fragment() {
     override fun onCreateView(
 
 
-
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
 
 
         return inflater.inflate(R.layout.main_fragment, container, false)
@@ -82,43 +78,19 @@ class MainFragment : Fragment() {
         recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
         var userName = view!!.findViewById<TextView>(R.id.username)
         var userPoints = view!!.findViewById<TextView>(R.id.points)
-        timerTextView  = view!!.findViewById(R.id.tv_mainListTimer)
+        timerTextView = view!!.findViewById(R.id.tv_mainListTimer)
         var listTitleLabel = view!!.findViewById<TextView>(R.id.tv_mainListTitle)
         //userName.text = viewModel.getUserName()
         //userPoints.text = viewModel.getUserPoints()
 
 
-    //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
+        //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
 
 
-        recyclerView.layoutManager =  LinearLayoutManager(this.context)
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
 
         viewModel.loadNextList(false)
-
-     /*   var listItemsToAdd = ArrayList<ListItem>()
-        listItemsToAdd.add(ListItem(0,"Cinnamon Toast Crunch","",0))
-        listItemsToAdd.add(ListItem(1,"Lucky Charms","",0))
-        listItemsToAdd.add(ListItem(2,"Froot Loops","",0))
-        listItemsToAdd.add(ListItem(3,"Cheerios","",0))
-        listItemsToAdd.add(ListItem(4,"Frosted Flakes","",0))
-        listItemsToAdd.add(ListItem(5,"Honeycomb","",0))
-        listItemsToAdd.add(ListItem(6,"Cap'n Crunch","",0))
-        listItemsToAdd.add(ListItem(6,"Reese's Puffs","",0))
-
-        var list: TopTenList = TopTenList(
-            1,
-            "Top Ten Cereals",
-            "A list of favorite cereals",
-            false,
-            "Food",
-            Date(),
-            Date()
-        )
-        list.listItems = listItemsToAdd
-        viewModel.firestoreService.writeListToDatabase(list)
-
-      */
 
 
         adapter = CurrentListAdapter(viewModel, testList)
@@ -142,9 +114,6 @@ class MainFragment : Fragment() {
                 }
             )
 
-            // adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
-
-            //adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             //Stops the animation from playing each time the recycler view is updated/a vote changes
             if (viewModel.playAnimation) {
                 recyclerView.startLayoutAnimation()
@@ -152,7 +121,6 @@ class MainFragment : Fragment() {
 
                 getTimeRemainingOnCurrentList()
             }
-
 
 
         })
@@ -165,10 +133,9 @@ class MainFragment : Fragment() {
     }
 
 
+    fun startCountdownTimer(totalTimeInMilli: Long) {
 
-    fun startCountdownTimer(totalTimeInMilli: Long){
-
-     countDownTimer =   object : CountDownTimer(totalTimeInMilli, 1000) {
+        countDownTimer = object : CountDownTimer(totalTimeInMilli, 1000) {
             override fun onTick(millisUntilFinished: Long) {
 
                 val hours = (millisUntilFinished / 1000 / 3600)
@@ -179,7 +146,7 @@ class MainFragment : Fragment() {
 
             override fun onFinish() {
 
-                if(isCanceled){
+                if (isCanceled) {
 
                     timerTextView.setText("Voting is Closed On The List!")
 
@@ -195,10 +162,7 @@ class MainFragment : Fragment() {
 
                 }
 
-                }
-
-
-
+            }
 
 
         }.start()
@@ -206,36 +170,38 @@ class MainFragment : Fragment() {
 
     }
 
-   private fun getTimeRemainingOnCurrentList(): Long {
+    private fun getTimeRemainingOnCurrentList(): Long {
 
         val db = FirebaseFirestore.getInstance()
 
-        var expiryDate:Date
+        var expiryDate: Date
 
-        var path:String = "lists/" + viewModel.firestoreService.currentList
+        var path: String = "lists/" + viewModel.firestoreService.currentList
 
-        var result:Long= 0
+        var result: Long = 0
 
-        var validList:Boolean = false
-
-
-            db.document(path).get().addOnSuccessListener {
-
-                expiryDate = it.getDate("expireDate")!!
+        var validList: Boolean = false
 
 
-                result = (TimeUnit.MILLISECONDS.convert (expiryDate.time- Date().time, TimeUnit.MILLISECONDS))
+        db.document(path).get().addOnSuccessListener {
 
-                startCountdownTimer(result)
-            }.addOnFailureListener { exception ->
-                Log.d("error", "get failed with ", exception)
-            }
+            expiryDate = it.getDate("expireDate")!!
+
+
+            result = (TimeUnit.MILLISECONDS.convert(
+                expiryDate.time - Date().time,
+                TimeUnit.MILLISECONDS
+            ))
+
+            startCountdownTimer(result)
+        }.addOnFailureListener { exception ->
+            Log.d("error", "get failed with ", exception)
+        }
 
         return result
 
 
-
-   }
+    }
 
 
 }

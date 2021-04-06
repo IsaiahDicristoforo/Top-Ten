@@ -2,15 +2,11 @@ package edu.uc.groupProject.topten
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.service.ListService
 import edu.uc.groupProject.topten.ui.main.MainViewModel
-import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -25,6 +21,7 @@ class ListItemDataUnitTest {
     var rule: TestRule = InstantTaskExecutorRule()
     var listService = mockk<ListService>()
     private val mvm: MainViewModel = MainViewModel()
+    lateinit var badListItems: ListItem
 
     @Test
     fun SearchForTheAvengers_ReturnsTheAvengers() {
@@ -92,5 +89,25 @@ class ListItemDataUnitTest {
         var toStringTest = mockk<ListItem>()
         toStringTest = ListItem(0, "Avengers", "A movie about Batman", 100)
         assertTrue(toStringTest.toString() == "Avengers")
+    }
+
+    @Test
+    fun ensureCorrectVoteCounts() {
+        // Code should ensure the counts are correct before they are added
+        try {
+            badListItems = ListItem(0, "Avengers", "A movie about Batman", -100)
+        } catch (ex: Exception) {
+            assertTrue(ex.message == "Votes must be non-negative")
+        }
+    }
+
+    @Test
+    fun ensureMovieHasName() {
+        // Code should ensure that all movies have a name
+        try {
+            badListItems = ListItem(0, "", "A movie about Batman", 100)
+        } catch (ex: Exception) {
+            assertTrue(ex.message == "Name required")
+        }
     }
 }
