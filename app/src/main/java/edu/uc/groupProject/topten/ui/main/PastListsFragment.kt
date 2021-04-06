@@ -1,5 +1,6 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.Spinner
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import edu.uc.groupProject.topten.R
+
 
 //Handles the past_lists_fragment
 class PastListsFragment : Fragment() {
@@ -22,12 +27,18 @@ class PastListsFragment : Fragment() {
         fun newInstance() = PastListsFragment()
     }
 
+
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.past_lists_fragment, container, false)
     }
+
+
 
 
 
@@ -52,6 +63,8 @@ class PastListsFragment : Fragment() {
                 }
             )
         })
+
+
     }
 
 }

@@ -7,8 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,10 @@ class MainFragment : Fragment() {
     var testList = ArrayList<ListItem>()
     private lateinit var countDownTimer:CountDownTimer
     private var isCanceled = false
+    lateinit var dialogToDisplay:ListExpirationDialog
+    lateinit var previousListTitle:String
+    lateinit var winningItem:String
+
 
 
 
@@ -90,6 +96,8 @@ class MainFragment : Fragment() {
 
     //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
 
+        createShareListFunctionality()
+
 
         recyclerView.layoutManager =  LinearLayoutManager(this.context)
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
@@ -137,6 +145,8 @@ class MainFragment : Fragment() {
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
 
                     listTitleLabel.text = viewModel.firestoreService.currentList
+                    previousListTitle = viewModel.firestoreService.currentList
+                    winningItem = viewModel.firestoreService.list.value!![0].title
 
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
@@ -164,6 +174,24 @@ class MainFragment : Fragment() {
 
     }
 
+    private fun createShareListFunctionality() {
+        var shareButton:ImageButton = view!!.findViewById<ImageButton>(R.id.btn_shareList)
+        shareButton.setOnClickListener({
+
+            var possibleList = viewModel.firestoreService.list
+            if(possibleList != null){
+                var privateListFragment:PrivateListFragment = PrivateListFragment()
+
+                var newListToAddTitle:String = "Test123"
+
+                var bundle:Bundle = Bundle()
+                bundle.putString("ListTitle",newListToAddTitle)
+                privateListFragment.arguments = bundle
+                activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, privateListFragment).commit()
+            }
+
+        })
+    }
 
 
     fun startCountdownTimer(totalTimeInMilli: Long){
@@ -174,7 +202,7 @@ class MainFragment : Fragment() {
                 val hours = (millisUntilFinished / 1000 / 3600)
                 val minutes = (millisUntilFinished / 1000 / 60 % 60)
                 val seconds = (millisUntilFinished / 1000 % 60)
-                timerTextView.setText("VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec")
+                timerTextView.setText("${hours} hrs  ${minutes} min  ${seconds} sec")
             }
 
             override fun onFinish() {
@@ -193,15 +221,38 @@ class MainFragment : Fragment() {
 
                     startCountdownTimer(countdownTime)
 
+                    launchListResultsDialog()
+
+
+
                 }
 
                 }
-
-
-
-
 
         }.start()
+
+
+    }
+
+    fun launchListResultsDialog(){
+
+    try{
+
+      dialogToDisplay = ListExpirationDialog()
+
+      if(this.fragmentManager != null && this.isVisible()){
+      var infoForDialog:Bundle = Bundle()
+      infoForDialog.putString("ListTitle", previousListTitle)
+      infoForDialog.putString("FirstPlace",winningItem)
+      dialogToDisplay.setArguments(infoForDialog)
+         dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
+      }
+
+    }catch(e: Exception){
+
+
+
+    }
 
 
     }

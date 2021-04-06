@@ -7,39 +7,54 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/black"
-        android:orientation="vertical"
-        android:paddingStart="10sp"
-        android:paddingRight="10sp"
+        android:layout_height="wrap_content"
+        android:background="#0E0000"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:layout_editor_absoluteX="10dp">
 
         <TextView
             android:id="@+id/tv_mainListTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="92dp"
             android:fontFamily="@font/baloo"
-            android:text="Top Ten Movies"
-            android:textAlignment="center"
+            android:text="_"
+            android:textAlignment="textStart"
             android:textColor="#DFDEDE"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_mainListTimer"
+            app:layout_constraintEnd_toStartOf="@+id/btn_shareList" />
 
         <TextView
             android:id="@+id/tv_mainListTimer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="188dp"
             android:layout_weight="1"
             android:fontFamily="@font/baloo"
-            android:text="0hrs 12 min 56 sec"
+            android:text="0 hrs 0 min 0sec"
             android:textAlignment="textEnd"
             android:textColor="#FFFFFF"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_shareList"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_mainListTitle" />
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/btn_shareList"
+            android:layout_width="77dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_menu_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rec_currentList"
@@ -51,11 +66,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

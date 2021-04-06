@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +9,6 @@
     android:layout_marginBottom="13sp"
     android:padding="10dp"
     app:cardBackgroundColor="#00FFFFFF">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -55,10 +56,27 @@
             android:textAlignment="viewStart"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_Vote"
             app:layout_constraintTop_toBottomOf="@+id/txt_Title"
             app:layout_constraintVertical_bias="0.483" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="57dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.833"
+            app:layout_constraintStart_toEndOf="@+id/txt_Title"
+            app:layout_constraintTop_toTopOf="@+id/txt_Title"
+            app:layout_constraintVertical_bias="0.222"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_url="https://assets1.lottiefiles.com/datafiles/uPRZVpdi1M78Hhm/data.json" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -77,4 +95,10 @@
         android:visibility="visible" />
 
 
+
+
+
 </androidx.cardview.widget.CardView>
+
+
+

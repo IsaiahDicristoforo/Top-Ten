@@ -63,4 +63,16 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.android.support:multidex:1.0.3'
+
+    // Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    // androidx.test
+    def androidx_test = "1.1.0"
+    androidTestImplementation "androidx.test:runner:$androidx_test"
+    androidTestImplementation "androidx.test:core:$androidx_test"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$androidx_test"
+
+    def lottieVersion = "3.6.1"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }
+

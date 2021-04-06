@@ -1,14 +1,22 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
+import edu.uc.groupProject.topten.MainActivity
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
+import kotlin.coroutines.coroutineContext
 
 
 /**
@@ -88,12 +96,16 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         val totalVotes: TextView
         val currentRank: TextView
         val voteButton: ImageButton
+        val buttonClickAnimation:LottieAnimationView
 
         init {
             listItemTitle = view.findViewById(R.id.txt_Title)
             totalVotes = view.findViewById(R.id.txt_TotalVotes)
             currentRank = view.findViewById(R.id.txt_Rank)
             voteButton = view.findViewById(R.id.btn_Vote)
+            buttonClickAnimation = view.findViewById(R.id.animationView)
+
+
         }
     }
 
@@ -124,6 +136,9 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         holder.voteButton.setOnClickListener(){
             //holder.voteButton.isClickable = false
             mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
+            holder.buttonClickAnimation.playAnimation()
+            holder.voteButton.setImageResource(android.R.drawable.btn_star_big_on)
+
         }
     }
 
