@@ -9,7 +9,6 @@ import edu.uc.groupProject.topten.dto.ListItem
  * Contains the fetchList() function, which fetches a specific list according to the list's name.
  */
 class ListService {
-
     /**
      * Fetches a specific list according to the list's name.
      * @param listName The name of the list being fetched.

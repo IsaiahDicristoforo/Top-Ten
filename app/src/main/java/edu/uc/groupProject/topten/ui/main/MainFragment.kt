@@ -1,5 +1,11 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Parcelable
@@ -9,6 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -46,8 +55,10 @@ class MainFragment : Fragment() {
     lateinit var winningItem:String
 
 
-
-
+    //Notification code
+    private val channelId = "edu.uc.groupProject.topten"
+    private val channelName = "Top Ten Channel"
+    private var notificationId = 0
 
     /**
      * Creates the view.
@@ -56,16 +67,7 @@ class MainFragment : Fragment() {
      * @param savedInstanceState The current instance.
      * @return The layout of the application's UI.
      */
-    override fun onCreateView(
-
-
-
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -103,47 +105,15 @@ class MainFragment : Fragment() {
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
 
         viewModel.loadNextList(false)
-
-     /*   var listItemsToAdd = ArrayList<ListItem>()
-        listItemsToAdd.add(ListItem(0,"Cinnamon Toast Crunch","",0))
-        listItemsToAdd.add(ListItem(1,"Lucky Charms","",0))
-        listItemsToAdd.add(ListItem(2,"Froot Loops","",0))
-        listItemsToAdd.add(ListItem(3,"Cheerios","",0))
-        listItemsToAdd.add(ListItem(4,"Frosted Flakes","",0))
-        listItemsToAdd.add(ListItem(5,"Honeycomb","",0))
-        listItemsToAdd.add(ListItem(6,"Cap'n Crunch","",0))
-        listItemsToAdd.add(ListItem(6,"Reese's Puffs","",0))
-
-        var list: TopTenList = TopTenList(
-            1,
-            "Top Ten Cereals",
-            "A list of favorite cereals",
-            false,
-            "Food",
-            Date(),
-            Date()
-        )
-        list.listItems = listItemsToAdd
-        viewModel.firestoreService.writeListToDatabase(list)
-
-      */
-
-
         adapter = CurrentListAdapter(viewModel, testList)
         recyclerView.adapter = adapter
 
-
-
         viewModel.firestoreService.list.observe(this, Observer {
-
             activity?.runOnUiThread(
-
                 Runnable {
                     val recyclerViewState: Parcelable? =
                         recyclerView.layoutManager!!.onSaveInstanceState()
-
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
-
                     listTitleLabel.text = viewModel.firestoreService.currentList
                     previousListTitle = viewModel.firestoreService.currentList
                     winningItem = viewModel.firestoreService.list.value!![0].title
@@ -152,26 +122,15 @@ class MainFragment : Fragment() {
                 }
             )
 
-            // adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
-
-            //adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
-            //Stops the animation from playing each time the recycler view is updated/a vote changes
             if (viewModel.playAnimation) {
                 recyclerView.startLayoutAnimation()
                 viewModel.playAnimation = false
 
                 getTimeRemainingOnCurrentList()
             }
-
-
-
         })
-
-
         isCanceled = true
-
         viewModel.fetchStrawpoll(1)
-
     }
 
     private fun createShareListFunctionality() {
@@ -195,30 +154,45 @@ class MainFragment : Fragment() {
 
 
     fun startCountdownTimer(totalTimeInMilli: Long){
+        createNotificationChannel()
+        val notificationManager = NotificationManagerCompat.from(activity!!)
 
-     countDownTimer =   object : CountDownTimer(totalTimeInMilli, 1000) {
+        countDownTimer = object : CountDownTimer(totalTimeInMilli, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-
                 val hours = (millisUntilFinished / 1000 / 3600)
                 val minutes = (millisUntilFinished / 1000 / 60 % 60)
                 val seconds = (millisUntilFinished / 1000 % 60)
                 timerTextView.setText("${hours} hrs  ${minutes} min  ${seconds} sec")
+
+                if(seconds.toInt() == 10){
+                    val notification = NotificationCompat.Builder(activity!!, channelId)
+                        .setContentTitle("Top Ten List Expiring in 10 secs !")
+                        .setContentText("Last Chance to vote on your favorite List Item.")
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .build()
+
+                    notificationManager.notify(notificationId, notification)
+                }
+
+                timerTextView.setText("VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec")
             }
 
             override fun onFinish() {
-
                 if(isCanceled){
+                    val notification = NotificationCompat.Builder(activity!!, channelId)
+                        .setContentTitle("New list is on its way...!")
+                        .setContentText("Go vote on your favorite list item.")
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .build()
 
+                    notificationManager.notify(notificationId, notification)
                     timerTextView.setText("Voting is Closed On The List!")
-
                     viewModel.loadNextList(true)
-
                     adapter.notifyDataSetChanged()
-
                     recyclerView.startLayoutAnimation()
-
                     viewModel.playAnimation = false
-
                     startCountdownTimer(countdownTime)
 
                     launchListResultsDialog()
@@ -260,18 +234,11 @@ class MainFragment : Fragment() {
    private fun getTimeRemainingOnCurrentList(): Long {
 
         val db = FirebaseFirestore.getInstance()
-
         var expiryDate:Date
-
         var path:String = "lists/" + viewModel.firestoreService.currentList
-
         var result:Long= 0
-
         var validList:Boolean = false
-
-
             db.document(path).get().addOnSuccessListener {
-
                 expiryDate = it.getDate("expireDate")!!
 
 
@@ -288,5 +255,15 @@ class MainFragment : Fragment() {
 
    }
 
+    fun createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply{
+                lightColor = Color.CYAN
+                enableLights(true)
+            }
 
+            val manager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
 }
