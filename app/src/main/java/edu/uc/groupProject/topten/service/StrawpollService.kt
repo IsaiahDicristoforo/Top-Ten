@@ -30,4 +30,33 @@ class StrawpollService {
         })
         return strawpoll
     }
+
+   fun createStrawpoll(title: String, options: ArrayList<String>, multi: Boolean = true): MutableLiveData<Strawpoll>?{
+       // Create our response object and strawpoll instance
+        var strawpoll = MutableLiveData<Strawpoll>()
+        val service = StrawpollInstance.retrofitInstance?.create(IStrawpollDAO::class.java)
+
+       // Create our strawpoll post object
+        var poll = Strawpoll(title=title, options=options, multi=multi)
+
+       // Call our POST endpoint
+        val call = service?.createStrawpoll(poll)
+
+       // Enqueue the call
+        call?.enqueue(object : Callback<Strawpoll> {
+            override fun onFailure(bigcall: Call<Strawpoll>, t: Throwable) {
+                println(t.message)
+            }
+
+            override fun onResponse(call: Call<Strawpoll>?, response: Response<Strawpoll>?) {
+                if(response?.code() == 200){
+                    strawpoll.value = response?.body()
+                }
+
+            }
+        })
+
+       // Return the strawpoll
+        return strawpoll
+    }
 }

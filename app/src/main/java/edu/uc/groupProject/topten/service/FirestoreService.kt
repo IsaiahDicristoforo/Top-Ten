@@ -10,7 +10,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-
 class FirestoreService {
     var listIncrementTime: Long = 0
     var listOfLists: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
@@ -47,26 +46,17 @@ class FirestoreService {
     fun fetchList(generateNewList:Boolean): MutableLiveData<ArrayList<ListItem>> {
         val db = FirebaseFirestore.getInstance()
 
-        var listItemCollection = db.collection("lists")
-
-
-
-
         var theCollection = db.collection("lists").get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val myList: MutableList<String> = ArrayList()
                     for (document in task.result!!) {
-
                         myList.add(document.id)
-                        //arrayOfLists.add(currentList)
-                        //listOfLists.value = arrayOfLists
 
                         if (document.getBoolean("active") == true && !generateNewList) {
                             currentList = document.id
                             break
                         }
-
                     }
 
                     if (generateNewList) {
@@ -91,28 +81,27 @@ class FirestoreService {
 
                                 }
 
-                                if (snapshot != null) {
-                                    var allListItems = ArrayList<ListItem>()
-                                    val documents = snapshot.documents
+                        if (snapshot != null) {
+                            var allListItems = ArrayList<ListItem>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val listItem: ListItem = ListItem(
+                                    it.getLong("id")!!.toInt(),
+                                    it.getString("title")!!,
+                                    "Test",
+                                    it.getLong("totalVotes")!!.toInt())
 
-                                    documents.forEach {
-                                        val listItem: ListItem = ListItem(
-                                            it.getLong("id")!!.toInt(), it.getString(
-                                                "title"
-                                            )!!, "Test", it.getLong("totalVotes")!!.toInt()
-                                        )
-                                        allListItems.add(listItem)
-                                    }
-                                    allListItems = sortListItemsByVoteDesc((allListItems))
-
-                                    list.value = allListItems
-                                }
+                                allListItems.add(listItem)
                             }
+                            allListItems = sortListItemsByVoteDesc((allListItems))
 
-                    } else {
-                        Log.d("ERROR", "Error getting documents: ", task.exception)
+                            list.value = allListItems
+                        }
                     }
-
+                }
+                else {
+                    Log.d("ERROR", "Error getting documents: ", task.exception)
+                }
             }
 
 
@@ -165,8 +154,7 @@ class FirestoreService {
      */
     fun addListItemVote(listItemToIncrement: String) {
         val db = FirebaseFirestore.getInstance()
-        var listItemDocument =
-            db.document("lists/" + currentList + "/listItems/" + listItemToIncrement)
+        var listItemDocument = db.document("lists/" + currentList + "/listItems/" + listItemToIncrement)
         var totalVotes: Number
         listItemDocument.get().addOnSuccessListener {
             totalVotes = it.getLong("totalVotes")!!
@@ -255,43 +243,31 @@ class FirestoreService {
 
         var calendar:Calendar = Calendar.getInstance()
 
-        var allLists = db.collection("lists").get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val myList: MutableList<String> = ArrayList()
-                    for (document in task.result!!) {
+        var allLists = db.collection("lists").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val myList: MutableList<String> = ArrayList()
+                for (document in task.result!!) {
+                    calendar.add(Calendar.MILLISECOND,timeIncrementInMilli)
 
-                        calendar.add(Calendar.MILLISECOND,timeIncrementInMilli)
-
-                      db.document("lists/" + document.id).update("expireDate",calendar.time)
-
-                    }
+                    db.document("lists/" + document.id).update("expireDate",calendar.time)
                 }
-                }
+            }
+        }
     }
 
     fun getTimeRemainingOnCurrentList(timer:CountDownTimer): Long {
-
         val db = FirebaseFirestore.getInstance()
-
-       var expiryDate:Date
-
+        var expiryDate:Date
         var path:String = "lists/" + currentList
 
         var result:Long= 0
 
         db.document(path).get().addOnSuccessListener {
-
-           expiryDate = it.getDate("expireDate")!!
-
-             result = Math.abs(TimeUnit.MILLISECONDS.convert (expiryDate.time- Date().time, TimeUnit.MILLISECONDS))
-
-
-       }.addOnFailureListener { exception ->
-               Log.d("error", "get failed with ", exception)
-           }
-
-
+            expiryDate = it.getDate("expireDate")!!
+            result = Math.abs(TimeUnit.MILLISECONDS.convert (expiryDate.time- Date().time, TimeUnit.MILLISECONDS))
+        }.addOnFailureListener { exception ->
+            Log.d("error", "get failed with ", exception)
+        }
         timer.start()
 
         return result
