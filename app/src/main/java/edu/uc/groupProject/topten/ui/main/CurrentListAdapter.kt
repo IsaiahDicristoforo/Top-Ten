@@ -148,6 +148,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
             holder.currentRank.text = (position + 1).toString()
         }
 
+        holder.voteButton.setImageResource(android.R.drawable.btn_star_big_off)
+
         if(lastClickedListItemTitle == holder.listItemTitle.text.toString()){
             holder.voteButton.setImageResource(android.R.drawable.btn_star_big_on)
         }
@@ -196,15 +198,12 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
                 mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
 
                 holder.voteButton.setImageResource(android.R.drawable.btn_star_big_on)
+                holder.buttonClickAnimation.playAnimation()
                 holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
                 holder.currentRank.text = (position + 1).toString()
             }
 
             //userHasVoted = currentActivity.getPreferences(Context.MODE_PRIVATE).getBoolean("HasVoted",false)
-
-
-
-
 
         }
 
