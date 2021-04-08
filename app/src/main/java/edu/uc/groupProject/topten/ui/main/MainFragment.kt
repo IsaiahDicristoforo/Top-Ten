@@ -109,7 +109,7 @@ class MainFragment : Fragment() {
                 getTimeRemainingOnCurrentList()
             }
         })
-        
+
         isCanceled = true
         viewModel.fetchStrawpoll(1)
     }
@@ -133,9 +133,6 @@ class MainFragment : Fragment() {
     }
 
     fun startCountdownTimer(totalTimeInMilli: Long){
-        createNotificationChannel()
-        val notificationManager = NotificationManagerCompat.from(activity!!)
-
         countDownTimer = object : CountDownTimer(totalTimeInMilli, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val hours = (millisUntilFinished / 1000 / 3600)
@@ -144,14 +141,19 @@ class MainFragment : Fragment() {
                 timerTextView.text = "${hours} hrs  ${minutes} min  ${seconds} sec"
 
                 if(seconds.toInt() == 10){
-                    val notification = NotificationCompat.Builder(activity!!, channelId)
-                        .setContentTitle("Top Ten List Expiring in 10 secs !")
-                        .setContentText("Last Chance to vote on your favorite List Item.")
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .build()
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+                        val notificationManager = NotificationManagerCompat.from(activity!!)
+                        createNotificationChannel()
 
-                    notificationManager.notify(notificationId, notification)
+                        val notification = NotificationCompat.Builder(activity!!, channelId)
+                            .setContentTitle("Top Ten List Expiring in 10 secs !")
+                            .setContentText("Last Chance to vote on your favorite List Item.")
+                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .build()
+
+                        notificationManager.notify(notificationId, notification)
+                    }
                 }
 
                 timerTextView.text = "VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec"
@@ -159,14 +161,19 @@ class MainFragment : Fragment() {
 
             override fun onFinish() {
                 if(isCanceled){
-                    val notification = NotificationCompat.Builder(activity!!, channelId)
-                        .setContentTitle("New list is on its way...!")
-                        .setContentText("Go vote on your favorite list item.")
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .build()
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+                        val notificationManager = NotificationManagerCompat.from(activity!!)
+                        createNotificationChannel()
+                        val notification = NotificationCompat.Builder(activity!!, channelId)
+                            .setContentTitle("New list is on its way...!")
+                            .setContentText("Go vote on your favorite list item.")
+                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .build()
 
-                    notificationManager.notify(notificationId, notification)
+                        notificationManager.notify(notificationId, notification)
+                    }
+
                     timerTextView.text = "Voting is Closed On The List!"
                     viewModel.loadNextList(true)
                     adapter.notifyDataSetChanged()
