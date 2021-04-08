@@ -106,6 +106,7 @@ class FirestoreService {
                                     allListItems = sortListItemsByVoteDesc((allListItems))
 
                                     list.value = allListItems
+
                                 }
                             }
 

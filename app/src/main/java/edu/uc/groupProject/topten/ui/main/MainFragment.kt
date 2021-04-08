@@ -1,5 +1,6 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Parcelable
@@ -44,8 +45,7 @@ class MainFragment : Fragment() {
     lateinit var dialogToDisplay:ListExpirationDialog
     lateinit var previousListTitle:String
     lateinit var winningItem:String
-
-
+    var isVotedSharedPreference = activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)
 
 
 
@@ -58,8 +58,6 @@ class MainFragment : Fragment() {
      */
     override fun onCreateView(
 
-
-
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -67,6 +65,8 @@ class MainFragment : Fragment() {
 
 
         return inflater.inflate(R.layout.main_fragment, container, false)
+
+
     }
 
     /**
@@ -80,9 +80,14 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
+        isVotedSharedPreference = activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)
+       // isVotedSharedPreference?.edit()?.putBoolean("HasVoted", false)?.apply()
+
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.firestoreService.listIncrementTime = countdownTime
+
 
 
         recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
@@ -125,11 +130,10 @@ class MainFragment : Fragment() {
         )
         list.listItems = listItemsToAdd
         viewModel.firestoreService.writeListToDatabase(list)
-
       */
 
 
-        adapter = CurrentListAdapter(viewModel, testList)
+        adapter = CurrentListAdapter(viewModel, testList, context!!)
         recyclerView.adapter = adapter
 
 
@@ -142,8 +146,17 @@ class MainFragment : Fragment() {
                     val recyclerViewState: Parcelable? =
                         recyclerView.layoutManager!!.onSaveInstanceState()
 
-                    adapter.setItemList(viewModel.firestoreService.list.value!!)
 
+                    if(!activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)!!.getBoolean("HasVoted", false)){
+
+                        var randomizedItems = viewModel.firestoreService.list.value
+                        randomizedItems!!.shuffle()
+                        adapter.setItemList(randomizedItems)
+
+                    }else{
+                        adapter.setItemList(viewModel.firestoreService.list.value!!)
+
+                    }
                     listTitleLabel.text = viewModel.firestoreService.currentList
                     previousListTitle = viewModel.firestoreService.currentList
                     winningItem = viewModel.firestoreService.list.value!![0].title
@@ -152,9 +165,7 @@ class MainFragment : Fragment() {
                 }
             )
 
-            // adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
 
-            //adapter = CurrentListAdapter(viewModel, viewModel.firestoreService.list.value!!)
             //Stops the animation from playing each time the recycler view is updated/a vote changes
             if (viewModel.playAnimation) {
                 recyclerView.startLayoutAnimation()
@@ -208,22 +219,20 @@ class MainFragment : Fragment() {
             override fun onFinish() {
 
                 if(isCanceled){
-
                     timerTextView.setText("Voting is Closed On The List!")
-
                     viewModel.loadNextList(true)
 
                     adapter.notifyDataSetChanged()
-
                     recyclerView.startLayoutAnimation()
-
                     viewModel.playAnimation = false
-
                     startCountdownTimer(countdownTime)
-
                     launchListResultsDialog()
 
+                    isVotedSharedPreference?.edit()?.putString("ListName",viewModel.firestoreService.currentList )?.apply()
+                    isVotedSharedPreference?.edit()?.putBoolean("HasVoted", false)?.apply()
 
+                    adapter.lastClickedListItemTitle = ""
+                    adapter.newList = true
 
                 }
 
@@ -241,11 +250,11 @@ class MainFragment : Fragment() {
       dialogToDisplay = ListExpirationDialog()
 
       if(this.fragmentManager != null && this.isVisible()){
-      var infoForDialog:Bundle = Bundle()
-      infoForDialog.putString("ListTitle", previousListTitle)
-      infoForDialog.putString("FirstPlace",winningItem)
-      dialogToDisplay.setArguments(infoForDialog)
-         dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
+        var infoForDialog:Bundle = Bundle()
+        infoForDialog.putString("ListTitle", previousListTitle)
+        infoForDialog.putString("FirstPlace",winningItem)
+        dialogToDisplay.setArguments(infoForDialog)
+          dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
       }
 
     }catch(e: Exception){
