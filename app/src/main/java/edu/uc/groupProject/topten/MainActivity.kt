@@ -1,17 +1,12 @@
 package edu.uc.groupProject.topten
 
-import androidx.appcompat.app.AppCompatActivity
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.squareup.okhttp.internal.Internal.instance
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import edu.uc.groupProject.topten.ui.main.MainViewModel
 import edu.uc.groupProject.topten.ui.main.PastListsFragment
@@ -43,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         bottomMenu = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomMenu.selectedItemId = R.id.currentList
         bottomMenu.setOnNavigationItemSelectedListener { item: MenuItem ->
-
             when (item.itemId) {
                 R.id.currentList -> {
                     changeFragment(MainFragment())
@@ -63,16 +57,16 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         val loginButton = findViewById<Button>(R.id.loginButton)
+
         loginButton.setOnClickListener {
             createSignInIntent()
         }
     }
 
-
     private fun changeFragment(newFragment: Fragment) {
-        supportFragmentManager?.beginTransaction()?.replace(R.id.container, newFragment)
-            ?.commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container, newFragment).commit()
     }
 
     private fun createSignInIntent() {
@@ -94,7 +88,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-
         private const val RC_SIGN_IN = 123
     }
 }

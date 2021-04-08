@@ -30,6 +30,33 @@ class ListItemDataUnitTest {
         thenResultContainsAvengers()
     }
 
+    @Test
+    fun ToStringReturnsTitle() {
+        var toStringTest = mockk<ListItem>()
+        toStringTest = ListItem(0, "Avengers", "A movie about Batman", 100)
+        assertTrue(toStringTest.toString() == "Avengers")
+    }
+
+    @Test
+    fun ensureCorrectVoteCounts() {
+        // Code should ensure the counts are correct before they are added
+        try {
+            badListItems = ListItem(0, "Avengers", "A movie about Batman", -100)
+        } catch (ex: Exception) {
+            assertTrue(ex.message == "Votes must be non-negative")
+        }
+    }
+
+    @Test
+    fun ensureMovieHasName() {
+        // Code should ensure that all movies have a name
+        try {
+            badListItems = ListItem(0, "", "A movie about Batman", 100)
+        } catch (ex: Exception) {
+            assertTrue(ex.message == "Name required")
+        }
+    }
+
     private fun givenAListOfMockItemsAreAvailable() {
         createMockData()
     }
@@ -82,32 +109,5 @@ class ListItemDataUnitTest {
         allListItemsLiveData.postValue(allListItems)
         every { listService.fetchList(any<String>()) } returns allListItemsLiveData
         mvm.listService = listService
-    }
-
-    @Test
-    fun ToStringReturnsTitle() {
-        var toStringTest = mockk<ListItem>()
-        toStringTest = ListItem(0, "Avengers", "A movie about Batman", 100)
-        assertTrue(toStringTest.toString() == "Avengers")
-    }
-
-    @Test
-    fun ensureCorrectVoteCounts() {
-        // Code should ensure the counts are correct before they are added
-        try {
-            badListItems = ListItem(0, "Avengers", "A movie about Batman", -100)
-        } catch (ex: Exception) {
-            assertTrue(ex.message == "Votes must be non-negative")
-        }
-    }
-
-    @Test
-    fun ensureMovieHasName() {
-        // Code should ensure that all movies have a name
-        try {
-            badListItems = ListItem(0, "", "A movie about Batman", 100)
-        } catch (ex: Exception) {
-            assertTrue(ex.message == "Name required")
-        }
     }
 }

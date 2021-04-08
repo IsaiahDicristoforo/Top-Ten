@@ -14,18 +14,14 @@ class PastListsViewModel : ViewModel() {
     var firestoreService : FirestoreService =  FirestoreService()
     var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
 
-
-
     fun loadLists(): MutableLiveData<ArrayList<String>> {
         lists = firestoreService.listOfLists
         return lists
     }
 
-
     fun fetchFirestoreListItem(){
         list = firestoreService.fetchDocument()
     }
-
 
     fun fetchListServiceList(listName: String) {
         list = listService.fetchList(listName)
@@ -35,6 +31,4 @@ class PastListsViewModel : ViewModel() {
         val service = StrawpollService()
         return service.getStrawpoll(id)
     }
-
-
 }

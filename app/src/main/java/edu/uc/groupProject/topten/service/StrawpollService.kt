@@ -14,7 +14,6 @@ import retrofit2.Response
  * Makes use of the Retrofit instance
  */
 class StrawpollService {
-
     fun getStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
         var strawpoll = MutableLiveData<Strawpoll>()
         val service = StrawpollInstance.retrofitInstance?.create(IStrawpollDAO::class.java)
@@ -28,21 +27,22 @@ class StrawpollService {
                 strawpoll.value = response?.body()
             }
         })
+
         return strawpoll
     }
 
-   fun createStrawpoll(title: String, options: ArrayList<String>, multi: Boolean = true): MutableLiveData<Strawpoll>?{
-       // Create our response object and strawpoll instance
+    fun createStrawpoll(title: String, options: ArrayList<String>, multi: Boolean = true): MutableLiveData<Strawpoll>?{
+        // Create our response object and strawpoll instance
         var strawpoll = MutableLiveData<Strawpoll>()
         val service = StrawpollInstance.retrofitInstance?.create(IStrawpollDAO::class.java)
 
-       // Create our strawpoll post object
+        // Create our strawpoll post object
         var poll = Strawpoll(title=title, options=options, multi=multi)
 
-       // Call our POST endpoint
+        // Call our POST endpoint
         val call = service?.createStrawpoll(poll)
 
-       // Enqueue the call
+        // Enqueue the call
         call?.enqueue(object : Callback<Strawpoll> {
             override fun onFailure(bigcall: Call<Strawpoll>, t: Throwable) {
                 println(t.message)

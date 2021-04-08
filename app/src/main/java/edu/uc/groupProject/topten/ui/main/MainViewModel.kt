@@ -1,7 +1,5 @@
 package edu.uc.groupProject.topten.ui.main
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import edu.uc.groupProject.topten.dto.ListItem
@@ -22,11 +20,9 @@ class MainViewModel : ViewModel() {
     var firestoreService : FirestoreService =  FirestoreService()
     var playAnimation:Boolean = true
 
-
     fun loadNextList(generateNewList:Boolean){
         list = firestoreService.fetchList(generateNewList)
     }
-
 
     fun fetchFirestoreListItem(){
         list = firestoreService.fetchDocument()
@@ -40,6 +36,4 @@ class MainViewModel : ViewModel() {
         val service = StrawpollService()
         return service.getStrawpoll(id)
     }
-
-
 }
