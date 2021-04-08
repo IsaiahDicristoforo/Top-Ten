@@ -159,6 +159,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
         holder.voteButton.setOnClickListener(){
 
+            currentActivity.getSharedPreferences("HasVoted", Context.MODE_PRIVATE).edit().putString("VotedOnTitle",holder.listItemTitle.text.toString()).apply()
+
             var animation:Animation= AnimationUtils.loadAnimation(currentActivity,R.anim.vote_button_animation)
             holder.voteButton.startAnimation(animation)
 

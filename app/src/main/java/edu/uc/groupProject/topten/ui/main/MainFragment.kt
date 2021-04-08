@@ -220,13 +220,37 @@ class MainFragment : Fragment() {
 
                 if(isCanceled){
                     timerTextView.setText("Voting is Closed On The List!")
+
+                    var votedOnItem = isVotedSharedPreference!!.getString("VotedOnTitle","")
+                    var positionOfYourItem =  viewModel.firestoreService.list.value!!.indexOfFirst{ item->item.title == votedOnItem } + 1
+
+                    var totalPoints = 0
+                    if(positionOfYourItem == 1){
+                        totalPoints = 200
+                    }
+                    else if(positionOfYourItem == 2){
+                        totalPoints = 100
+                    }else if(positionOfYourItem == 3){
+                        totalPoints = 50
+                    }else if(positionOfYourItem >= 5){
+                        totalPoints = 25
+                    }else{
+                        totalPoints += 5
+                    }
+
+                    var pastPointTotal = isVotedSharedPreference!!.getInt("TotalPoints",0)
+
+
+
                     viewModel.loadNextList(true)
 
                     adapter.notifyDataSetChanged()
                     recyclerView.startLayoutAnimation()
                     viewModel.playAnimation = false
                     startCountdownTimer(countdownTime)
-                    launchListResultsDialog()
+                    launchListResultsDialog(votedOnItem!!,positionOfYourItem,totalPoints,pastPointTotal)
+
+                    isVotedSharedPreference!!.edit().putInt("TotalPoints",pastPointTotal + totalPoints)
 
                     isVotedSharedPreference?.edit()?.putString("ListName",viewModel.firestoreService.currentList )?.apply()
                     isVotedSharedPreference?.edit()?.putBoolean("HasVoted", false)?.apply()
@@ -243,7 +267,7 @@ class MainFragment : Fragment() {
 
     }
 
-    fun launchListResultsDialog(){
+    fun launchListResultsDialog(selectedItem:String, finalPosition:Int, pointsEarned:Int, totalPoints:Int ){
 
     try{
 
@@ -253,6 +277,12 @@ class MainFragment : Fragment() {
         var infoForDialog:Bundle = Bundle()
         infoForDialog.putString("ListTitle", previousListTitle)
         infoForDialog.putString("FirstPlace",winningItem)
+          infoForDialog.putString("SelectedItem",selectedItem)
+          infoForDialog.putInt("FinalPosition",finalPosition)
+          infoForDialog.putInt("TotalPoints", totalPoints)
+          infoForDialog.putInt("PointsEarned", pointsEarned)
+
+
         dialogToDisplay.setArguments(infoForDialog)
           dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
       }
