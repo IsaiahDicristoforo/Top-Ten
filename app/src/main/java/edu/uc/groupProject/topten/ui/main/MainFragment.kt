@@ -222,14 +222,12 @@ class MainFragment : Fragment() {
     }
 
     private fun createNotificationChannel(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply{
-                lightColor = Color.CYAN
-                enableLights(true)
-            }
-
-            val manager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply{
+            lightColor = Color.CYAN
+            enableLights(true)
         }
+
+        val manager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
     }
 }
