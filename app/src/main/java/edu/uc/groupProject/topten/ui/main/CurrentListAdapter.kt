@@ -6,6 +6,8 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -156,6 +158,11 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
 
         holder.voteButton.setOnClickListener(){
+
+            var animation:Animation= AnimationUtils.loadAnimation(currentActivity,R.anim.vote_button_animation)
+            holder.voteButton.startAnimation(animation)
+
+
             lastClickedListItemTitle = holder.listItemTitle.text.toString()
             userHasVoted = currentActivity.getSharedPreferences("HasVoted", Context.MODE_PRIVATE).getBoolean("HasVoted",false)
             if(!userHasVoted){
