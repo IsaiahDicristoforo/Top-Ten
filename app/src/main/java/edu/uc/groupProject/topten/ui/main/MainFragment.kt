@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
+import edu.uc.groupProject.topten.service.FirestoreService
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -46,6 +46,7 @@ class MainFragment : Fragment() {
     lateinit var previousListTitle:String
     lateinit var winningItem:String
     var isVotedSharedPreference = activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)
+    var firestoreService : FirestoreService =  FirestoreService()
 
 
 
@@ -91,12 +92,12 @@ class MainFragment : Fragment() {
 
 
         recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
-        var userName = view!!.findViewById<TextView>(R.id.username)
-        var userPoints = view!!.findViewById<TextView>(R.id.points)
+        var userName = view!!.findViewById<TextView>(R.id.txt_username)
+        var userPoints = view!!.findViewById<TextView>(R.id.txt_points)
         timerTextView  = view!!.findViewById(R.id.tv_mainListTimer)
         var listTitleLabel = view!!.findViewById<TextView>(R.id.tv_mainListTitle)
-        //userName.text = viewModel.getUserName()
-        //userPoints.text = viewModel.getUserPoints()
+        //userName.text = firestoreService.getUserName()
+      //  userPoints.text = firestoreService.getUserPoints()
 
 
     //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
