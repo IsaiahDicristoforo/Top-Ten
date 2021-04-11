@@ -7,7 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
-class StrawpollUnitTest {
+class PollUnitTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
     lateinit var pvm: PrivateListViewModel
@@ -18,12 +18,7 @@ class StrawpollUnitTest {
     }
 
     @Test
-    fun strawpollDTO_isPopulated() {
-        whenJSONDataAreReadAndParsed()
-    }
-
-    fun whenJSONDataAreReadAndParsed() {
-        pvm.fetchStrawpoll(1)
-        pvm.createStrawpoll()
+    fun createPoll() {
+        pvm.createPoll()
     }
 }

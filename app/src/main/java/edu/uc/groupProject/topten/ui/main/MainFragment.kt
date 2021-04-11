@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Parcelable
@@ -111,7 +110,6 @@ class MainFragment : Fragment() {
         })
 
         isCanceled = true
-        viewModel.fetchStrawpoll(1)
     }
 
     private fun createShareListFunctionality() {
