@@ -15,22 +15,22 @@ import retrofit2.Response
  * Makes use of the Retrofit instance
  */
 class PollService {
-    /*fun getStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
-        var strawpoll = MutableLiveData<Strawpoll>()
+    fun getPoll(id: Int?): MutableLiveData<PollResponse>? {
+        var pollResponse = MutableLiveData<PollResponse>()
         val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
-        val call = service?.getStrawpoll(id)
+        val call = service?.getPoll(id)
 
-        call?.enqueue(object : Callback<Strawpoll> {
-            override fun onFailure(call: Call<Strawpoll>, t: Throwable) {
+        call?.enqueue(object : Callback<PollResponse> {
+            override fun onFailure(call: Call<PollResponse>, t: Throwable) {
             }
 
-            override fun onResponse(call: Call<Strawpoll>?, response: Response<Strawpoll>?) {
-                strawpoll.value = response?.body()
+            override fun onResponse(call: Call<PollResponse>?, response: Response<PollResponse>?) {
+                pollResponse.value = response?.body()
             }
         })
 
-        return strawpoll
-    }*/
+        return pollResponse
+    }
 
     fun createPoll(question: String, choices: ArrayList<String>): MutableLiveData<PollResponse>?{
         // Create our response object and poll instance

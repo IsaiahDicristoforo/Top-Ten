@@ -18,7 +18,12 @@ class PollUnitTest {
     }
 
     @Test
-    fun createPoll() {
-        pvm.createPoll()
+    fun CreateAndFetchPoll() {
+        var poll = pvm.createPoll()
+        var url = poll?.value?.url
+
+        var questionId = url?.substring(url?.lastIndexOf('/')+1)?.toInt()
+
+        var retrievedPoll = pvm.getPoll(questionId)
     }
 }

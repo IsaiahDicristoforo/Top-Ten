@@ -7,14 +7,18 @@ import edu.uc.groupProject.topten.service.PollService
 
 class PrivateListViewModel : ViewModel() {
     // TODO: Implement the ViewModel
+    var service = PollService()
 
     // Example create poll method
     fun createPoll() : MutableLiveData<PollResponse>? {
         var testOptions = ArrayList<String>()
         testOptions.add("Option 1")
         testOptions.add("Option 2")
-        val service = PollService()
 
         return  service.createPoll("3141592653", testOptions)
+    }
+
+    fun getPoll(id: Int? = 1) : MutableLiveData<PollResponse>? {
+        return service.getPoll(id)
     }
 }
