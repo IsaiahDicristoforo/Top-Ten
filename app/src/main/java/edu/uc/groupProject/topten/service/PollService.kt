@@ -3,6 +3,7 @@ package edu.uc.groupProject.topten.service
 import androidx.lifecycle.MutableLiveData
 import edu.uc.groupProject.topten.dao.IPollDAO
 import edu.uc.groupProject.topten.dto.Poll
+import edu.uc.groupProject.topten.dto.PollChoice
 import edu.uc.groupProject.topten.dto.PollResponse
 import edu.uc.groupProject.topten.instance.PollInstance
 import retrofit2.Call
@@ -50,14 +51,29 @@ class PollService {
             }
 
             override fun onResponse(call: Call<PollResponse>?, response: Response<PollResponse>?) {
-                if(response?.code() == 200){
                     pollResponse.value = response?.body()
-                }
 
             }
         })
 
        // Return the strawpoll
+        return pollResponse
+    }
+
+    fun castVote(question_id: Int?, choice_id: Int?): MutableLiveData<PollChoice>? {
+        var pollResponse = MutableLiveData<PollChoice>()
+        val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
+        val call = service?.castVote(question_id, choice_id)
+
+        call?.enqueue(object : Callback<PollChoice> {
+            override fun onFailure(call: Call<PollChoice>, t: Throwable) {
+            }
+
+            override fun onResponse(call: Call<PollChoice>?, response: Response<PollChoice>?) {
+                pollResponse.value = response?.body()
+            }
+        })
+
         return pollResponse
     }
 }

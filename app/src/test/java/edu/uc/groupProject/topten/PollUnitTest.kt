@@ -19,11 +19,26 @@ class PollUnitTest {
 
     @Test
     fun CreateAndFetchPoll() {
-        var poll = pvm.createPoll()
+        // Poll Create POST Options
+        var testOptions = ArrayList<String>()
+        testOptions.add("Option 1")
+        testOptions.add("Option 2")
+
+        // Create Poll and save its URL
+        var poll = pvm.createPoll("test question", testOptions)
         var url = poll?.value?.url
 
+        // Get the question_id from created poll
         var questionId = url?.substring(url?.lastIndexOf('/')+1)?.toInt()
 
+        // Get the choice_id from the first choice in the created poll
+        var choice = poll?.value?.choices?.get(0)
+        var choiceId = choice?.url?.substring(choice?.url?.lastIndexOf('/')+1)?.toInt()
+
+        // Vote on the poll
+        var votedPoll = pvm.castVote(questionId, choiceId)
+
+        // Retrieve the poll
         var retrievedPoll = pvm.getPoll(questionId)
     }
 }
