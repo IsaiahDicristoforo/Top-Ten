@@ -12,7 +12,6 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import edu.uc.groupProject.topten.service.FirestoreService
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import edu.uc.groupProject.topten.ui.main.MainViewModel
 import edu.uc.groupProject.topten.ui.main.PastListsFragment
@@ -25,7 +24,6 @@ import edu.uc.groupProject.topten.ui.main.PrivateListFragment
 class MainActivity : AppCompatActivity() {
     var mvm: MainViewModel = MainViewModel()
     private lateinit var bottomMenu: BottomNavigationView
-    var firestoreService : FirestoreService =  FirestoreService()
 
     /**
      * onCreate function
@@ -83,7 +81,14 @@ class MainActivity : AppCompatActivity() {
         }
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
-            createSignInIntent()
+
+            val userName = findViewById<TextView>(R.id.txt_username)
+
+            if (userName.text != "test") {
+                //do nothing
+            } else {
+                createSignInIntent()
+            }
         }
     }
 
@@ -94,22 +99,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createSignInIntent() {
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
-        )
 
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setLogo((R.drawable.top10logo))
-                .setTheme((R.style.Theme_TopTen))
-                .build(),
-            RC_SIGN_IN
-        )
-    }
+            val providers = arrayListOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.PhoneBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build()
+            )
+
+            startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .setLogo((R.drawable.top10logo))
+                    .setTheme((R.style.Theme_TopTen))
+                    .build(),
+                RC_SIGN_IN
+            )
+        }
 
     companion object {
 
@@ -143,3 +149,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 }
+

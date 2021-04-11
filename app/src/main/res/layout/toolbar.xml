@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/design_default_color_primary"
+    android:background="#3F51B5"
     android:elevation="4dp"
     android:theme="@style/Theme.TopTen">
 
@@ -74,12 +74,12 @@
         android:id="@+id/loginButton"
         android:layout_width="75sp"
         android:layout_height="50sp"
+        android:background="@drawable/rounded_textview"
         android:fontFamily="@font/bowlby_one_sc"
         android:text="Login"
         android:textAllCaps="true"
         android:textAppearance="@style/Theme.TopTen"
         android:textSize="12sp"
-        android:theme="@style/Theme.TopTen"
-        android:translationX="-70sp"
+        android:translationX="-75sp"
         tools:visibility="visible" />
 </androidx.appcompat.widget.Toolbar>
