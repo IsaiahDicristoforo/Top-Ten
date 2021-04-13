@@ -1,11 +1,12 @@
 package edu.uc.groupProject.topten.ui.main
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.os.CountDownTimer
 import android.os.Parcelable
 import android.util.Log
@@ -16,8 +17,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -106,8 +107,8 @@ class MainFragment : Fragment() {
         var userPoints = view!!.findViewById<TextView>(R.id.txt_points)
         timerTextView  = view!!.findViewById(R.id.tv_mainListTimer)
         var listTitleLabel = view!!.findViewById<TextView>(R.id.tv_mainListTitle)
-        //userName.text = firestoreService.getUserName()
-      //  userPoints.text = firestoreService.getUserPoints()
+        //userName.text = viewModel.getUserName()
+        //userPoints.text = viewModel.getUserPoints()
 
 
     //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
@@ -119,36 +120,8 @@ class MainFragment : Fragment() {
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
 
         viewModel.loadNextList(false)
-
-     /*   var listItemsToAdd = ArrayList<ListItem>()
-        listItemsToAdd.add(ListItem(0,"Cinnamon Toast Crunch","",0))
-        listItemsToAdd.add(ListItem(1,"Lucky Charms","",0))
-        listItemsToAdd.add(ListItem(2,"Froot Loops","",0))
-        listItemsToAdd.add(ListItem(3,"Cheerios","",0))
-        listItemsToAdd.add(ListItem(4,"Frosted Flakes","",0))
-        listItemsToAdd.add(ListItem(5,"Honeycomb","",0))
-        listItemsToAdd.add(ListItem(6,"Cap'n Crunch","",0))
-        listItemsToAdd.add(ListItem(6,"Reese's Puffs","",0))
-
-        var list: TopTenList = TopTenList(
-            1,
-            "Top Ten Cereals",
-            "A list of favorite cereals",
-            false,
-            "Food",
-            Date(),
-            Date()
-        )
-        list.listItems = listItemsToAdd
-        viewModel.firestoreService.writeListToDatabase(list)
-
-      */
-
-
-        adapter = CurrentListAdapter(viewModel, testList, activity!!)
+        adapter = CurrentListAdapter(viewModel, testList, context!!)
         recyclerView.adapter = adapter
-
-
 
         viewModel.firestoreService.list.observe(this, Observer {
 
@@ -186,16 +159,9 @@ class MainFragment : Fragment() {
 
                 getTimeRemainingOnCurrentList()
             }
-
-
-
         })
-
-
         isCanceled = true
-
         viewModel.fetchStrawpoll(1)
-
     }
 
     private fun createShareListFunctionality() {
@@ -219,43 +185,48 @@ class MainFragment : Fragment() {
 
 
     fun startCountdownTimer(totalTimeInMilli: Long){
-        createNotificationChannel()
-        val notificationManager = NotificationManagerCompat.from(activity!!)
 
      countDownTimer =   object : CountDownTimer(totalTimeInMilli, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-
                 val hours = (millisUntilFinished / 1000 / 3600)
                 val minutes = (millisUntilFinished / 1000 / 60 % 60)
                 val seconds = (millisUntilFinished / 1000 % 60)
                 timerTextView.setText("${hours} hrs  ${minutes} min  ${seconds} sec")
 
                 if(seconds.toInt() == 10){
-                    val notification = NotificationCompat.Builder(activity!!, channelId)
-                        .setContentTitle("Top Ten List Expiring in 10 secs !")
-                        .setContentText("Last Chance to vote on your favorite List Item.")
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .build()
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+                        val notificationManager = NotificationManagerCompat.from(activity!!)
+                        createNotificationChannel()
 
-                    notificationManager.notify(notificationId, notification)
+                        val notification = NotificationCompat.Builder(activity!!, channelId)
+                            .setContentTitle("Top Ten List Expiring in 10 secs !")
+                            .setContentText("Last Chance to vote on your favorite List Item.")
+                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .build()
+
+                        notificationManager.notify(notificationId, notification)
+                    }
                 }
 
-                timerTextView.setText("VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec")
+                timerTextView.text = "VOTING ENDS: ${hours} hrs  ${minutes} min  ${seconds} sec"
             }
 
             override fun onFinish() {
-
                 if(isCanceled){
-                    val notification = NotificationCompat.Builder(activity!!, channelId)
-                        .setContentTitle("New list is on its way...!")
-                        .setContentText("Go vote on your favorite list item.")
-                        .setSmallIcon(R.mipmap.ic_launcher_round)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .build()
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+                        val notificationManager = NotificationManagerCompat.from(activity!!)
+                        createNotificationChannel()
+                        val notification = NotificationCompat.Builder(activity!!, channelId)
+                            .setContentTitle("New list is on its way...!")
+                            .setContentText("Go vote on your favorite list item.")
+                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .build()
 
-                    notificationManager.notify(notificationId, notification)
-                    timerTextView.setText("Voting is Closed On The List!")
+                        notificationManager.notify(notificationId, notification)
+                    }
+
 
                     var votedOnItem = isVotedSharedPreference!!.getString("VotedOnTitle","")
                     var positionOfYourItem =  viewModel.firestoreService.list.value!!.indexOfFirst{ item->item.title == votedOnItem } + 1
@@ -298,12 +269,8 @@ class MainFragment : Fragment() {
                     adapter.newList = true
 
                 }
-
-                }
-
+            }
         }.start()
-
-
     }
 
     fun launchListResultsDialog(selectedItem:String, finalPosition:Int, pointsEarned:Int, totalPoints:Int ){
@@ -335,16 +302,11 @@ class MainFragment : Fragment() {
 
     }
 
-   private fun getTimeRemainingOnCurrentList(): Long {
-
+    private fun getTimeRemainingOnCurrentList(): Long {
         val db = FirebaseFirestore.getInstance()
-
         var expiryDate:Date
-
         var path:String = "lists/" + viewModel.firestoreService.currentList
-
         var result:Long= 0
-
         var validList:Boolean = false
 
 
@@ -366,15 +328,13 @@ class MainFragment : Fragment() {
 
    }
 
-    fun createNotificationChannel(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply{
-                lightColor = Color.CYAN
-                enableLights(true)
-            }
-
-            val manager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
+    private fun createNotificationChannel(){
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply{
+            lightColor = Color.CYAN
+            enableLights(true)
         }
+
+        val manager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
     }
 }

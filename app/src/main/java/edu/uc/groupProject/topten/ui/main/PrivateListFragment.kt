@@ -2,7 +2,6 @@ package edu.uc.groupProject.topten.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,6 @@ import android.view.ViewGroup
 import edu.uc.groupProject.topten.R
 
 class PrivateListFragment : Fragment() {
-
-
     companion object {
         fun newInstance() = PrivateListFragment()
     }
@@ -28,10 +25,7 @@ class PrivateListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PrivateListViewModel::class.java)
-
-
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

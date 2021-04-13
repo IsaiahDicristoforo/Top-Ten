@@ -16,7 +16,6 @@ import com.airbnb.lottie.LottieAnimationView
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 
-
 /**
  * Populates a list of data into a container.
  *
@@ -130,6 +129,8 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.listItemTitle.text = listItems[position].title
+        holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
+        holder.currentRank.text = (position + 1).toString()
 
 
         val maxTitleLengthBeforeFontSizeNeedsToBeLowered = 20

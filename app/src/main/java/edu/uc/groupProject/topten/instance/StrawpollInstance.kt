@@ -7,19 +7,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 * Retrofit instance manages HTTP requests
 */
 object StrawpollInstance {
-
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "https://www.strawpoll.me/api/v2/"
+    private const val BASE_URL = "https://www.strawpoll.me/api/v2/"
 
-    val retrofitInstance: Retrofit?
-        get() {
-            if (retrofit == null) {
-                retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            }
-
-            return retrofit
+    val retrofitInstance: Retrofit? get() {
+        if (retrofit == null) {
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
         }
+
+        return retrofit
+    }
 }

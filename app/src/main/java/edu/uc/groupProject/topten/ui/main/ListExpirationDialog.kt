@@ -12,24 +12,18 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.airbnb.lottie.LottieAnimationView
 import edu.uc.groupProject.topten.R
-import edu.uc.groupProject.topten.service.FirestoreService
-
 
 class ListExpirationDialog : DialogFragment() {
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
 
-           var  dialogView: View = inflater.inflate(R.layout.pop_up_list_expired, null)
+            var  dialogView: View = inflater.inflate(R.layout.pop_up_list_expired, null)
             dialogView.findViewById<LottieAnimationView>(R.id.podiumAnimationView).playAnimation()
 
-
             var progressBar:ProgressBar =  dialogView.findViewById<ProgressBar>(R.id.dialogProgressBar)
-
             var listTitleTextBox:TextView = dialogView.findViewById(R.id.listTitleDialogView)
             listTitleTextBox.text = arguments!!.getString("ListTitle")
 
@@ -50,7 +44,6 @@ class ListExpirationDialog : DialogFragment() {
 
             dialogView.findViewById<TextView>(R.id.tv_winningItem).text = arguments!!.getString("FirstPlace")
 
-
             object : CountDownTimer(10000, 100) {
                 override fun onTick(millisUntilFinished: Long) {
                     progressBar.progress = progressBar.progress - 1
@@ -61,10 +54,10 @@ class ListExpirationDialog : DialogFragment() {
             }.start()
 
             builder.setView(dialogView)
-                .setNegativeButton("Close",
-                    DialogInterface.OnClickListener { dialog, id ->
+                .setNegativeButton("Close", DialogInterface.OnClickListener { dialog, id ->
                         // User cancelled the dialog
-                    })
+                })
+
             // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")

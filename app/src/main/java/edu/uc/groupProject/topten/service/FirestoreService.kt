@@ -10,7 +10,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-
 class FirestoreService {
     var listIncrementTime: Long = 0
     var listOfLists: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
