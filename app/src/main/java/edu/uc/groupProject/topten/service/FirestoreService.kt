@@ -10,6 +10,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
+
 class FirestoreService {
     var listIncrementTime: Long = 0
     var listOfLists: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
@@ -51,12 +52,16 @@ class FirestoreService {
                 if (task.isSuccessful) {
                     val myList: MutableList<String> = ArrayList()
                     for (document in task.result!!) {
+
                         myList.add(document.id)
+                        //arrayOfLists.add(currentList)
+                        //listOfLists.value = arrayOfLists
 
                         if (document.getBoolean("active") == true && !generateNewList) {
                             currentList = document.id
                             break
                         }
+
                     }
 
                     if (generateNewList) {
@@ -95,13 +100,15 @@ class FirestoreService {
                             }
                             allListItems = sortListItemsByVoteDesc((allListItems))
 
-                            list.value = allListItems
-                        }
+                                    list.value = allListItems
+
+                                }
+                            }
+
+                    } else {
+                        Log.d("ERROR", "Error getting documents: ", task.exception)
                     }
-                }
-                else {
-                    Log.d("ERROR", "Error getting documents: ", task.exception)
-                }
+
             }
 
 

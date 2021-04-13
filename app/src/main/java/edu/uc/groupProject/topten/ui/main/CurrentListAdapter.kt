@@ -1,22 +1,20 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.animation.Animator
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import edu.uc.groupProject.topten.MainActivity
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
-import kotlin.coroutines.coroutineContext
 
 
 /**
@@ -26,7 +24,13 @@ import kotlin.coroutines.coroutineContext
  * @param listItems an array list of incoming data
  * @return RecyclerView.Adapter<CurrentListAdapter.ViewHolder>
  */
-class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: ArrayList<ListItem>):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
+class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: ArrayList<ListItem>, private var currentActivity : Context):RecyclerView.Adapter<CurrentListAdapter.ViewHolder>() {
+    var newList: Boolean = false
+    var userHasVoted:Boolean  = false
+    var notifyDatasetChanged:Boolean = false
+    var listItemTitle = ""
+    var lastClickedListItemTitle = ""
+
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
@@ -40,7 +44,14 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
 
     }
 
-  fun setItemList(list: ArrayList<ListItem>){
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+
+    }
+
+    fun setItemList(list: ArrayList<ListItem>){
+
+
         if(list == null){
             listItems = list
             notifyItemRangeInserted(0, list.size)
@@ -119,8 +130,6 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.listItemTitle.text = listItems[position].title
-        holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
-        holder.currentRank.text = (position + 1).toString()
 
 
         val maxTitleLengthBeforeFontSizeNeedsToBeLowered = 20
@@ -133,11 +142,83 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         }
 
 
-        holder.voteButton.setOnClickListener(){
-            //holder.voteButton.isClickable = false
-            mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
-            holder.buttonClickAnimation.playAnimation()
+        if(!currentActivity.getSharedPreferences("HasVoted", Context.MODE_PRIVATE).getBoolean("HasVoted", false)){
+            holder.totalVotes.text = "?"
+            holder.currentRank.text = "?"
+        }else{
+            holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
+            holder.currentRank.text = (position + 1).toString()
+        }
+
+        holder.voteButton.setImageResource(android.R.drawable.btn_star_big_off)
+
+        if(lastClickedListItemTitle == holder.listItemTitle.text.toString()){
             holder.voteButton.setImageResource(android.R.drawable.btn_star_big_on)
+        }
+
+
+        holder.voteButton.setOnClickListener(){
+
+            currentActivity.getSharedPreferences("HasVoted", Context.MODE_PRIVATE).edit().putString("VotedOnTitle",holder.listItemTitle.text.toString()).apply()
+
+            var animation:Animation= AnimationUtils.loadAnimation(currentActivity,R.anim.vote_button_animation)
+            holder.voteButton.startAnimation(animation)
+
+
+            lastClickedListItemTitle = holder.listItemTitle.text.toString()
+            userHasVoted = currentActivity.getSharedPreferences("HasVoted", Context.MODE_PRIVATE).getBoolean("HasVoted",false)
+            if(!userHasVoted){
+                userHasVoted = true
+                currentActivity.getSharedPreferences("HasVoted", Context.MODE_PRIVATE).edit().putBoolean("HasVoted",true).apply()
+                notifyDatasetChanged = true
+
+
+                mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
+
+                holder.voteButton.setImageResource(android.R.drawable.btn_star_big_on)
+                holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
+                holder.currentRank.text = (position + 1).toString()
+                holder.buttonClickAnimation.speed = 2.0f
+                holder.buttonClickAnimation.addAnimatorListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(animation: Animator?) {
+
+                    }
+
+                    override fun onAnimationEnd(animation: Animator?) {
+                        notifyDataSetChanged()
+
+                    }
+
+                    override fun onAnimationCancel(animation: Animator?) {
+                    }
+
+
+                    override fun onAnimationStart(animation: Animator?) {
+                        //Do nothing
+                    }
+
+                })
+
+                holder.buttonClickAnimation.playAnimation()
+
+            }else{
+                notifyDatasetChanged = false
+
+                mvm.firestoreService.addListItemVote(holder.listItemTitle.text.toString())
+
+                holder.voteButton.setImageResource(android.R.drawable.btn_star_big_on)
+                holder.buttonClickAnimation.playAnimation()
+                holder.totalVotes.text = listItems[position].totalVotes.toString() + " votes"
+                holder.currentRank.text = (position + 1).toString()
+            }
+
+            //userHasVoted = currentActivity.getPreferences(Context.MODE_PRIVATE).getBoolean("HasVoted",false)
+
+        }
+
+        if(newList){
+            holder.voteButton.setImageResource(android.R.drawable.btn_star_big_off)
+            newList = false
 
         }
     }
