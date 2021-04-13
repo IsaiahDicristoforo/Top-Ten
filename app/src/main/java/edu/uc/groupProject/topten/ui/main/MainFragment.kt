@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.app.Notification
+import android.content.Intent
 import android.os.CountDownTimer
 import android.os.Parcelable
 import android.util.Log
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.uc.groupProject.topten.ListGeneration
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.service.FirestoreService
@@ -112,6 +114,14 @@ class MainFragment : Fragment() {
 
 
     //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
+
+
+        var listGenerationButton = view!!.findViewById<ImageButton>(R.id.btn_listGenerationActivity)
+        listGenerationButton.setOnClickListener(){
+            val newActivityIntent = Intent(this.context, ListGeneration::class.java)
+            startActivity(newActivityIntent)
+        }
+
 
         createShareListFunctionality()
 

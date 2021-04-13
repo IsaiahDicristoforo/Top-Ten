@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.airbnb.lottie.LottieAnimationView
 import edu.uc.groupProject.topten.R
+import java.lang.Exception
 
 class ListExpirationDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,7 +50,13 @@ class ListExpirationDialog : DialogFragment() {
                     progressBar.progress = progressBar.progress - 1
                 }
                 override fun onFinish() {
-                    this@ListExpirationDialog.dismiss()
+
+                    try{
+                        this@ListExpirationDialog.dismiss()
+
+                    }catch(e:Exception){
+
+                    }
                 }
             }.start()
 
