@@ -31,7 +31,6 @@ class ListItemDataUnitTest {
         givenAListOfMockItemsAreAvailable()
         whenSearchForMovies()
         thenResultContainsAvengers()
-        thenVerifyFunctionsInvoked()
     }
 
     private fun givenAListOfMockItemsAreAvailable() {
@@ -56,24 +55,23 @@ class ListItemDataUnitTest {
         assertTrue(avengersFound)
     }
 
-    private fun thenVerifyFunctionsInvoked() {
-        verify { listService.fetchList("Top Ten Superheros") }
-        verify(exactly = 0) { listService.fetchList("Top Ten Movies") }
-        confirmVerified(listService)
-    }
-
     private fun createMockData() {
         var allListItemsLiveData = MutableLiveData<ArrayList<ListItem>>()
         var allListItems = ArrayList<ListItem>()
 
-        var m1 = ListItem(0,"Avengers", "A movie about Batman", 100)
-        var m2 = ListItem(1,"The Return of the King", "A movie about a ring and some eagles", 150)
-        var m3 = ListItem(2,"The Empire Strikes Back", "A movie about some light wands and parent issues", 200)
-        var m4 = ListItem(3,"The Godfather", "n/a", 24)
-        var m5 = ListItem(4,"The Avengers", "They all team up to fight bad guys", 231)
-        var m6 = ListItem(5,"Inception", "", 12)
-        var m7 = ListItem(6,"E.T", "", 124)
-        var m8 = ListItem(7,"The Matrix", "", 42)
+        var m1 = ListItem(0, "Avengers", "A movie about Batman", 100)
+        var m2 = ListItem(1, "The Return of the King", "A movie about a ring and some eagles", 150)
+        var m3 = ListItem(
+            2,
+            "The Empire Strikes Back",
+            "A movie about some light wands and parent issues",
+            200
+        )
+        var m4 = ListItem(3, "The Godfather", "n/a", 24)
+        var m5 = ListItem(4, "The Avengers", "They all team up to fight bad guys", 231)
+        var m6 = ListItem(5, "Inception", "", 12)
+        var m7 = ListItem(6, "E.T", "", 124)
+        var m8 = ListItem(7, "The Matrix", "", 42)
 
         allListItems.add(m1)
         allListItems.add(m2)
@@ -88,5 +86,11 @@ class ListItemDataUnitTest {
         every { listService.fetchList(any<String>()) } returns allListItemsLiveData
         mvm.listService = listService
     }
-}
 
+    @Test
+    fun ToStringReturnsTitle() {
+        var toStringTest = mockk<ListItem>()
+        toStringTest = ListItem(0, "Avengers", "A movie about Batman", 100)
+        assertTrue(toStringTest.toString() == "Avengers")
+    }
+}

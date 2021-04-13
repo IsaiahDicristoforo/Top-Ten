@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/design_default_color_primary"
+    android:background="#3F51B5"
     android:elevation="4dp"
-    android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+    android:theme="@style/Theme.TopTen">
 
     <TextView
         android:id="@+id/toolbarTextName"
@@ -31,7 +32,7 @@
         android:visibility="visible" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/txt_username"
         android:layout_width="76sp"
         android:layout_height="match_parent"
         android:fontFamily="@font/bowlby_one_sc"
@@ -57,7 +58,7 @@
         android:visibility="visible" />
 
     <TextView
-        android:id="@+id/points"
+        android:id="@+id/txt_points"
         android:layout_width="76sp"
         android:layout_height="match_parent"
         android:fontFamily="@font/bowlby_one_sc"
@@ -68,4 +69,17 @@
         android:translationX="-96sp"
         android:translationY="14sp"
         android:visibility="visible" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="75sp"
+        android:layout_height="50sp"
+        android:background="@drawable/rounded_textview"
+        android:fontFamily="@font/bowlby_one_sc"
+        android:text="Login"
+        android:textAllCaps="true"
+        android:textAppearance="@style/Theme.TopTen"
+        android:textSize="12sp"
+        android:translationX="-75sp"
+        tools:visibility="visible" />
 </androidx.appcompat.widget.Toolbar>
