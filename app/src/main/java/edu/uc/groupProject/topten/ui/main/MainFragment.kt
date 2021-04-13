@@ -120,7 +120,7 @@ class MainFragment : Fragment() {
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
 
         viewModel.loadNextList(false)
-        adapter = CurrentListAdapter(viewModel, testList)
+        adapter = CurrentListAdapter(viewModel, testList, context!!)
         recyclerView.adapter = adapter
 
         viewModel.firestoreService.list.observe(this, Observer {
@@ -185,8 +185,6 @@ class MainFragment : Fragment() {
 
 
     fun startCountdownTimer(totalTimeInMilli: Long){
-        createNotificationChannel()
-        val notificationManager = NotificationManagerCompat.from(activity!!)
 
      countDownTimer =   object : CountDownTimer(totalTimeInMilli, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -229,9 +227,6 @@ class MainFragment : Fragment() {
                         notificationManager.notify(notificationId, notification)
                     }
 
-                    timerTextView.text = "Voting is Closed On The List!"
-                    notificationManager.notify(notificationId, notification)
-                    timerTextView.setText("Voting is Closed On The List!")
 
                     var votedOnItem = isVotedSharedPreference!!.getString("VotedOnTitle","")
                     var positionOfYourItem =  viewModel.firestoreService.list.value!!.indexOfFirst{ item->item.title == votedOnItem } + 1
