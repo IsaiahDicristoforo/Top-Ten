@@ -17,6 +17,7 @@ import org.junit.rules.TestRule
  * Example local unit test, which will execute on the development machine.
  */
 class ListItemDataUnitTest {
+
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
     var listService = mockk<ListService>()
