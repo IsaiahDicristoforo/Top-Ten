@@ -16,9 +16,11 @@ import retrofit2.Response
  * Makes use of the Retrofit instance
  */
 class PollService {
+    private val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
+
     fun getPoll(id: Int?): MutableLiveData<PollResponse>? {
         var pollResponse = MutableLiveData<PollResponse>()
-        val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
+
         val call = service?.getPoll(id)
 
         call?.enqueue(object : Callback<PollResponse> {
@@ -36,7 +38,7 @@ class PollService {
     fun createPoll(question: String, choices: ArrayList<String>): MutableLiveData<PollResponse>?{
         // Create our response object and poll instance
         var pollResponse = MutableLiveData<PollResponse>()
-        val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
+        //val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
 
         // Create our poll post object
         var poll = Poll(question=question, choices=choices)
@@ -62,7 +64,7 @@ class PollService {
 
     fun castVote(question_id: Int?, choice_id: Int?): MutableLiveData<PollChoice>? {
         var pollResponse = MutableLiveData<PollChoice>()
-        val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
+        //val service = PollInstance.retrofitInstance?.create(IPollDAO::class.java)
         val call = service?.castVote(question_id, choice_id)
 
         call?.enqueue(object : Callback<PollChoice> {

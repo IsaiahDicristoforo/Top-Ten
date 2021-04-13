@@ -119,7 +119,7 @@ class MainFragment : Fragment() {
 
             if (possibleList != null) {
                 var bundle: Bundle = Bundle()
-                var newListToAddTitle: String = "Test123"
+                var newListToAddTitle: String = viewModel.firestoreService.currentList
                 var privateListFragment: PrivateListFragment = PrivateListFragment()
 
                 bundle.putString("ListTitle", newListToAddTitle)

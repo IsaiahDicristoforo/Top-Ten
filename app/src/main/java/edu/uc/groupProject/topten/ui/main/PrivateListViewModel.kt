@@ -2,6 +2,7 @@ package edu.uc.groupProject.topten.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.PollChoice
 import edu.uc.groupProject.topten.dto.PollResponse
 import edu.uc.groupProject.topten.service.PollService
