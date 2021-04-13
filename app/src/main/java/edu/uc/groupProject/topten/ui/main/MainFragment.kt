@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
-import android.graphics.Color
-import android.os.Build
 import android.os.CountDownTimer
 import android.os.Parcelable
 import android.util.Log
@@ -148,7 +145,7 @@ class MainFragment : Fragment() {
       */
 
 
-        adapter = CurrentListAdapter(viewModel, testList)
+        adapter = CurrentListAdapter(viewModel, testList, activity!!)
         recyclerView.adapter = adapter
 
 
