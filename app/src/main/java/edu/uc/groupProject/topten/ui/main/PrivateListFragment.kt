@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.PollResponse
@@ -21,6 +23,7 @@ class PrivateListFragment : Fragment() {
 
     private lateinit var viewModel: PrivateListViewModel
     private var fireStoreService : FirestoreService = FirestoreService()
+    private lateinit var privateListAdapter : PrivateListAdapter
 
 
     override fun onCreateView(
@@ -45,24 +48,23 @@ class PrivateListFragment : Fragment() {
 
                 list = fireStoreService.fetchList(false)
 
-
                 list.observe(this, Observer {
-                    suspend{
-                        list.value?.forEach { choices.add(it.title) }
-                    }
-
-
+                    list.value?.forEach { choices.add(it.title) }
+                    poll = viewModel.createPoll(arguments!!.getString("ListTitle") + "username", choices)!!
                 })
-
-
-
-
-
-
-
         }
 
-        poll = viewModel.createPoll(arguments!!.getString("ListTitle") + "username", choices)!!
+        // TODO: Retrieve user lists
+        var lists = ArrayList<String>()
+        lists.add("title1")
+        lists.add("title2")
+
+        privateListAdapter = PrivateListAdapter(viewModel, lists)
+
+        var recyclerView : RecyclerView = view!!.findViewById(R.id.rcyPrivateRecycler)
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = privateListAdapter
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
