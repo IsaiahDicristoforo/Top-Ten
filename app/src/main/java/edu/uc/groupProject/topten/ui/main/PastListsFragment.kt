@@ -14,8 +14,12 @@ import edu.uc.groupProject.topten.R
 //Handles the past_lists_fragment
 class PastListsFragment : Fragment() {
     private lateinit var viewModel: PastListsViewModel
-    private lateinit var adapter : ArrayAdapter<String>
+
+    //Not used (yet?)
+    private lateinit var adapter : PastListAdapter
+
     lateinit var spinnerList : Spinner //spinner variable
+
 
     companion object {
         fun newInstance() = PastListsFragment()
@@ -29,13 +33,25 @@ class PastListsFragment : Fragment() {
         return inflater.inflate(R.layout.past_lists_fragment, container, false)
     }
 
+    /*
+     * onActivityCreated function.
+     * Responsible for populating the past-list tab's drop-down spinner item.
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PastListsViewModel::class.java)
-        viewModel.firestoreService.fetchListNames()
+        viewModel.firestoreService.fetchListNames() //fetches all the list names
+
+        //Observer loop. This is where the drop-down box gets populated.
         viewModel.firestoreService.listOfLists.observe(this, Observer{
             spinnerList = view!!.findViewById<Spinner>(R.id.spn_listNames)
-            adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, viewModel.firestoreService.listOfLists.value!!)
+            var listOfListVariable = viewModel.firestoreService.arrayOfLists
+
+            var spinAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listOfListVariable)
+
+            spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerList.adapter = spinAdapter;
         })
 
         viewModel.firestoreService.list.observe(this, Observer {

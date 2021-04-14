@@ -19,7 +19,11 @@ class FirestoreService {
 
 
 
-
+    /*
+     * fetchListNames function.
+     * Responsible for fetching the names of the Firebase lists. Does not fetch the items inside
+     * of each list, only the names of the lists.
+     */
     fun fetchListNames(){
         val db = FirebaseFirestore.getInstance()
         var listItemCollection = db.collection("lists")
@@ -35,7 +39,6 @@ class FirestoreService {
                 } else {
                     Log.d("ERROR", "Error getting documents: ", task.exception)
                 }
-
             }
     }
 

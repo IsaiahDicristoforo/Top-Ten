@@ -13,9 +13,10 @@ class PastListsViewModel : ViewModel() {
     var listService : ListService = ListService()
     var firestoreService : FirestoreService =  FirestoreService()
     var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
+    //var listsString = firestoreService.listOfLists
 
     fun loadLists(): MutableLiveData<ArrayList<String>> {
-        lists = firestoreService.listOfLists
+        lists = firestoreService.listOfLists //potentially a problem, could be lists.value?
         return lists
     }
 
