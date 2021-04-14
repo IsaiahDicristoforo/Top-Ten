@@ -16,7 +16,7 @@ class PastListsFragment : Fragment() {
     private lateinit var viewModel: PastListsViewModel
 
     //Not used (yet?)
-    private lateinit var adapter : PastListAdapter
+    //private lateinit var adapter : PastListAdapter
 
     lateinit var spinnerList : Spinner //spinner variable
 
@@ -43,14 +43,16 @@ class PastListsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(PastListsViewModel::class.java)
         viewModel.firestoreService.fetchListNames() //fetches all the list names
 
+        var i = 0
         //Observer loop. This is where the drop-down box gets populated.
         viewModel.firestoreService.listOfLists.observe(this, Observer{
             spinnerList = view!!.findViewById<Spinner>(R.id.spn_listNames)
             var listOfListVariable = viewModel.firestoreService.arrayOfLists
 
+            //Mini-adapter!
             var spinAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listOfListVariable)
-
             spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            i++
             spinnerList.adapter = spinAdapter;
         })
 

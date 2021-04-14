@@ -16,6 +16,7 @@ class FirestoreService {
     var arrayOfLists: ArrayList<String> = ArrayList<String>()
     var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var currentList = ""
+    var listedItem = ""
 
 
 
@@ -30,10 +31,11 @@ class FirestoreService {
         var theCollection = db.collection("lists").get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val myList: MutableList<String> = ArrayList()
+                    //val myList: MutableList<String> = ArrayList()
                     for (document in task.result!!) {
-                        myList.add(document.id)
-                        arrayOfLists.add(currentList)
+                        //myList.add(document.id)
+                        listedItem = document.id
+                        arrayOfLists.add(document.id)
                         listOfLists.value = arrayOfLists
                     }
                 } else {
