@@ -14,12 +14,8 @@ data class ListItem(var id: Int,
                     var totalVotes: Int)
 {
     init {
-        // Ensure the title is not blank
-        if (title.isBlank()) {
-            throw IllegalArgumentException("Name required")
-        }
 
-        // Ensure the votes are not negative
+                // Ensure the votes are not negative
         if (totalVotes < 0) {
             throw IllegalArgumentException("Votes must be non-negative")
         }

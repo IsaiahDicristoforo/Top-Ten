@@ -174,24 +174,46 @@ class FirestoreService {
     fun writeListToDatabase(listToAdd: TopTenList) {
         val db = FirebaseFirestore.getInstance()
 
-        var listsReference = (db.collection("lists").document(listToAdd.title))
-
-        listsReference.set(listToAdd).addOnSuccessListener {
-            Log.d("Firebase", "document saved")
-        }.addOnFailureListener {
-            Log.d("Firebase", "Save Failed")
-        }
+        var calendar: Calendar = Calendar.getInstance()
 
 
-        var listItemCollectionReference = listsReference.collection("listItems")
+        var expirationDates = ArrayList<Date>()
 
-        var arrayOfListItemsToAdd: Array<ListItem> = listToAdd.listItems.toTypedArray()
+        var lists = db.collection("lists").get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        expirationDates.add(document.getDate("expireDate")!!)
+                    }
+                } else {
+                    Log.d("ERROR", "Error getting documents: ", task.exception)
+                }
 
-        for (item in arrayOfListItemsToAdd) {
-            listItemCollectionReference.document(item.title).set(item)
-        }
+
+                var listsReference = (db.collection("lists").document(listToAdd.title))
+
+                listsReference.set(listToAdd).addOnSuccessListener {
+                    Log.d("Firebase", "document saved")
+                }.addOnFailureListener {
+                    Log.d("Firebase", "Save Failed")
+                }
+
+                calendar.time = expirationDates[expirationDates.size - 1]
+                calendar.add(Calendar.MILLISECOND,30000)
+
+                listToAdd.expireDate = calendar.time
 
 
+                var listItemCollectionReference = listsReference.collection("listItems")
+
+                var arrayOfListItemsToAdd: Array<ListItem> = listToAdd.listItems.toTypedArray()
+
+                for (item in arrayOfListItemsToAdd) {
+                    listItemCollectionReference.document(item.title).set(item)
+                }
+
+
+            }
     }
 
     /**
