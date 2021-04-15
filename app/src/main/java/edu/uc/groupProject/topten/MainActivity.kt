@@ -1,17 +1,19 @@
 package edu.uc.groupProject.topten
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.uc.groupProject.topten.service.FirestoreService
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import edu.uc.groupProject.topten.ui.main.MainViewModel
 import edu.uc.groupProject.topten.ui.main.PastListsFragment
@@ -24,7 +26,6 @@ import edu.uc.groupProject.topten.ui.main.PrivateListFragment
 class MainActivity : AppCompatActivity() {
     var mvm: MainViewModel = MainViewModel()
     private lateinit var bottomMenu: BottomNavigationView
-
     /**
      * onCreate function
      * @param savedInstanceState the saved instance state
@@ -79,19 +80,23 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
-
+            val firestore = FirestoreService()
             val userName = findViewById<TextView>(R.id.txt_username)
 
             if (userName.text != "test") {
-                //do nothing
+                val test = firestore.getUID()
+                Log.d("TAG", test)
+
             } else {
                 createSignInIntent()
             }
         }
-    }
 
+
+    }
 
     private fun changeFragment(newFragment: Fragment) {
         supportFragmentManager?.beginTransaction()?.replace(R.id.container, newFragment)
