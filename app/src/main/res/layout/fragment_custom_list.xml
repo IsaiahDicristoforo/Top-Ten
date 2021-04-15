@@ -11,11 +11,15 @@
         android:id="@+id/btn_submitCustomList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#0003A9F4"
-        android:scaleX="0.4"
-        android:scaleY="0.4"
-        android:src="@drawable/fui_ic_check_circle_black_128dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="48dp"
+        android:background="#A4179DD6"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@android:drawable/ic_menu_upload"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textInputLayout2" />
 
     <ScrollView

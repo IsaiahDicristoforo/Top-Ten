@@ -24,7 +24,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
         if(position == 0){
             return CustomListFragment.newInstance("Test1","Test2")
         }else{
-            return PlaceholderFragment()
+            return ApiListFragment()
         }
     }
 

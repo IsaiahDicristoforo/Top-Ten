@@ -63,6 +63,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation project(':spotify-app-remote')
+    implementation "com.google.code.gson:gson:2.6.1"
 
     // Espresso
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

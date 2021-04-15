@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.TopTenList
@@ -64,13 +65,25 @@ class CustomListFragment : Fragment() {
             customListAdapter.notifyItemInserted(customListAdapter.itemCount - 1)
         }
 
-        var submitListButton = view!!.findViewById<ImageButton>(R.id.btn_submitCustomList).setOnClickListener(){
+        var submitListButton = view!!.findViewById<ImageButton>(R.id.btn_submitCustomList)
+
+            submitListButton.setOnClickListener(){
 
             var listTitle = view!!.findViewById<EditText>(R.id.txt_CustomListTitle).text.toString()
+            if(listTitle.isBlank() || listTitle.isEmpty()){
 
-            var listToAddToDatabase: TopTenList = TopTenList(0, listTitle,"",false,"", Date(), Date())
-            listToAddToDatabase.listItems = customListAdapter.listItems
-            FirestoreService().writeListToDatabase(listToAddToDatabase)
+
+                Snackbar.make(submitListButton,"You Must Enter A List Title",Snackbar.LENGTH_SHORT).show()
+
+
+
+            }else{
+                var listToAddToDatabase: TopTenList = TopTenList(0, listTitle,"",false,"", Date(), Date())
+                listToAddToDatabase.listItems = customListAdapter.listItems
+                FirestoreService().writeListToDatabase(listToAddToDatabase)
+            }
+
+
 
         }
     }
