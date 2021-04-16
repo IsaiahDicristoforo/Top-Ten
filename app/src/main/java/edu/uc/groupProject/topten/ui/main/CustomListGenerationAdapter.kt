@@ -71,6 +71,8 @@ class CustomListGenerationAdapter(public var listItems: ArrayList<ListItem>): Ad
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        holder.customListItem.setText("")
+
 
         holder.customListItem.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {

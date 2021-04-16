@@ -1,26 +1,34 @@
 package edu.uc.groupProject.topten.ui.main
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.sdk.android.authentication.AuthenticationClient
+import com.spotify.sdk.android.authentication.AuthenticationRequest
+import com.spotify.sdk.android.authentication.AuthenticationResponse
 import edu.uc.groupProject.topten.R
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
-
-import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.PlayerState;
-import com.spotify.protocol.types.Track;
-import edu.uc.groupProject.topten.ListGeneration
+import edu.uc.groupProject.topten.SpotifyIntegration.Song
+import edu.uc.groupProject.topten.SpotifyIntegration.SongService
+import edu.uc.groupProject.topten.SpotifyIntegration.VolleyCallback
 
 
 class ApiListFragment : Fragment() {
+
+    private var spotifyAppRemote: SpotifyAppRemote? = null
+    public val clientId = "b935841758ee436db43f7cfba5faf6f1"
+    val redirectUri = "edu.uc.topten://callback"
+    public val request_code = 1000
+    lateinit var songService:SongService
 
 
 
@@ -30,16 +38,50 @@ class ApiListFragment : Fragment() {
 
     }
 
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+
+        songService = SongService(context!!)
+
+        populateDropdown()
+
+
+        var loggedInUserView = view!!.findViewById<TextView>(R.id.txt_loggedInUser).setText(activity!!.getSharedPreferences("SPOTIFY",0).getString("username","No Account Linked"))
+
         var authorizeSpotifyButton = view!!.findViewById<Button>(R.id.btn_connectToSpotify)
         authorizeSpotifyButton.setOnClickListener(){
-            SpotifyService.connect(activity!!.applicationContext){
+            connect()
 
-            }
+            val connectionParams = ConnectionParams.Builder(clientId)
+                .setRedirectUri(redirectUri)
+                .showAuthView(false)
+                .build()
+
+            SpotifyAppRemote.connect(context, connectionParams, object : Connector.ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+
+                    spotifyAppRemote = appRemote
+                    spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX1lVhptIYRda")
+                    Log.d("MainActivity", "Connected! Yay!")
+
+                    getTracks()
+                }
+
+                override fun onFailure(throwable: Throwable) {
+                    // Something went wrong when attempting to connect! Handle errors here
+                }
+            })
+
+
 
         }
+    }
+
+    override fun onStop(){
+        super.onStop()
     }
 
     override fun onCreateView(
@@ -48,6 +90,13 @@ class ApiListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_api_list, container, false)
+    }
+
+    fun populateDropdown(){
+        val items = listOf("My Recently Played Songs","Search By Artist","Top Tracks")
+        val adapter = ArrayAdapter(requireContext(), R.layout.spotify_drop_down,items)
+        (view!!.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.spotifyDropDown).editText as?AutoCompleteTextView)?.setAdapter(adapter)
+
     }
 
     companion object {
@@ -67,42 +116,34 @@ class ApiListFragment : Fragment() {
             }
     }
 
-    object SpotifyService {
+        fun connect() {
 
-        private val clientId = "b935841758ee436db43f7cfba5faf6f1"
-        private val redirectUri = "edu.uc.topten://callback"
+            var authRequest:AuthenticationRequest.Builder = AuthenticationRequest.Builder(clientId, AuthenticationResponse.Type.TOKEN, redirectUri)
 
-        private var spotifyAppRemote: SpotifyAppRemote? = null
-        private var connectionParams: ConnectionParams = ConnectionParams.Builder(clientId)
-            .setRedirectUri(redirectUri)
-            .showAuthView(true)
-            .build()
+            authRequest.setScopes(arrayOf("streaming", "app-remote-control","user-read-recently-played","user-library-modify","user-read-email","user-read-private"))
 
-
-        fun connect(context: Context, handler: (connected: Boolean) -> Unit) {
-            if (spotifyAppRemote?.isConnected == true) {
-                handler(true)
-                return
-            }
-            val connectionListener = object : Connector.ConnectionListener {
-                override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
-                    this@SpotifyService.spotifyAppRemote = spotifyAppRemote
-                    handler(true)
-                    SpotifyService.spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX1lVhptIYRda")
-                }
-
-                override fun onFailure(throwable: Throwable) {
-                    Log.e("SpotifyService", throwable.message, throwable)
-                    handler(false)
-                }
-            }
-            SpotifyAppRemote.connect(context, connectionParams, connectionListener)
+            var finalRequest:AuthenticationRequest = authRequest.build()
+            AuthenticationClient.openLoginActivity(requireActivity(), request_code, finalRequest)
 
         }
+
+    private fun getTracks() {
+
+        var recentlyPlayedTracks:ArrayList<Song> = ArrayList<Song>()
+        songService.getRecentlyPlayedTracks(object:VolleyCallback{
+            override fun onSuccess() {
+                recentlyPlayedTracks = songService.songs
+                var l = recentlyPlayedTracks[0].name
+            }
+        })
+    }
+
+
 
     }
 
 
 
 
-}
+
+
