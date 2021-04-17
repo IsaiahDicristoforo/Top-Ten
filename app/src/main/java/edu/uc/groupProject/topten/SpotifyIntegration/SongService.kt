@@ -42,7 +42,14 @@ init{
                         var jObject: JSONObject? = jsonArray.getJSONObject(counter)
                         jObject = jObject?.optJSONObject("track")
 
-                        var song = gson.fromJson(jObject.toString(),Song::class.java)
+
+                        var song = Song(jObject!!["id"].toString(), jObject!!["name"].toString(),jObject!!.getJSONObject("album").getJSONArray("artists").getJSONObject(0)["name"].toString(),  jObject!!["uri"].toString())
+
+                        // jObject!!.optJSONArray("artists")[3].toString()
+
+                           // gson.fromJson(jObject.toString(),Song::class.java)
+
+
                         songs.add(song)
 
                     }catch(exception:Exception){
@@ -50,8 +57,6 @@ init{
                         Log.d(TAG, "getRecentlyPlayedTracks: " + exception)
 
                     }
-
-
                     counter++
                 }
 

@@ -10,13 +10,11 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/spotifyDropDown"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:hint="ListType"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_connectToSpotify">
+        app:layout_constraintStart_toEndOf="@+id/btn_connectToSpotify"
+        app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
@@ -26,33 +24,21 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="411dp"
-        android:layout_height="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spotifyDropDown" />
-
     <Button
         android:id="@+id/btn_connectToSpotify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
         android:text="Connect To Spotify"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.358"
-        app:layout_constraintStart_toEndOf="@+id/txt_loggedInUser"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txt_loggedInUser"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:text="No User Logged In"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/spotifyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spotifyDropDown"
+        tools:layout_editor_absoluteX="207dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

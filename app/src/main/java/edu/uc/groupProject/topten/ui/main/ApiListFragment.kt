@@ -1,34 +1,37 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.ImageUri
+import com.spotify.protocol.types.Track
 import com.spotify.sdk.android.authentication.AuthenticationClient
 import com.spotify.sdk.android.authentication.AuthenticationRequest
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 import edu.uc.groupProject.topten.R
-import edu.uc.groupProject.topten.SpotifyIntegration.Song
-import edu.uc.groupProject.topten.SpotifyIntegration.SongService
-import edu.uc.groupProject.topten.SpotifyIntegration.VolleyCallback
+import edu.uc.groupProject.topten.SpotifyIntegration.*
 
 
-class ApiListFragment : Fragment() {
+class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
     public val clientId = "b935841758ee436db43f7cfba5faf6f1"
     val redirectUri = "edu.uc.topten://callback"
     public val request_code = 1000
     lateinit var songService:SongService
+    lateinit var spotifyPlayer: SpotifyAppRemote
 
 
 
@@ -49,7 +52,6 @@ class ApiListFragment : Fragment() {
         populateDropdown()
 
 
-        var loggedInUserView = view!!.findViewById<TextView>(R.id.txt_loggedInUser).setText(activity!!.getSharedPreferences("SPOTIFY",0).getString("username","No Account Linked"))
 
         var authorizeSpotifyButton = view!!.findViewById<Button>(R.id.btn_connectToSpotify)
         authorizeSpotifyButton.setOnClickListener(){
@@ -63,9 +65,10 @@ class ApiListFragment : Fragment() {
             SpotifyAppRemote.connect(context, connectionParams, object : Connector.ConnectionListener {
                 override fun onConnected(appRemote: SpotifyAppRemote) {
 
-                    spotifyAppRemote = appRemote
-                    spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX1lVhptIYRda")
-                    Log.d("MainActivity", "Connected! Yay!")
+                    spotifyPlayer = appRemote
+
+                   // spotifyAppRemote = appRemote
+                    //spotifyAppRemote!!.playerApi.play("spotify:album:7yDyRk7Wvvw7JM1kqV4tJf")
 
                     getTracks()
                 }
@@ -74,6 +77,7 @@ class ApiListFragment : Fragment() {
                     // Something went wrong when attempting to connect! Handle errors here
                 }
             })
+
 
 
 
@@ -134,13 +138,36 @@ class ApiListFragment : Fragment() {
             override fun onSuccess() {
                 recentlyPlayedTracks = songService.songs
                 var l = recentlyPlayedTracks[0].name
+                fillRecyclerView(recentlyPlayedTracks)
             }
         })
     }
 
+    private fun fillRecyclerView(songs:ArrayList<Song>) {
+
+        var recyclerViewToFill = view!!.findViewById<RecyclerView>(R.id.spotifyRecyclerView)
+
+        var adapter = RecentlyPlayedSongsAdapter(songs, this)
+        recyclerViewToFill.adapter = adapter
+
+        var layoutManager:GridLayoutManager = GridLayoutManager(context,2,GridLayoutManager.VERTICAL, false)
+        recyclerViewToFill.layoutManager = layoutManager
+
 
 
     }
+
+    override fun onItemClick(item: Song?) {
+
+        var song = item
+        spotifyPlayer.playerApi.play(song!!.uri)
+
+
+        }
+
+
+
+}
 
 
 

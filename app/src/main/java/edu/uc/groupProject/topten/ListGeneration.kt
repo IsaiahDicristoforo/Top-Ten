@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.android.volley.RequestQueue
@@ -61,9 +62,6 @@ class ListGeneration : AppCompatActivity() {
 
                 waitForUserInfo()
 
-
-
-
             }else{
 
             }
@@ -85,9 +83,8 @@ class ListGeneration : AppCompatActivity() {
                 editor = getSharedPreferences("SPOTIFY", 0).edit()
                 editor.putString("userid", user.id)
                 editor.putString("username", user.displayName)
-                Log.d("STARTING", "GOT USER INFORMATION")
-                // We use commit instead of apply because we need the information stored immediately
                 editor.commit()
+
             }
         })
 
