@@ -99,7 +99,6 @@ class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
     fun populateDropdown(){
         val items = listOf("My Recently Played Songs","Search By Artist","Top Tracks")
         val adapter = ArrayAdapter(requireContext(), R.layout.spotify_drop_down,items)
-        (view!!.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.spotifyDropDown).editText as?AutoCompleteTextView)?.setAdapter(adapter)
 
     }
 

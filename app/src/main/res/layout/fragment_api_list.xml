@@ -7,38 +7,59 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.ApiListFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/spotifyDropDown"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="ListType"
-        app:layout_constraintStart_toEndOf="@+id/btn_connectToSpotify"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <Button
-        android:id="@+id/btn_connectToSpotify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect To Spotify"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/spotifyRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spotifyDropDown"
+        app:layout_constraintTop_toBottomOf="@+id/btn_connectToSpotify"
         tools:layout_editor_absoluteX="207dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:src="@android:drawable/ic_menu_upload"
+        app:layout_constraintStart_toEndOf="@+id/btn_connectToSpotify"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_connectToSpotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Connect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.765"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Recently Played Songs"
+        app:layout_constraintEnd_toStartOf="@+id/btn_connectToSpotify"
+        app:layout_constraintHorizontal_bias="0.075"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="111dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="5dp"
+        android:ems="8"
+        android:hint="List Title"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
