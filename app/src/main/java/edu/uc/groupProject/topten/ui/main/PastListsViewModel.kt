@@ -15,6 +15,10 @@ class PastListsViewModel : ViewModel() {
     var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     //var listsString = firestoreService.listOfLists
 
+    fun loadNextList(generateNewList:Boolean){
+        list = firestoreService.fetchList(generateNewList)
+    }
+
     fun loadLists(): MutableLiveData<ArrayList<String>> {
         lists = firestoreService.listOfLists //potentially a problem, could be lists.value?
         return lists

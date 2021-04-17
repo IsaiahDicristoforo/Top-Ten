@@ -6,9 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerCallback : ListUpdateCallback {
     var firstInsert = -1
     var adapter: RecyclerView.Adapter<CurrentListAdapter.ViewHolder>? = null
+    var pastAdapter: RecyclerView.Adapter<PastListAdapter.ViewHolder>? = null
 
     fun bind(adapter: RecyclerView.Adapter<CurrentListAdapter.ViewHolder>?) {
         this.adapter = adapter
+    }
+
+    fun bindPast(thePastAdapter: RecyclerView.Adapter<PastListAdapter.ViewHolder>?){
+        this.pastAdapter = thePastAdapter
     }
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {

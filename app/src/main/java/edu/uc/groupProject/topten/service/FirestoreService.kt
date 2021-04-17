@@ -31,9 +31,7 @@ class FirestoreService {
         var theCollection = db.collection("lists").get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    //val myList: MutableList<String> = ArrayList()
                     for (document in task.result!!) {
-                        //myList.add(document.id)
                         listedItem = document.id
                         arrayOfLists.add(document.id)
                         listOfLists.value = arrayOfLists

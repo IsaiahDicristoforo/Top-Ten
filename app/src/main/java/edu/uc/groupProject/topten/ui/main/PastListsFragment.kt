@@ -1,23 +1,29 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import edu.uc.groupProject.topten.R
+import edu.uc.groupProject.topten.dto.ListItem
 
 //Handles the past_lists_fragment
 class PastListsFragment : Fragment() {
     private lateinit var viewModel: PastListsViewModel
-
-    //Not used (yet?)
-    //private lateinit var adapter : PastListAdapter
-
+    private lateinit var adapter : PastListAdapter
+    var testList = ArrayList<ListItem>()
+    lateinit var recyclerView: RecyclerView
     lateinit var spinnerList : Spinner //spinner variable
 
 
@@ -25,6 +31,13 @@ class PastListsFragment : Fragment() {
         fun newInstance() = PastListsFragment()
     }
 
+    /**
+     * Creates the view.
+     * @param inflater The layout inflater
+     * @param container the main view that contains sub-views
+     * @param savedInstanceState The current instance.
+     * @return The layout of the application's UI.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,23 +54,43 @@ class PastListsFragment : Fragment() {
 
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PastListsViewModel::class.java)
+
+        recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_pastList)
+        spinnerList = view!!.findViewById<Spinner>(R.id.spn_listNames)
+        recyclerView.layoutManager =  LinearLayoutManager(this.context)
+        (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
+        viewModel.loadNextList(false)
+        adapter = PastListAdapter(viewModel, testList, context!!)
+        recyclerView.adapter = adapter
+
         viewModel.firestoreService.fetchListNames() //fetches all the list names
 
         var i = 0
         //Observer loop. This is where the drop-down box gets populated.
         viewModel.firestoreService.listOfLists.observe(this, Observer{
-            spinnerList = view!!.findViewById<Spinner>(R.id.spn_listNames)
             var listOfListVariable = viewModel.firestoreService.arrayOfLists
 
-            //Mini-adapter!
+            //Mini-adapter
             var spinAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listOfListVariable)
             spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             i++
             spinnerList.adapter = spinAdapter;
         })
 
+        //Observer loop. This is where the recyclerview gets populated.
         viewModel.firestoreService.list.observe(this, Observer {
-            activity?.runOnUiThread(Runnable {})
+            super.onActivityCreated(savedInstanceState)
+            viewModel = ViewModelProvider(this).get(PastListsViewModel::class.java)
+
+            viewModel.list.observe(this, Observer {
+                activity?.runOnUiThread(
+                    Runnable{
+                        val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
+                        adapter.setItemList(viewModel.firestoreService.list.value!!)
+                        recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+                })
+            })
         })
+
     }
 }
