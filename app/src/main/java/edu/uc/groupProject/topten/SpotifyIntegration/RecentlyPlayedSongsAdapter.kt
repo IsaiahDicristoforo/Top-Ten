@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.uc.groupProject.topten.R
+import edu.uc.groupProject.topten.dto.ListItem
 
 class RecentlyPlayedSongsAdapter(private var songs: ArrayList<Song>, var itemListener:ItemListener): RecyclerView.Adapter<RecentlyPlayedSongsAdapter.ViewHolder>() {
+
+     var itemsToAddToDatabase:ArrayList<ListItem> = ArrayList<ListItem>()
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -39,6 +43,12 @@ class RecentlyPlayedSongsAdapter(private var songs: ArrayList<Song>, var itemLis
         val songName: TextView = view.findViewById(R.id.txt_songName)
         val songArtist: TextView = view.findViewById(R.id.txtArtist)
         val layout: ConstraintLayout = view.findViewById(R.id.spotifyItemLayout)
+        var addSongToDatabaseButton = view.findViewById<FloatingActionButton>(R.id.actionButton_AddSpotifyItem).setOnClickListener{
+
+            var id = itemsToAddToDatabase.size + 1
+
+            itemsToAddToDatabase.add(ListItem(id,songName.text.toString(),"",0))
+        }
 
 }
 

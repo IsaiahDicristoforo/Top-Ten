@@ -1,27 +1,27 @@
 package edu.uc.groupProject.topten.ui.main
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.protocol.types.ImageUri
-import com.spotify.protocol.types.Track
 import com.spotify.sdk.android.authentication.AuthenticationClient
 import com.spotify.sdk.android.authentication.AuthenticationRequest
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.SpotifyIntegration.*
+import edu.uc.groupProject.topten.dto.TopTenList
+import edu.uc.groupProject.topten.service.FirestoreService
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
@@ -32,6 +32,8 @@ class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
     public val request_code = 1000
     lateinit var songService:SongService
     lateinit var spotifyPlayer: SpotifyAppRemote
+    lateinit var adapter:RecentlyPlayedSongsAdapter
+
 
 
 
@@ -43,13 +45,22 @@ class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
 
 
 
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
 
         songService = SongService(context!!)
 
-        populateDropdown()
+
+        var uploadListButton = view!!.findViewById<AppCompatImageButton>(R.id.btn_uploadSpotifyList).setOnClickListener(){
+            var spotifyListTitle = view!!.findViewById<EditText>(R.id.txt_SpotifyListTitle).text.toString()
+
+            var topTenList = TopTenList(Random().nextInt(),spotifyListTitle,"",false,"",Date(), Date())
+            topTenList.listItems = adapter.itemsToAddToDatabase
+            FirestoreService().writeListToDatabase(topTenList)
+        }
 
 
 
@@ -96,13 +107,7 @@ class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
         return inflater.inflate(R.layout.fragment_api_list, container, false)
     }
 
-    fun populateDropdown(){
-        val items = listOf("My Recently Played Songs","Search By Artist","Top Tracks")
-        val adapter = ArrayAdapter(requireContext(), R.layout.spotify_drop_down,items)
-
-    }
-
-    companion object {
+       companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -146,7 +151,7 @@ class ApiListFragment :RecentlyPlayedSongsAdapter.ItemListener, Fragment()  {
 
         var recyclerViewToFill = view!!.findViewById<RecyclerView>(R.id.spotifyRecyclerView)
 
-        var adapter = RecentlyPlayedSongsAdapter(songs, this)
+        adapter = RecentlyPlayedSongsAdapter(songs, this)
         recyclerViewToFill.adapter = adapter
 
         var layoutManager:GridLayoutManager = GridLayoutManager(context,2,GridLayoutManager.VERTICAL, false)

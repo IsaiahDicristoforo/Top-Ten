@@ -71,11 +71,7 @@ class CustomListFragment : Fragment() {
 
             var listTitle = view!!.findViewById<EditText>(R.id.txt_CustomListTitle).text.toString()
             if(listTitle.isBlank() || listTitle.isEmpty()){
-
-
                 Snackbar.make(submitListButton,"You Must Enter A List Title",Snackbar.LENGTH_SHORT).show()
-
-
 
             }else{
                 var listToAddToDatabase: TopTenList = TopTenList(0, listTitle,"",false,"", Date(), Date())

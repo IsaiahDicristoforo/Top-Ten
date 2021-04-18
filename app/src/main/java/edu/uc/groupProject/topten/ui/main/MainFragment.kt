@@ -155,7 +155,10 @@ class MainFragment : Fragment() {
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
                     listTitleLabel.text = viewModel.firestoreService.currentList
                     previousListTitle = viewModel.firestoreService.currentList
-                    winningItem = viewModel.firestoreService.list.value!![0].title
+
+                    if(viewModel.firestoreService.list.value!!.size > 0){
+                        winningItem = viewModel.firestoreService.list.value!![0].title
+                    }
 
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
