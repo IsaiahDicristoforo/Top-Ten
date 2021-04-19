@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.app.Notification
 import android.os.CountDownTimer
@@ -161,7 +160,6 @@ class MainFragment : Fragment() {
             }
         })
         isCanceled = true
-        viewModel.fetchStrawpoll(1)
     }
 
     private fun createShareListFunctionality() {
@@ -173,6 +171,10 @@ class MainFragment : Fragment() {
                 var privateListFragment:PrivateListFragment = PrivateListFragment()
 
                 var newListToAddTitle:String = "Test123"
+            if (possibleList != null) {
+                var bundle: Bundle = Bundle()
+                var newListToAddTitle: String = viewModel.firestoreService.currentList
+                var privateListFragment: PrivateListFragment = PrivateListFragment()
 
                 var bundle:Bundle = Bundle()
                 bundle.putString("ListTitle",newListToAddTitle)
