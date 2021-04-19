@@ -1,3 +1,3 @@
 package edu.uc.groupProject.topten.dto
 
-data class UserPolls(var user_id: Int, var question_id: Int) {}
+data class UserPolls(var uid: String, var question_id: List<Int>) {}

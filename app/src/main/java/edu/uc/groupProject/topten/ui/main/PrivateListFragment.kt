@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ class PrivateListFragment : Fragment() {
     private lateinit var viewModel: PrivateListViewModel
     private var fireStoreService : FirestoreService = FirestoreService()
     private lateinit var privateListAdapter : PrivateListAdapter
+    private lateinit var lblPrivate: TextView
 
 
     override fun onCreateView(
@@ -58,6 +60,17 @@ class PrivateListFragment : Fragment() {
         var lists = ArrayList<String>()
         lists.add("title1")
         lists.add("title2")
+
+        lblPrivate = view?.findViewById(R.id.lblPrivateLists)!!
+
+        var count: Int? = 0
+        var lista = fireStoreService.getPollQuestions(fireStoreService.getUID())
+        lista.observe(this, Observer {
+            count = list.value?.count()
+
+        })
+
+        lblPrivate.text = count.toString()
 
         privateListAdapter = PrivateListAdapter(viewModel, lists)
 

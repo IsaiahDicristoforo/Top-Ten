@@ -34,7 +34,7 @@ import kotlin.collections.ArrayList
  * Responsible for creating the view, and additionally contains Observe functionality that
  * observes live data coming in from MainViewModel
  */
-class MainFragment : Fragment() {
+class       MainFragment : Fragment() {
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter : CurrentListAdapter

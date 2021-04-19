@@ -3,6 +3,7 @@ package edu.uc.groupProject.topten.service
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.TopTenList
@@ -250,5 +251,33 @@ class FirestoreService {
 
         timer.start()
         return result
+    }
+
+    fun getPollQuestions(uid: String) : MutableLiveData<ArrayList<Int>> {
+        val db = FirebaseFirestore.getInstance()
+        var questionIds: MutableLiveData<ArrayList<Int>> = MutableLiveData<ArrayList<Int>>()
+
+
+        var path:String = "polls_api/" + uid + "/questionIds"
+
+
+            var collection = db.collection(path).get().addOnCompleteListener() { task ->
+                if(task.isComplete)
+                {
+                    for(document in task.result!!)
+                    {
+                        questionIds.value?.add(document.id.toInt())
+                    }
+
+                }
+
+            }
+
+        return questionIds
+    }
+
+    fun getUID(): String {
+        val userUID = FirebaseAuth.getInstance().uid
+        return userUID.toString()
     }
 }
