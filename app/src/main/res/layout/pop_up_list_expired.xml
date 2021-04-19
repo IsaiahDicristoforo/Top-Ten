@@ -70,6 +70,36 @@
         app:lottie_loop="true"
         app:lottie_url="https://assets3.lottiefiles.com/packages/lf20_qtt2dv.json" />
 
+    <TextView
+        android:id="@+id/tv_pointsEarnedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/baloo"
+        android:text="Total Points"
+        android:textColor="#03A9F4"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/podiumAnimationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_winningItem"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_PointsEarned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/baloo"
+        android:text="0"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.246"
+        app:layout_constraintLeft_toRightOf="@id/tv_pointsEarnedLabel"
+        app:layout_constraintStart_toEndOf="@+id/tv_pointsEarnedLabel"
+        app:layout_constraintTop_toBottomOf="@id/tv_winningItem" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/podiumAnimationView"
         android:layout_width="wrap_content"
@@ -79,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_winningItem"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pointsEarnedLabel"
         app:layout_constraintVertical_bias="0.044"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
