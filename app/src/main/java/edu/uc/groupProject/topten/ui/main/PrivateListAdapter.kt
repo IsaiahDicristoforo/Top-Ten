@@ -19,7 +19,7 @@ import org.w3c.dom.Text
  * @param listItems an array list of incoming data
  * @return RecyclerView.Adapter<CurrentListAdapter.ViewHolder>
  */
-class PrivateListAdapter(private val pvm: PrivateListViewModel, private var listItems: ArrayList<String>):RecyclerView.Adapter<PrivateListAdapter.ViewHolder>() {
+class PrivateListAdapter(private val pvm: PrivateListViewModel, private var listItems: ArrayList<String?>):RecyclerView.Adapter<PrivateListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(
             R.layout.private_list_item,

@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
+import edu.uc.groupProject.topten.dto.PollsCallback
 import edu.uc.groupProject.topten.dto.TopTenList
+import kotlinx.coroutines.tasks.await
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -253,27 +255,35 @@ class FirestoreService {
         return result
     }
 
-    fun getPollQuestions(uid: String) : MutableLiveData<ArrayList<Int>> {
+    fun getPollQuestions(uid: String, pollsCallback: PollsCallback) {
         val db = FirebaseFirestore.getInstance()
-        var questionIds: MutableLiveData<ArrayList<Int>> = MutableLiveData<ArrayList<Int>>()
-
 
         var path:String = "polls_api/" + uid + "/questionIds"
 
-
-            var collection = db.collection(path).get().addOnCompleteListener() { task ->
-                if(task.isComplete)
+            db.collection(path).get().addOnCompleteListener() { task ->
+                if(task.isSuccessful)
                 {
+                    val questionIds = ArrayList<Int>()
+
                     for(document in task.result!!)
                     {
-                        questionIds.value?.add(document.id.toInt())
+                        val id = document.id.toInt()
+                        questionIds.add(id)
                     }
-
+                        pollsCallback.onCallback(questionIds)
                 }
-
             }
+    }
 
-        return questionIds
+    fun setUserPoll(uid: String, questionId: Int) {
+        val db = FirebaseFirestore.getInstance()
+        var path:String = "polls_api"
+
+
+        val items = HashMap<String, Any>()
+        items.put(questionId.toString(), questionId)
+
+        db.collection(path).document(uid).collection("questionIds").document(questionId.toString()).set(items)
     }
 
     fun getUID(): String {
