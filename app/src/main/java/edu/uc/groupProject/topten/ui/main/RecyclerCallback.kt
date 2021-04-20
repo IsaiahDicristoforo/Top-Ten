@@ -3,10 +3,10 @@ package edu.uc.groupProject.topten.ui.main
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 
+
 class RecyclerCallback : ListUpdateCallback {
     var firstInsert = -1
     var adapter: RecyclerView.Adapter<CurrentListAdapter.ViewHolder>? = null
-
     fun bind(adapter: RecyclerView.Adapter<CurrentListAdapter.ViewHolder>?) {
         this.adapter = adapter
     }
@@ -19,7 +19,6 @@ class RecyclerCallback : ListUpdateCallback {
         if (firstInsert == -1 || firstInsert > position) {
             firstInsert = position
         }
-
         adapter?.notifyItemRangeInserted(position, count)
     }
 
@@ -27,7 +26,8 @@ class RecyclerCallback : ListUpdateCallback {
         adapter?.notifyItemMoved(fromPosition, toPosition)
         adapter?.notifyItemChanged(fromPosition)
         adapter?.notifyItemChanged(fromPosition, toPosition)
-    }
+
+          }
 
     override fun onRemoved(position: Int, count: Int) {
         adapter?.notifyItemRangeRemoved(position, count)
