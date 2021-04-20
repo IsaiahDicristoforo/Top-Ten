@@ -8,7 +8,22 @@ package edu.uc.groupProject.topten.dto
  * @param description The description of the listItem
  * @param totalVotes The total number of votes counted towards this listItem. Handled by Firebase.
  */
-data class ListItem(var id:Int, var title: String, var description: String = "", var totalVotes: Int) {
+data class ListItem(var id: Int,
+                    var title: String,
+                    var description: String = "",
+                    var totalVotes: Int)
+{
+    init {
+        // Ensure the title is not blank
+        if (title.isBlank()) {
+            throw IllegalArgumentException("Name required")
+        }
+
+        // Ensure the votes are not negative
+        if (totalVotes < 0) {
+            throw IllegalArgumentException("Votes must be non-negative")
+        }
+    }
 
     /**
      * returns a string representing an object
@@ -17,5 +32,4 @@ data class ListItem(var id:Int, var title: String, var description: String = "",
     override fun toString(): String {
         return title
     }
-
 }
