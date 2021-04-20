@@ -17,6 +17,7 @@ class FirestoreService {
     var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var currentList = ""
     var listedItem = ""
+    var pastListSelected = ""
 
 
 
@@ -56,8 +57,6 @@ class FirestoreService {
                     for (document in task.result!!) {
 
                         myList.add(document.id)
-                        //arrayOfLists.add(currentList)
-                        //listOfLists.value = arrayOfLists
 
                         if (document.getBoolean("active") == true && !generateNewList) {
                             currentList = document.id
@@ -110,6 +109,79 @@ class FirestoreService {
                     } else {
                         Log.d("ERROR", "Error getting documents: ", task.exception)
                     }
+
+            }
+
+
+        return list
+    }
+
+    fun fetchPastList(generateNewList:Boolean): MutableLiveData<ArrayList<ListItem>> {
+        val db = FirebaseFirestore.getInstance()
+
+        var theCollection = db.collection("lists").get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val myList: MutableList<String> = ArrayList()
+                    for (document in task.result!!) {
+
+                        myList.add(document.id)
+
+                        if (document.getBoolean("active") == true && !generateNewList) {
+                            if(pastListSelected == ""){
+                                currentList = document.id
+                            }else{
+                                currentList = pastListSelected
+                            }
+                            break
+                        }
+
+                    }
+
+                    if (generateNewList) {
+                        db.document("lists/$currentList").update("active", false)
+
+                        if(myList.indexOf(currentList) == myList.size - 1){
+                            resetExpirationDateOnAllLists(listIncrementTime.toInt())
+                            currentList = myList[0]
+                        }else{
+                            currentList = myList[myList.indexOf(currentList) + 1]
+                        }
+
+                        db.document("lists/$currentList").update("active", true)
+                    }
+
+                    db.collection("lists").document(currentList).collection("listItems")
+                        .addSnapshotListener { snapshot, e ->
+                            if (e != null) {
+
+                                Log.w("Error", "Listen Failed", e)
+                                return@addSnapshotListener
+
+                            }
+
+                            if (snapshot != null) {
+                                var allListItems = ArrayList<ListItem>()
+                                val documents = snapshot.documents
+                                documents.forEach {
+                                    val listItem: ListItem = ListItem(
+                                        it.getLong("id")!!.toInt(),
+                                        it.getString("title")!!,
+                                        "Test",
+                                        it.getLong("totalVotes")!!.toInt())
+
+                                    allListItems.add(listItem)
+                                }
+                                allListItems = sortListItemsByVoteDesc((allListItems))
+
+                                list.value = allListItems
+
+                            }
+                        }
+
+                } else {
+                    Log.d("ERROR", "Error getting documents: ", task.exception)
+                }
 
             }
 

@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
@@ -25,6 +26,7 @@ class PastListsFragment : Fragment() {
     var testList = ArrayList<ListItem>()
     lateinit var recyclerView: RecyclerView
     lateinit var spinnerList : Spinner //spinner variable
+    lateinit var thing : String
 
 
     companion object {
@@ -68,13 +70,17 @@ class PastListsFragment : Fragment() {
         var i = 0
         //Observer loop. This is where the drop-down box gets populated.
         viewModel.firestoreService.listOfLists.observe(this, Observer{
-            var listOfListVariable = viewModel.firestoreService.arrayOfLists
+            var listOfListVariable = viewModel.firestoreService.arrayOfLists //may cause issues with observe function
 
             //Mini-adapter
             var spinAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listOfListVariable)
             spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             i++
             spinnerList.adapter = spinAdapter;
+
+
+
+
         })
 
         //Observer loop. This is where the recyclerview gets populated.
@@ -88,9 +94,31 @@ class PastListsFragment : Fragment() {
                         val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
                         adapter.setItemList(viewModel.firestoreService.list.value!!)
                         recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+
+                        spinnerList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener  {
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                val text = parent?.getItemAtPosition(position).toString()
+                                thing = text
+                                viewModel.firestoreService.pastListSelected = thing
+                                viewModel.loadNextList(false)
+                            }
+
+                        }
                 })
             })
         })
+
+
 
     }
 }

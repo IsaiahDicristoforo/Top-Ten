@@ -61,13 +61,10 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
     //identifies the IDs of the items in the layout_past_list_item fragment
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val listName: TextView
-
-        init{
-            listName = view.findViewById(R.id.tv_listName)
-        }
+        val listName: TextView = view.findViewById(R.id.tv_listName)
 
     }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.listName.text = listItems[position].title
