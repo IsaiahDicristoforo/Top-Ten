@@ -1,15 +1,21 @@
 package edu.uc.groupProject.topten.service
 
+import android.R
+import android.app.Activity
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.TopTenList
+import edu.uc.groupProject.topten.ui.main.MainViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+
 
 class FirestoreService {
     var listIncrementTime: Long = 0
@@ -225,8 +231,9 @@ class FirestoreService {
      */
     fun getUserPoints(): String {
         val db = FirebaseFirestore.getInstance()
+        val userUID = FirebaseAuth.getInstance().uid
 
-        val docRef = db.collection("users").document("testuser")
+        val docRef = db.collection("users").document(userUID.toString())
         var userPoints = ""
 
         docRef.get()
@@ -290,5 +297,9 @@ class FirestoreService {
     fun getUID(): String {
         val userUID = FirebaseAuth.getInstance().uid
         return userUID.toString()
+    }
+
+    fun updatePoints(totalPoints: Int){
+
     }
 }

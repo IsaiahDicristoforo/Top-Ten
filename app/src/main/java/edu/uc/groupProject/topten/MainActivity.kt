@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,12 +19,14 @@ import edu.uc.groupProject.topten.ui.main.PastListsFragment
 import edu.uc.groupProject.topten.ui.main.PrivateListFragment
 
 
+
 /**
  * MainActivity class.
  */
 class MainActivity : AppCompatActivity() {
     var mvm: MainViewModel = MainViewModel()
     private lateinit var bottomMenu: BottomNavigationView
+
     /**
      * onCreate function
      * @param savedInstanceState the saved instance state
@@ -86,8 +87,8 @@ class MainActivity : AppCompatActivity() {
             val firestore = FirestoreService()
             val userName = findViewById<TextView>(R.id.txt_username)
 
-            if (userName.text != "test") {
-                val test = firestore.getUID()
+            if (userName.text != "") {
+                val test = firestore.getUserPoints()
                 Log.d("TAG", test)
 
             } else {
@@ -105,22 +106,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun createSignInIntent() {
 
-            val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.PhoneBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build()
-            )
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
 
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .setLogo((R.drawable.top10logo))
-                    .setTheme((R.style.Theme_TopTen))
-                    .build(),
-                RC_SIGN_IN
-            )
-        }
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo((R.drawable.top10logo))
+                .setTheme((R.style.Theme_TopTen))
+                .build(),
+            RC_SIGN_IN
+        )
+    }
 
     companion object {
 
@@ -129,29 +130,46 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == RESULT_OK) {
-            val db = FirebaseFirestore.getInstance()
             val userUID = FirebaseAuth.getInstance().uid
+            val db = FirebaseFirestore.getInstance()
             val name = FirebaseAuth.getInstance().currentUser.email
-            val points = 300
-            val newUser = hashMapOf(
-                "username" to name,
-                "points" to points
-            )
-            if (userUID != null) {
-                db.collection("users").document(userUID).set(newUser)
-                    .addOnSuccessListener { Log.d("msg", "DocumentSnapshot successfully written!") }
-                    .addOnFailureListener { e -> Log.w("err", "Error writing document", e) }
-            }
+            var newUser: HashMap<String, Any>
+            var points = 0
+            db.collection("users")
+                .document(userUID.toString())
+                .get()
+                .addOnSuccessListener { doc ->
+                    if (!doc.exists()) {
+                        points = 300
+                        newUser = hashMapOf(
+                            "username" to name,
+                            "points" to points.toString()
+                        )
+                        if (userUID != null) {
+                            db.collection("users").document(userUID).set(newUser)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        "msg",
+                                        "DocumentSnapshot successfully written!"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        "err",
+                                        "Error writing document",
+                                        e
+                                    )
+                                }
+                        }
+                    }
+                }
             val userName = findViewById<TextView>(R.id.txt_username)
             val userPoints = findViewById<TextView>(R.id.txt_points)
-        //userName.text = firestoreService.getUserName()
-        //userPoints.text = firestoreService.getUserPoints()
-        userName.text = name.substringBefore("@").take(8)
-        userPoints.text = points.toString()
+            userName.text = name.substringBefore("@").take(8)
+            userPoints.text = "300"
+            }
         }
-
-    }
 }
+
 
