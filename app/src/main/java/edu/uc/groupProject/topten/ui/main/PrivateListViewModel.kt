@@ -2,25 +2,24 @@ package edu.uc.groupProject.topten.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import edu.uc.groupProject.topten.dto.ListItem
-import edu.uc.groupProject.topten.dto.PollChoice
-import edu.uc.groupProject.topten.dto.PollResponse
-import edu.uc.groupProject.topten.service.PollService
+import edu.uc.groupProject.topten.dto.Strawpoll
+import edu.uc.groupProject.topten.service.StrawpollService
 
 class PrivateListViewModel : ViewModel() {
     // TODO: Implement the ViewModel
-    var service = PollService()
-
-    // Example create poll method
-    fun createPoll(question: String, choices: ArrayList<String>) : MutableLiveData<PollResponse>? {
-        return service.createPoll(question, choices)
+    // Example fetch strawpoll by id method
+    fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
+        val service = StrawpollService()
+        return service.getStrawpoll(id)
     }
 
-    fun getPoll(id: Int? = 1) : MutableLiveData<PollResponse>? {
-        return service.getPoll(id)
-    }
+    // Example create strawpoll method
+    fun createStrawpoll() : MutableLiveData<Strawpoll>? {
+        var testOptions = ArrayList<String>()
+        testOptions.add("Option 1")
+        testOptions.add("Option 2")
 
-    fun castVote(question_id: Int?, choice_id: Int?) : MutableLiveData<PollChoice>? {
-        return service.castVote(question_id, choice_id)
+        val service = StrawpollService()
+        return  service.createStrawpoll("3141592653", testOptions)
     }
 }

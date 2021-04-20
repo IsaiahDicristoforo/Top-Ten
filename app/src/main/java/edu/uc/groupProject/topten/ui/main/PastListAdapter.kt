@@ -11,12 +11,15 @@ import edu.uc.groupProject.topten.dto.ListItem
 
 //Handles the items put INTO the recyclerview, and connects to the PastListFragments class
 class PastListAdapter(private val mvm: PastListsViewModel, private var listItems: ArrayList<ListItem>): RecyclerView.Adapter<PastListAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        viewGroup: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(
             R.layout.layout_past_list_item,
             viewGroup,
-            false)
-
+            false
+        )
         return ViewHolder(view)
     }
 
@@ -24,8 +27,7 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
         if (list == null) {
             listItems = list
             notifyItemRangeInserted(0, list.size)
-        }
-        else {
+        } else {
             var result: DiffUtil.DiffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize(): Int {
                     return listItems.size
@@ -36,23 +38,32 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
                 }
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+
                     return listItems[oldItemPosition].id == list[newItemPosition].id
                 }
 
-                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                override fun areContentsTheSame(
+                    oldItemPosition: Int,
+                    newItemPosition: Int
+                ): Boolean {
                     var oldItem: ListItem = listItems[oldItemPosition]
                     var newItem: ListItem = list[newItemPosition]
 
                     return oldItem.id == newItem.id && oldItem.title == newItem.title && oldItem.totalVotes == newItem.totalVotes
                 }
+
             })
         }
     }
 
     //identifies the IDs of the items in the layout_past_list_item fragment
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val listName: TextView = view.findViewById(R.id.tv_listName)
+        val listName: TextView
+        init{
+            listName = view.findViewById(R.id.tv_listName)
+        }
     }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.listName.text = listItems[position].title //CURRENTLY ONLY PRODUCES THE NAME OF A LIST ITEM, NOT THE LIST TITLE
