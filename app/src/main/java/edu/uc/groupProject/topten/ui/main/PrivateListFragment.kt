@@ -2,7 +2,6 @@ package edu.uc.groupProject.topten.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.R
-import edu.uc.groupProject.topten.dto.ListItem
-import edu.uc.groupProject.topten.dto.PollResponse
-import edu.uc.groupProject.topten.dto.PollsCallback
+import edu.uc.groupProject.topten.dto.*
 import edu.uc.groupProject.topten.service.FirestoreService
-import edu.uc.groupProject.topten.service.PollService
 
 class PrivateListFragment : Fragment() {
     companion object {
@@ -76,11 +72,10 @@ class PrivateListFragment : Fragment() {
 
         var pollsList = ArrayList<String?>()
 
-        privateListAdapter = PrivateListAdapter(viewModel, pollsList)
 
-        var recyclerView : RecyclerView = view!!.findViewById(R.id.rcyPrivateRecycler)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = privateListAdapter
+
+        var pollResponses:MutableLiveData<ArrayList<PollResponse>> = MutableLiveData()
+        var responsesToAddToLiveData = ArrayList<PollResponse>()
 
 
         if(uid != null)
@@ -90,13 +85,27 @@ class PrivateListFragment : Fragment() {
                     for(id in questionIds) {
                         var response = viewModel.getPoll(id)
                         response?.observe(this@PrivateListFragment, Observer {
-                            pollsList.add(it.question)
+                            pollsList.add(it.question.split("-")[0])
                             privateListAdapter.notifyDataSetChanged()
+                            responsesToAddToLiveData.add(it)
+
                         })
                     }
+                    pollResponses.value = responsesToAddToLiveData
                 }
             })
+
+            pollResponses.observe(this,Observer{
+                privateListAdapter = PrivateListAdapter(context!!,pollResponses.value!!,viewModel, pollsList)
+
+                var recyclerView : RecyclerView = view!!.findViewById(R.id.rcyPrivateRecycler)
+                recyclerView.layoutManager = LinearLayoutManager(context)
+                recyclerView.adapter = privateListAdapter
+
+            })
         }
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

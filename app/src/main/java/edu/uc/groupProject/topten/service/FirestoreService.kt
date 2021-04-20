@@ -8,7 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.PollsCallback
 import edu.uc.groupProject.topten.dto.TopTenList
-import kotlinx.coroutines.tasks.await
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
