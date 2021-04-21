@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 
-//Handles the items put INTO the recyclerview, and connects to the PastListFragments class
+/**
+ * PastListAdapter.
+ * Handles the items put into the Past List recyclerview, and connects to the PastListFragment class.
+ */
 class PastListAdapter(private val mvm: PastListsViewModel, private var listItems: ArrayList<ListItem>, private var currentActivity : Context): RecyclerView.Adapter<PastListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -22,6 +25,10 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
         return ViewHolder(view)
     }
 
+    /**
+     * setItemList function in the PastListAdapter.
+     * @param list The arraylist of ListItem DTOs.
+     */
     fun setItemList(list: ArrayList<ListItem>) {
         if (list == null) {
             listItems = list

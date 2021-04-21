@@ -10,21 +10,15 @@ import edu.uc.groupProject.topten.service.StrawpollService
 
 class PastListsViewModel : ViewModel() {
     var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
-    var listService : ListService = ListService()
     var firestoreService : FirestoreService =  FirestoreService()
-    var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
-    //var listsString = firestoreService.listOfLists
 
+    /**
+     * loadNextList function.
+     * Connects the PastListFragment with firestoreService via fetchPastList.
+     * @param listTitle the title of a given list.
+     * @return list
+     */
     fun loadNextList(listTitle: String){
         list = firestoreService.fetchPastList(listTitle)
-    }
-
-    fun fetchFirestoreListItem(){
-        list = firestoreService.fetchDocument()
-    }
-
-    fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {
-        val service = StrawpollService()
-        return service.getStrawpoll(id)
     }
 }

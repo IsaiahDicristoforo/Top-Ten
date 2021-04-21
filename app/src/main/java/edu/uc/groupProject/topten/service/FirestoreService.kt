@@ -21,7 +21,7 @@ class FirestoreService {
 
 
 
-    /*
+    /**
      * fetchListNames function.
      * Responsible for fetching the names of the Firebase lists. Does not fetch the items inside
      * of each list, only the names of the lists.
@@ -116,6 +116,10 @@ class FirestoreService {
         return list
     }
 
+    /**
+     * Fetches list items from the firebase - angled more toward the Past List Tab.
+     * Notably has a string parameter rather than a boolean.
+     */
     fun fetchPastList(listTitle:String): MutableLiveData<ArrayList<ListItem>> {
         val db = FirebaseFirestore.getInstance()
 

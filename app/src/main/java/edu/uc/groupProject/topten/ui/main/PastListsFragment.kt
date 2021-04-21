@@ -48,7 +48,7 @@ class PastListsFragment : Fragment() {
         return inflater.inflate(R.layout.past_lists_fragment, container, false)
     }
 
-    /*
+    /**
      * onActivityCreated function.
      * Responsible for populating the past-list tab's drop-down spinner item.
      */
@@ -76,6 +76,7 @@ class PastListsFragment : Fragment() {
             spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerList.adapter = spinAdapter
 
+            //Interaction when clicking on the spinner.
             spinnerList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener  {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
