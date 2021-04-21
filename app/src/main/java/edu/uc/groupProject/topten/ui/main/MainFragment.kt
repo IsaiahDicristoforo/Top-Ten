@@ -122,6 +122,7 @@ class MainFragment : Fragment() {
         adapter = CurrentListAdapter(viewModel, testList, context!!)
         recyclerView.adapter = adapter
 
+
         viewModel.firestoreService.list.observe(this, Observer {
 
             activity?.runOnUiThread(
