@@ -90,6 +90,7 @@ class       MainFragment : Fragment() {
         adapter = CurrentListAdapter(viewModel, testList)
         recyclerView.adapter = adapter
 
+
         viewModel.firestoreService.list.observe(this, Observer {
             activity?.runOnUiThread( Runnable {
                 val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
