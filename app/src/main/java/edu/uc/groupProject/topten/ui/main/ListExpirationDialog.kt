@@ -1,6 +1,5 @@
 package edu.uc.groupProject.topten.ui.main
 
-import android.animation.ValueAnimator
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
@@ -26,21 +25,6 @@ class ListExpirationDialog : DialogFragment() {
             var progressBar:ProgressBar =  dialogView.findViewById<ProgressBar>(R.id.dialogProgressBar)
             var listTitleTextBox:TextView = dialogView.findViewById(R.id.listTitleDialogView)
             listTitleTextBox.text = arguments!!.getString("ListTitle")
-
-            var pointsEarned = arguments!!.getInt("PointsEarned")
-            var totalPoints = arguments!!.getInt("TotalPoints")
-
-           var pointsView = dialogView.findViewById<TextView>(R.id.tv_PointsEarned)
-
-
-            val anim = ValueAnimator.ofInt(totalPoints, (totalPoints + pointsEarned)).apply {
-                addUpdateListener {
-                    pointsView.text = animatedValue.toString()
-                }
-            }
-            anim.duration = 1500
-            anim.start()
-
 
             dialogView.findViewById<TextView>(R.id.tv_winningItem).text = arguments!!.getString("FirstPlace")
 
