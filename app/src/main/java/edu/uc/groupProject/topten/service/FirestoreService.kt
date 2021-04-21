@@ -190,8 +190,6 @@ class FirestoreService {
                 Log.d("error", "get failed with ", exception)
             }
 
-
-
         return list
     }
 

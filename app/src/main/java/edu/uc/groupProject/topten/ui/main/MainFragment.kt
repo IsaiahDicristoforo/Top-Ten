@@ -251,14 +251,22 @@ class MainFragment : Fragment() {
                     }else{
                         totalPoints += 5
                     }
-                    var userPoints = activity?.findViewById<TextView>(R.id.txt_points)
-                    if(userPoints?.text != "") {
-                        val points: Int = Integer.parseInt(userPoints?.text as String)
-                        val userTotal = totalPoints + points
-                        userPoints?.text = userTotal.toString()
-                        userPoints?.invalidate()
-                        userPoints?.requestLayout()
+
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+
+                        var userPoints = activity?.findViewById<TextView>(R.id.txt_points)
+
+                        if(userPoints?.text != "") {
+                            val points: Int = Integer.parseInt(userPoints?.text as String)
+                            val userTotal = totalPoints + points
+                            userPoints?.text = userTotal.toString()
+                            userPoints?.invalidate()
+                            userPoints?.requestLayout()
+                        }
+
                     }
+
+
                     var pastPointTotal = isVotedSharedPreference!!.getInt("TotalPoints", 0)
                     val firestore = FirestoreService()
 
