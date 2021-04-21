@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/private_cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+
+    <LinearLayout
+        android:id="@+id/nestedListItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4CAF50"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lbl_privateListItemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:fontFamily="@font/baloo"
+            android:text="Top 10 Superheros"
+            android:textColor="#0D2E3C"
+            android:textSize="36sp" />
+
+        <RelativeLayout
+            android:id="@+id/expandedView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nestedRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFCFC" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
