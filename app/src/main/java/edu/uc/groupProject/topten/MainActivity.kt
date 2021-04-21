@@ -1,17 +1,18 @@
 package edu.uc.groupProject.topten
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.uc.groupProject.topten.service.FirestoreService
 import edu.uc.groupProject.topten.ui.main.MainFragment
 import edu.uc.groupProject.topten.ui.main.MainViewModel
 import edu.uc.groupProject.topten.ui.main.PastListsFragment
@@ -80,9 +81,10 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
-
+            val firestore = FirestoreService()
             val userName = findViewById<TextView>(R.id.txt_username)
 
             if (userName.text != "") {
@@ -93,8 +95,9 @@ class MainActivity : AppCompatActivity() {
                 createSignInIntent()
             }
         }
-    }
 
+
+    }
 
     private fun changeFragment(newFragment: Fragment) {
         supportFragmentManager?.beginTransaction()?.replace(R.id.container, newFragment)
