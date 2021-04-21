@@ -171,26 +171,21 @@ class MainFragment : Fragment() {
 
     private fun createShareListFunctionality() {
         var shareButton:ImageButton = view!!.findViewById<ImageButton>(R.id.btn_shareList)
-        shareButton.setOnClickListener({
-
+        shareButton.setOnClickListener {
             var possibleList = viewModel.firestoreService.list
+
             if (possibleList != null) {
+                var bundle: Bundle = Bundle()
+                var newListToAddTitle: String = viewModel.firestoreService.currentList
                 var privateListFragment: PrivateListFragment = PrivateListFragment()
 
-                var newListToAddTitle: String = "Test123"
-
-                var bundle: Bundle = Bundle()
                 bundle.putString("ListTitle", newListToAddTitle)
                 privateListFragment.arguments = bundle
-                activity!!.supportFragmentManager.beginTransaction().replace(
-                    R.id.container,
-                    privateListFragment
-                ).commit()
+                activity!!.supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, privateListFragment).commit()
             }
-
-        })
+        }
     }
-
 
     fun startCountdownTimer(totalTimeInMilli: Long){
 
