@@ -166,7 +166,6 @@ class MainFragment : Fragment() {
             }
         })
         isCanceled = true
-        viewModel.fetchStrawpoll(1)
     }
 
     private fun createShareListFunctionality() {

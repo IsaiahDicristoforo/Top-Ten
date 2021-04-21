@@ -3,10 +3,7 @@ package edu.uc.groupProject.topten.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import edu.uc.groupProject.topten.dto.ListItem
-import edu.uc.groupProject.topten.dto.Strawpoll
 import edu.uc.groupProject.topten.service.FirestoreService
-import edu.uc.groupProject.topten.service.ListService
-import edu.uc.groupProject.topten.service.StrawpollService
 
 class PastListsViewModel : ViewModel() {
     var list : MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
