@@ -13,10 +13,12 @@ import androidx.fragment.app.DialogFragment
 import com.airbnb.lottie.LottieAnimationView
 import edu.uc.groupProject.topten.R
 
+/**
+ * The pop up fragment that appears when the countdown timer has expired and voting has ended on a list.
+ */
 class ListExpirationDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
 
@@ -30,9 +32,15 @@ class ListExpirationDialog : DialogFragment() {
             var pointsEarned = arguments!!.getInt("PointsEarned")
             var totalPoints = arguments!!.getInt("TotalPoints")
 
+            var yourSelectedItem = arguments!!.getString("SelectedItem")
+            var positionOfYourSelectedItem = arguments!!.getInt("FinalPosition")
+            var yourResultTextView = dialogView.findViewById<TextView>(R.id.txt_dialogSelectedItem)
+            yourResultTextView.text = "You selected $yourSelectedItem which finished in position #$positionOfYourSelectedItem"
+
            var pointsView = dialogView.findViewById<TextView>(R.id.tv_PointsEarned)
 
 
+            //Points increment animation.
             val anim = ValueAnimator.ofInt(totalPoints, (totalPoints + pointsEarned)).apply {
                 addUpdateListener {
                     pointsView.text = animatedValue.toString()
@@ -49,16 +57,15 @@ class ListExpirationDialog : DialogFragment() {
                     progressBar.progress = progressBar.progress - 1
                 }
                 override fun onFinish() {
-                    this@ListExpirationDialog.dismiss()
+                    this@ListExpirationDialog.dismiss() //Close out of the dialog box after a period of time defined in the countdown timer.
                 }
             }.start()
 
             builder.setView(dialogView)
                 .setNegativeButton("Close", DialogInterface.OnClickListener { dialog, id ->
-                        // User cancelled the dialog
+                        // User closes out of the dialog box
                 })
 
-            // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

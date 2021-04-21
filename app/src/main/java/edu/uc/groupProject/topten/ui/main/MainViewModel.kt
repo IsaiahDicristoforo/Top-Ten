@@ -22,13 +22,8 @@ class MainViewModel : ViewModel() {
         list = firestoreService.fetchList(generateNewList)
     }
 
-    fun fetchFirestoreListItem(){
-        list = firestoreService.fetchDocument()
-    }
-
     fun fetchListServiceList(listName: String) {
         list = listService.fetchList(listName)
     }
-
 
 }

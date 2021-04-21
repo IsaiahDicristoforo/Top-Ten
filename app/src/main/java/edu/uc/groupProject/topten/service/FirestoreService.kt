@@ -1,23 +1,20 @@
 package edu.uc.groupProject.topten.service
 
-import android.R
-import android.app.Activity
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.PollsCallback
 import edu.uc.groupProject.topten.dto.TopTenList
-import edu.uc.groupProject.topten.ui.main.MainViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-
+/**
+ * Handles all of the main database logic for the top-ten app
+ */
 class FirestoreService {
     var listIncrementTime: Long = 0
     var listOfLists: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
@@ -26,8 +23,6 @@ class FirestoreService {
     var currentList = ""
     var listedItem = ""
     var pastListSelected = ""
-
-
 
     /**
      * fetchListNames function.
@@ -53,7 +48,8 @@ class FirestoreService {
 
 
     /**
-     * gets the list items from firebase
+     * Fetches the current list from firebase. The current list is the list where the isActive field in the collection of lists is set to true.
+     * @param generateNewList Whether or not to generate a new active list by setting the isActive field on a list to true.
      */
     fun fetchList(generateNewList: Boolean): MutableLiveData<ArrayList<ListItem>> {
         val db = FirebaseFirestore.getInstance()
@@ -66,7 +62,7 @@ class FirestoreService {
 
                         myList.add(document.id)
 
-                        if (document.getBoolean("active") == true && !generateNewList) {
+                        if (document.getBoolean("active") == true && !generateNewList) { //Only one list will have the "active" field set to true in the database. The document
                             currentList = document.id
                             break
                         }
@@ -120,8 +116,6 @@ class FirestoreService {
                 }
 
             }
-
-
         return list
     }
 
@@ -308,28 +302,6 @@ class FirestoreService {
         }
     }
 
-    fun getTimeRemainingOnCurrentList(timer: CountDownTimer): Long {
-        val db = FirebaseFirestore.getInstance()
-        var expiryDate: Date
-        var path: String = "lists/" + currentList
-
-        var result: Long = 0
-
-        db.document(path).get().addOnSuccessListener {
-            expiryDate = it.getDate("expireDate")!!
-            result = Math.abs(
-                TimeUnit.MILLISECONDS.convert(
-                    expiryDate.time - Date().time,
-                    TimeUnit.MILLISECONDS
-                )
-            )
-        }.addOnFailureListener { exception ->
-            Log.d("error", "get failed with ", exception)
-        }
-        timer.start()
-
-        return result
-    }
 
     fun getPollQuestions(uid: String, pollsCallback: PollsCallback) {
         val db = FirebaseFirestore.getInstance()
@@ -362,12 +334,12 @@ class FirestoreService {
         db.collection(path).document(uid).collection("questionIds").document(questionId.toString()).set(items)
     }
 
+    /**
+     * Gets the UID of the user who is currently logged in.
+     */
     fun getUID(): String {
         val userUID = FirebaseAuth.getInstance().uid
         return userUID.toString()
     }
 
-    fun updatePoints(totalPoints: Int){
-
-    }
 }

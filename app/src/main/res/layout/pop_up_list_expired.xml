@@ -78,7 +78,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/baloo"
-        android:text="Total Points"
+        android:text="Points Earned"
         android:textColor="#03A9F4"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@id/podiumAnimationView"
@@ -99,6 +99,25 @@
         app:layout_constraintLeft_toRightOf="@id/tv_pointsEarnedLabel"
         app:layout_constraintStart_toEndOf="@+id/tv_pointsEarnedLabel"
         app:layout_constraintTop_toBottomOf="@id/tv_winningItem" />
+
+    <TextView
+        android:id="@+id/txt_dialogSelectedItem"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="25dp"
+        android:fontFamily="@font/baloo"
+        android:text="You selected Cheerios, which finished in position #5"
+        android:textAlignment="center"
+        android:textColor="#3F51B5"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.285"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pointsEarnedLabel"
+        app:layout_constraintVertical_bias="0.104" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/podiumAnimationView"

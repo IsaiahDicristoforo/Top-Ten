@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
@@ -26,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.MainActivity
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
-import edu.uc.groupProject.topten.service.FirestoreService
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -42,21 +40,23 @@ class MainFragment : Fragment() {
 
     //Variables to connect to the MainViewModel in the onActivityCreated() function.
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter : CurrentListAdapter
-    private var countdownTime:Long = 30000
-    lateinit var timerTextView:TextView
-    lateinit var recyclerView:RecyclerView
-    var testList = ArrayList<ListItem>()
+    private var countdownTime:Long = 60000  //The countdown time is 1 minute (60000 milliseconds)
     private lateinit var countDownTimer:CountDownTimer
     private var isCanceled = false
-    lateinit var dialogToDisplay:ListExpirationDialog
     lateinit var previousListTitle:String
     lateinit var winningItem:String
     var isVotedSharedPreference = activity?.getSharedPreferences("HasVoted", Context.MODE_PRIVATE)
-    var firestoreService : FirestoreService =  FirestoreService()
     var totalPoints = 0
     val main = MainActivity()
+    private lateinit var adapter : CurrentListAdapter
 
+
+
+    //The main UI components on the main fragment are the timer, the current list recycler view, and the pop up dialog that displays when the countdown timer reaches zero.
+    lateinit var timerTextView:TextView
+    lateinit var recyclerView:RecyclerView
+    lateinit var dialogToDisplay:ListExpirationDialog
+    lateinit var listTitleLabel:TextView
 
 
     //Notification code
@@ -77,8 +77,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-
-
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -90,39 +88,34 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
 
         super.onActivityCreated(savedInstanceState)
-
-
         isVotedSharedPreference = activity?.getSharedPreferences("HasVoted", Context.MODE_PRIVATE)
-       // isVotedSharedPreference?.edit()?.putBoolean("HasVoted", false)?.apply()
+        isCanceled = true
 
-
+        //Instantiate the view model
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.firestoreService.listIncrementTime = countdownTime //Currently the countdown time on the list is 60000 milliseconds (1 min)
 
-        viewModel.firestoreService.listIncrementTime = countdownTime
-
-
+        //Find and store the ui components
         recyclerView = view!!.findViewById<RecyclerView>(R.id.rec_currentList)
-        var userName = view!!.findViewById<TextView>(R.id.txt_username)
-        var userPoints = view!!.findViewById<TextView>(R.id.txt_points)
         timerTextView  = view!!.findViewById(R.id.tv_mainListTimer)
-        var listTitleLabel = view!!.findViewById<TextView>(R.id.tv_mainListTitle)
-        //userName.text = viewModel.getUserName()
-        //userPoints.text = viewModel.getUserPoints()
-
-
-    //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
-
-        createShareListFunctionality()
-
+        listTitleLabel = view!!.findViewById<TextView>(R.id.tv_mainListTitle)
 
         recyclerView.layoutManager =  LinearLayoutManager(this.context)
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
+        adapter = CurrentListAdapter(viewModel, ArrayList<ListItem>(), context!!) //Initially the recycler view adapter wil have an empty array list of list items passed to it. That changes when retrieve our data from firebase to populate the top ten list.
 
         viewModel.loadNextList(false)
-        adapter = CurrentListAdapter(viewModel, testList, context!!)
         recyclerView.adapter = adapter
 
+        observeTopTenListData() //Important function responsible for handling changes in the top ten list data and populating the recycler view.
+        createShareListFunctionality()
 
+    }
+
+    /**
+     * Observes the top ten list data being pulled from firestore, and populates/updates the recycler view when data is retrieved from firestore.
+     */
+    private fun observeTopTenListData() {
         viewModel.firestoreService.list.observe(this, Observer {
 
             activity?.runOnUiThread(
@@ -132,81 +125,85 @@ class MainFragment : Fragment() {
                         recyclerView.layoutManager!!.onSaveInstanceState()
 
 
+                    //Checking to see if the user has not already voted.
                     if (!activity?.getSharedPreferences("HasVoted", Context.MODE_PRIVATE)!!
-                            .getBoolean(
-                                "HasVoted",
-                                false
-                            )
+                            .getBoolean("HasVoted", false)
                     ) {
-
+                        //If the user hasn't voted yet, the list remains randomized, and the vote counts hidden
                         var randomizedItems = viewModel.firestoreService.list.value
                         randomizedItems!!.shuffle()
                         adapter.setItemList(randomizedItems)
 
                     } else {
+                        //If the user has voted, set the contents of the recycler view to be the unrandomized list, sorted ascending by vote total.
                         adapter.setItemList(viewModel.firestoreService.list.value!!)
 
                     }
+
                     adapter.setItemList(viewModel.firestoreService.list.value!!)
                     listTitleLabel.text = viewModel.firestoreService.currentList
                     previousListTitle = viewModel.firestoreService.currentList
-                    winningItem = viewModel.firestoreService.list.value!![0].title
+                    winningItem = viewModel.firestoreService.list.value!![0].title //The winning list item will be the item with the most number of votes, aka position 0 in the list since items are sorted ascending by vote total.
 
                     recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
                 }
             )
 
 
-            //Stops the animation from playing each time the recycler view is updated/a vote changes
+            //Stops the animation from playing each time the recycler view is updated/a vote changes. We only want to play the animation when the user loads it for the first time.
             if (viewModel.playAnimation) {
                 recyclerView.startLayoutAnimation()
                 viewModel.playAnimation = false
-
                 getTimeRemainingOnCurrentList()
             }
         })
-        isCanceled = true
     }
 
+    /**
+     * When the user clicks the share button, the current list data will be transferred over to the private tab.
+     */
     private fun createShareListFunctionality() {
         var shareButton:ImageButton = view!!.findViewById<ImageButton>(R.id.btn_shareList)
+
+        //Handling the share button click logic
         shareButton.setOnClickListener {
             var possibleList = viewModel.firestoreService.list
 
-            if (possibleList != null) {
+            if (possibleList != null) { //Sometimes the user may click the share button when the current list hasn't been populated yet.
                 var bundle: Bundle = Bundle()
                 var newListToAddTitle: String = viewModel.firestoreService.currentList
                 var privateListFragment: PrivateListFragment = PrivateListFragment()
 
                 bundle.putString("ListTitle", newListToAddTitle)
                 privateListFragment.arguments = bundle
-                activity!!.supportFragmentManager.beginTransaction()
+                activity!!.supportFragmentManager.beginTransaction() //Switching fragments from the current list to private list fragment.
                     .replace(R.id.container, privateListFragment).commit()
             }
         }
     }
 
+    /**
+     * Starts the countdown timer, and handles the logic when the countdown timer finishes.
+     */
     fun startCountdownTimer(totalTimeInMilli: Long){
 
-     countDownTimer =   object : CountDownTimer(totalTimeInMilli, 1000) {
+     countDownTimer =   object : CountDownTimer(totalTimeInMilli, 1000) { //The countdown timer counts down every 1 sec (1000 milliseconds)
             override fun onTick(millisUntilFinished: Long) {
                 val hours = (millisUntilFinished / 1000 / 3600)
                 val minutes = (millisUntilFinished / 1000 / 60 % 60)
                 val seconds = (millisUntilFinished / 1000 % 60)
-                timerTextView.setText("${hours} hrs  ${minutes} min  ${seconds} sec")
 
-                if(seconds.toInt() == 10){
-                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+                if(seconds.toInt() == 10){ //Display a notification when the countdown timer reaches 10 seconds
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){ //Fixes a bug where our app was crashing if the user was on another fragment when this logic executed.
                         val notificationManager = NotificationManagerCompat.from(activity!!)
                         createNotificationChannel()
 
                         val notification = NotificationCompat.Builder(activity!!, channelId)
-                            .setContentTitle("Top Ten List Expiring in 10 secs !")
+                            .setContentTitle("Top Ten List Expiring in 10 seconds!")
                             .setContentText("Last Chance to vote on your favorite List Item.")
                             .setSmallIcon(R.mipmap.ic_launcher_round)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .build()
-
                         notificationManager.notify(notificationId, notification)
                     }
                 }
@@ -234,7 +231,10 @@ class MainFragment : Fragment() {
                     var positionOfYourItem =  viewModel.firestoreService.list.value!!.indexOfFirst{ item->item.title == votedOnItem } + 1
 
 
-                    if(positionOfYourItem == 1){
+                    if(positionOfYourItem == 0){
+                        totalPoints = 0
+                    }
+                    else if(positionOfYourItem == 1){
                         totalPoints = 200
                     }
                     else if(positionOfYourItem == 2){
@@ -244,7 +244,7 @@ class MainFragment : Fragment() {
                     }else if(positionOfYourItem >= 5){
                         totalPoints = 25
                     }else{
-                        totalPoints += 5
+                        totalPoints = 5
                     }
 
                     if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
@@ -261,21 +261,16 @@ class MainFragment : Fragment() {
 
                     }
 
-
                     var pastPointTotal = isVotedSharedPreference!!.getInt("TotalPoints", 0)
-                    val firestore = FirestoreService()
-
-                    firestore.updatePoints(totalPoints)
 
                     viewModel.loadNextList(true)
 
                     adapter.notifyDataSetChanged()
 
                     recyclerView.startLayoutAnimation()
-
                     viewModel.playAnimation = false
 
-                    startCountdownTimer(countdownTime)
+                    startCountdownTimer(countdownTime) //When the countdown timer finishes, start it again
                     launchListResultsDialog(
                         votedOnItem!!,
                         positionOfYourItem,
@@ -301,6 +296,10 @@ class MainFragment : Fragment() {
         }.start()
     }
 
+
+    /**
+     * Launches the results dialog when the current list expires.
+     */
     fun launchListResultsDialog(
         selectedItem: String,
         finalPosition: Int,
@@ -313,28 +312,28 @@ class MainFragment : Fragment() {
       dialogToDisplay = ListExpirationDialog()
 
       if(this.fragmentManager != null && this.isVisible()){
-        var infoForDialog:Bundle = Bundle()
-        infoForDialog.putString("ListTitle", previousListTitle)
-        infoForDialog.putString("FirstPlace", winningItem)
-          infoForDialog.putString("SelectedItem", selectedItem)
-          infoForDialog.putInt("FinalPosition", finalPosition)
-          infoForDialog.putInt("TotalPoints", totalPoints)
-          infoForDialog.putInt("PointsEarned", pointsEarned)
+            var infoForDialog:Bundle = Bundle()
+            infoForDialog.putString("ListTitle", previousListTitle)
+            infoForDialog.putString("FirstPlace", winningItem)
+            infoForDialog.putString("SelectedItem", selectedItem)
+            infoForDialog.putInt("FinalPosition", finalPosition)
+            infoForDialog.putInt("TotalPoints", totalPoints)
+            infoForDialog.putInt("PointsEarned", pointsEarned)
 
-
-        dialogToDisplay.setArguments(infoForDialog)
-          dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
+            dialogToDisplay.setArguments(infoForDialog)
+            dialogToDisplay.show(this.fragmentManager!!, "List Expiration Pop Up Dialog")
       }
 
     }catch (e: Exception){
 
-
+        Log.e("List Expiration Pop-Up Dialog Error", e.toString())
+    }
 
     }
 
-
-    }
-
+    /**
+     * Gets the time remaining on the current list from firebase. If all devices retrieve the time remaining on the current list from firebase, the devices can have their countdown timers synced up.
+     */
     private fun getTimeRemainingOnCurrentList(): Long {
         val db = FirebaseFirestore.getInstance()
         var expiryDate:Date
@@ -348,7 +347,7 @@ class MainFragment : Fragment() {
                 expiryDate = it.getDate("expireDate")!!
 
 
-                result = (TimeUnit.MILLISECONDS.convert(
+                result = (TimeUnit.MILLISECONDS.convert( //The time remaining on the current list is the expiry datatime in the database minus the current datetime
                     expiryDate.time - Date().time,
                     TimeUnit.MILLISECONDS
                 ))
@@ -359,11 +358,11 @@ class MainFragment : Fragment() {
             }
 
         return result
-
-
-
    }
 
+    /**
+     * Creates a notification channel to display notifications when a new top ten list is loaded, and when a top ten list is about to expire.
+     */
     private fun createNotificationChannel(){
         val channel = NotificationChannel(
             channelId,

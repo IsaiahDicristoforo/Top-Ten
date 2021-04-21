@@ -60,6 +60,7 @@
         android:id="@+id/rec_currentList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
         android:layoutAnimation="@anim/recycler_layout_animation"
         android:translationY="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
