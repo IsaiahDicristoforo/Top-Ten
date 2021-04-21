@@ -328,8 +328,37 @@ class FirestoreService {
         timer.start()
 
         return result
+    }
+
+    fun getPollQuestions(uid: String, pollsCallback: PollsCallback) {
+        val db = FirebaseFirestore.getInstance()
+
+        var path:String = "polls_api/" + uid + "/questionIds"
+
+            db.collection(path).get().addOnCompleteListener() { task ->
+                if(task.isSuccessful)
+                {
+                    val questionIds = ArrayList<Int>()
+
+                    for(document in task.result!!)
+                    {
+                        val id = document.id.toInt()
+                        questionIds.add(id)
+                    }
+                        pollsCallback.onCallback(questionIds)
+                }
+            }
+    }
+
+    fun setUserPoll(uid: String, questionId: Int) {
+        val db = FirebaseFirestore.getInstance()
+        var path:String = "polls_api"
 
 
+        val items = HashMap<String, Any>()
+        items.put(questionId.toString(), questionId)
+
+        db.collection(path).document(uid).collection("questionIds").document(questionId.toString()).set(items)
     }
 
     fun getUID(): String {
