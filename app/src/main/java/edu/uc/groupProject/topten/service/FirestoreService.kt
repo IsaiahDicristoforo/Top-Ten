@@ -1,11 +1,16 @@
 package edu.uc.groupProject.topten.service
 
+import android.R
+import android.app.Activity
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.dto.TopTenList
+import edu.uc.groupProject.topten.ui.main.MainViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -17,10 +22,14 @@ class FirestoreService {
     var arrayOfLists: ArrayList<String> = ArrayList<String>()
     var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var currentList = ""
+    var listedItem = ""
+    var pastListSelected = ""
 
-
-
-
+    /**
+     * fetchListNames function.
+     * Responsible for fetching the names of the Firebase lists. Does not fetch the items inside
+     * of each list, only the names of the lists.
+     */
     fun fetchListNames(){
         val db = FirebaseFirestore.getInstance()
         var listItemCollection = db.collection("lists")
@@ -36,7 +45,6 @@ class FirestoreService {
                 } else {
                     Log.d("ERROR", "Error getting documents: ", task.exception)
                 }
-
             }
     }
 
@@ -44,7 +52,7 @@ class FirestoreService {
     /**
      * gets the list items from firebase
      */
-    fun fetchList(generateNewList:Boolean): MutableLiveData<ArrayList<ListItem>> {
+    fun fetchList(generateNewList: Boolean): MutableLiveData<ArrayList<ListItem>> {
         val db = FirebaseFirestore.getInstance()
 
         var theCollection = db.collection("lists").get()
@@ -54,8 +62,6 @@ class FirestoreService {
                     for (document in task.result!!) {
 
                         myList.add(document.id)
-                        //arrayOfLists.add(currentList)
-                        //listOfLists.value = arrayOfLists
 
                         if (document.getBoolean("active") == true && !generateNewList) {
                             currentList = document.id
@@ -67,53 +73,88 @@ class FirestoreService {
                     if (generateNewList) {
                         db.document("lists/$currentList").update("active", false)
 
-                        if(myList.indexOf(currentList) == myList.size - 1){
+                        if (myList.indexOf(currentList) == myList.size - 1) {
                             resetExpirationDateOnAllLists(listIncrementTime.toInt())
                             currentList = myList[0]
-                        }else{
+                        } else {
                             currentList = myList[myList.indexOf(currentList) + 1]
                         }
 
                         db.document("lists/$currentList").update("active", true)
                     }
 
-                        db.collection("lists").document(currentList).collection("listItems")
-                            .addSnapshotListener { snapshot, e ->
-                                if (e != null) {
+                    db.collection("lists").document(currentList).collection("listItems")
+                        .addSnapshotListener { snapshot, e ->
+                            if (e != null) {
 
-                                    Log.w("Error", "Listen Failed", e)
-                                    return@addSnapshotListener
-
-                                }
-
-                        if (snapshot != null) {
-                            var allListItems = ArrayList<ListItem>()
-                            val documents = snapshot.documents
-                            documents.forEach {
-                                val listItem: ListItem = ListItem(
-                                    it.getLong("id")!!.toInt(),
-                                    it.getString("title")!!,
-                                    "Test",
-                                    it.getLong("totalVotes")!!.toInt())
-
-                                allListItems.add(listItem)
-                            }
-                            allListItems = sortListItemsByVoteDesc((allListItems))
-
-                                    list.value = allListItems
-
-                                }
+                                Log.w("Error", "Listen Failed", e)
+                                return@addSnapshotListener
                             }
 
-                    } else {
-                        Log.d("ERROR", "Error getting documents: ", task.exception)
-                    }
+                            if (snapshot != null) {
+                                var allListItems = ArrayList<ListItem>()
+                                val documents = snapshot.documents
+                                documents.forEach {
+                                    val listItem: ListItem = ListItem(
+                                        it.getLong("id")!!.toInt(),
+                                        it.getString("title")!!,
+                                        "Test",
+                                        it.getLong("totalVotes")!!.toInt()
+                                    )
+
+                                    allListItems.add(listItem)
+                                }
+                                allListItems = sortListItemsByVoteDesc((allListItems))
+
+                                list.value = allListItems
+
+                            }
+                        }
+
+                } else {
+                    Log.d("ERROR", "Error getting documents: ", task.exception)
+                }
 
             }
 
-
         return list
     }
+
+    /**
+     * Fetches list items from the firebase - angled more toward the Past List Tab.
+     * Notably has a string parameter rather than a boolean.
+     */
+    fun fetchPastList(listTitle:String): MutableLiveData<ArrayList<ListItem>> {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("lists").document(listTitle).collection("listItems")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w("Error", "Listen Failed", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    var allListItems = ArrayList<ListItem>()
+                    val documents = snapshot.documents
+                    documents.forEach {
+                        val listItem: ListItem = ListItem(
+                            it.getLong("id")!!.toInt(),
+                            it.getString("title")!!,
+                            "Test",
+                            it.getLong("totalVotes")!!.toInt())
+
+                        allListItems.add(listItem)
+                    }
+                    allListItems = sortListItemsByVoteDesc((allListItems))
+
+                    list.value = allListItems
+
+                }
+            }
+        return list
+    }
+
 
     //TEST
     fun fetchDocument(): MutableLiveData<ArrayList<ListItem>> {
@@ -145,8 +186,6 @@ class FirestoreService {
                 Log.d("error", "get failed with ", exception)
             }
 
-
-
         return list
     }
 
@@ -161,7 +200,8 @@ class FirestoreService {
      */
     fun addListItemVote(listItemToIncrement: String) {
         val db = FirebaseFirestore.getInstance()
-        var listItemDocument = db.document("lists/" + currentList + "/listItems/" + listItemToIncrement)
+        var listItemDocument =
+            db.document("lists/" + currentList + "/listItems/" + listItemToIncrement)
         var totalVotes: Number
         listItemDocument.get().addOnSuccessListener {
             totalVotes = it.getLong("totalVotes")!!
@@ -225,8 +265,11 @@ class FirestoreService {
      */
     fun getUserPoints(): String {
         val db = FirebaseFirestore.getInstance()
+      
+        val userUID = FirebaseAuth.getInstance().uid
 
-        val docRef = db.collection("users").document("testuser")
+        val docRef = db.collection("users").document(userUID.toString())
+
         var userPoints = ""
 
         docRef.get()
@@ -245,33 +288,38 @@ class FirestoreService {
         return userPoints
     }
 
-    fun resetExpirationDateOnAllLists(timeIncrementInMilli:Int) {
+    fun resetExpirationDateOnAllLists(timeIncrementInMilli: Int) {
         val db = FirebaseFirestore.getInstance()
 
-        var calendar:Calendar = Calendar.getInstance()
+        var calendar: Calendar = Calendar.getInstance()
 
         var allLists = db.collection("lists").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val myList: MutableList<String> = ArrayList()
                 for (document in task.result!!) {
-                    calendar.add(Calendar.MILLISECOND,timeIncrementInMilli)
+                    calendar.add(Calendar.MILLISECOND, timeIncrementInMilli)
 
-                    db.document("lists/" + document.id).update("expireDate",calendar.time)
+                    db.document("lists/" + document.id).update("expireDate", calendar.time)
                 }
             }
         }
     }
 
-    fun getTimeRemainingOnCurrentList(timer:CountDownTimer): Long {
+    fun getTimeRemainingOnCurrentList(timer: CountDownTimer): Long {
         val db = FirebaseFirestore.getInstance()
-        var expiryDate:Date
-        var path:String = "lists/" + currentList
+        var expiryDate: Date
+        var path: String = "lists/" + currentList
 
-        var result:Long= 0
+        var result: Long = 0
 
         db.document(path).get().addOnSuccessListener {
             expiryDate = it.getDate("expireDate")!!
-            result = Math.abs(TimeUnit.MILLISECONDS.convert (expiryDate.time- Date().time, TimeUnit.MILLISECONDS))
+            result = Math.abs(
+                TimeUnit.MILLISECONDS.convert(
+                    expiryDate.time - Date().time,
+                    TimeUnit.MILLISECONDS
+                )
+            )
         }.addOnFailureListener { exception ->
             Log.d("error", "get failed with ", exception)
         }
@@ -279,7 +327,9 @@ class FirestoreService {
 
         return result
 
+    }
 
+    fun updatePoints(totalPoints: Int){
 
     }
 }

@@ -132,6 +132,7 @@ class CurrentListAdapter(private val mvm: MainViewModel, private var listItems: 
         holder.listItemTitle.text = listItems[position].title
 
 
+
         val maxTitleLengthBeforeFontSizeNeedsToBeLowered = 20
         if(listItems[position].title.length > maxTitleLengthBeforeFontSizeNeedsToBeLowered){
 

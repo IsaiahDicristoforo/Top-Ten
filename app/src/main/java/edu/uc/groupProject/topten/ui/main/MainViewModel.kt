@@ -40,6 +40,5 @@ class MainViewModel : ViewModel() {
         val service = StrawpollService()
         return service.getStrawpoll(id)
     }
-
-
+  
 }

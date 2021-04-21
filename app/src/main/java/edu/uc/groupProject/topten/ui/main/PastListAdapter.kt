@@ -1,5 +1,6 @@
 package edu.uc.groupProject.topten.ui.main
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 
-//Handles the items put INTO the recyclerview, and connects to the PastListFragments class
-class PastListAdapter(private val mvm: PastListsViewModel, private var listItems: ArrayList<ListItem>): RecyclerView.Adapter<PastListAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(
-        viewGroup: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
+/**
+ * PastListAdapter.
+ * Handles the items put into the Past List recyclerview, and connects to the PastListFragment class.
+ */
+class PastListAdapter(private val mvm: PastListsViewModel, private var listItems: ArrayList<ListItem>, private var currentActivity : Context): RecyclerView.Adapter<PastListAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(
             R.layout.layout_past_list_item,
             viewGroup,
@@ -23,6 +25,10 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
         return ViewHolder(view)
     }
 
+    /**
+     * setItemList function in the PastListAdapter.
+     * @param list The arraylist of ListItem DTOs.
+     */
     fun setItemList(list: ArrayList<ListItem>) {
         if (list == null) {
             listItems = list
@@ -53,20 +59,26 @@ class PastListAdapter(private val mvm: PastListsViewModel, private var listItems
                 }
 
             })
+
+            listItems = list
+
+            var theCallback = RecyclerCallback()
+            theCallback.bindPast(this)
+
+            result.dispatchUpdatesTo(theCallback)
         }
     }
 
     //identifies the IDs of the items in the layout_past_list_item fragment
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val listName: TextView
-        init{
-            listName = view.findViewById(R.id.tv_listName)
-        }
+
+        val listName: TextView = view.findViewById(R.id.tv_listName)
+r
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.listName.text = listItems[position].title //CURRENTLY ONLY PRODUCES THE NAME OF A LIST ITEM, NOT THE LIST TITLE
+        holder.listName.text = listItems[position].title
     }
 
     override fun getItemCount(): Int {

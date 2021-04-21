@@ -43,6 +43,7 @@ class StrawpollService {
         val call = service?.createStrawpoll(poll)
 
        // Enqueue the call
+
         call?.enqueue(object : Callback<Strawpoll> {
             override fun onFailure(bigcall: Call<Strawpoll>, t: Throwable) {
                 println(t.message)

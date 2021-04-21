@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.uc.groupProject.topten.MainActivity
 import edu.uc.groupProject.topten.R
 import edu.uc.groupProject.topten.dto.ListItem
 import edu.uc.groupProject.topten.service.FirestoreService
@@ -52,9 +54,10 @@ class MainFragment : Fragment() {
     lateinit var dialogToDisplay:ListExpirationDialog
     lateinit var previousListTitle:String
     lateinit var winningItem:String
-    var isVotedSharedPreference = activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)
+    var isVotedSharedPreference = activity?.getSharedPreferences("HasVoted", Context.MODE_PRIVATE)
     var firestoreService : FirestoreService =  FirestoreService()
-
+    var totalPoints = 0
+    val main = MainActivity()
 
 
 
@@ -88,13 +91,10 @@ class MainFragment : Fragment() {
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
 
-
         super.onActivityCreated(savedInstanceState)
 
 
-        isVotedSharedPreference = activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)
-       // isVotedSharedPreference?.edit()?.putBoolean("HasVoted", false)?.apply()
-
+        isVotedSharedPreference = activity?.getSharedPreferences("HasVoted", Context.MODE_PRIVATE)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -106,11 +106,6 @@ class MainFragment : Fragment() {
         var userPoints = view!!.findViewById<TextView>(R.id.txt_points)
         timerTextView  = view!!.findViewById(R.id.tv_mainListTimer)
         var listTitleLabel = view!!.findViewById<TextView>(R.id.tv_mainListTitle)
-        //userName.text = firestoreService.getUserName()
-      //  userPoints.text = firestoreService.getUserPoints()
-
-
-    //    viewModel.firestoreService.resetExpirationDateOnAllLists(countdownTime.toInt())
 
         createShareListFunctionality()
 
@@ -120,32 +115,8 @@ class MainFragment : Fragment() {
 
         viewModel.loadNextList(false)
 
-     /*   var listItemsToAdd = ArrayList<ListItem>()
-        listItemsToAdd.add(ListItem(0,"Cinnamon Toast Crunch","",0))
-        listItemsToAdd.add(ListItem(1,"Lucky Charms","",0))
-        listItemsToAdd.add(ListItem(2,"Froot Loops","",0))
-        listItemsToAdd.add(ListItem(3,"Cheerios","",0))
-        listItemsToAdd.add(ListItem(4,"Frosted Flakes","",0))
-        listItemsToAdd.add(ListItem(5,"Honeycomb","",0))
-        listItemsToAdd.add(ListItem(6,"Cap'n Crunch","",0))
-        listItemsToAdd.add(ListItem(6,"Reese's Puffs","",0))
+        adapter = CurrentListAdapter(viewModel, testList, context!!)
 
-        var list: TopTenList = TopTenList(
-            1,
-            "Top Ten Cereals",
-            "A list of favorite cereals",
-            false,
-            "Food",
-            Date(),
-            Date()
-        )
-        list.listItems = listItemsToAdd
-        viewModel.firestoreService.writeListToDatabase(list)
-
-      */
-
-
-        adapter = CurrentListAdapter(viewModel, testList, activity!!)
         recyclerView.adapter = adapter
 
 
@@ -158,14 +129,18 @@ class MainFragment : Fragment() {
                     val recyclerViewState: Parcelable? =
                         recyclerView.layoutManager!!.onSaveInstanceState()
 
-
-                    if(!activity?.getSharedPreferences("HasVoted",Context.MODE_PRIVATE)!!.getBoolean("HasVoted", false)){
+                    if (!activity?.getSharedPreferences("HasVoted", Context.MODE_PRIVATE)!!
+                            .getBoolean(
+                                "HasVoted",
+                                false
+                            )
+                    ) {
 
                         var randomizedItems = viewModel.firestoreService.list.value
                         randomizedItems!!.shuffle()
                         adapter.setItemList(randomizedItems)
 
-                    }else{
+                    } else {
                         adapter.setItemList(viewModel.firestoreService.list.value!!)
 
                     }
@@ -190,12 +165,8 @@ class MainFragment : Fragment() {
 
 
         })
-
-
         isCanceled = true
-
         viewModel.fetchStrawpoll(1)
-
     }
 
     private fun createShareListFunctionality() {
@@ -203,15 +174,18 @@ class MainFragment : Fragment() {
         shareButton.setOnClickListener({
 
             var possibleList = viewModel.firestoreService.list
-            if(possibleList != null){
-                var privateListFragment:PrivateListFragment = PrivateListFragment()
+            if (possibleList != null) {
+                var privateListFragment: PrivateListFragment = PrivateListFragment()
 
-                var newListToAddTitle:String = "Test123"
+                var newListToAddTitle: String = "Test123"
 
-                var bundle:Bundle = Bundle()
-                bundle.putString("ListTitle",newListToAddTitle)
+                var bundle: Bundle = Bundle()
+                bundle.putString("ListTitle", newListToAddTitle)
                 privateListFragment.arguments = bundle
-                activity!!.supportFragmentManager.beginTransaction().replace(R.id.container, privateListFragment).commit()
+                activity!!.supportFragmentManager.beginTransaction().replace(
+                    R.id.container,
+                    privateListFragment
+                ).commit()
             }
 
         })
@@ -274,9 +248,42 @@ class MainFragment : Fragment() {
                         totalPoints += 5
                     }
 
-                    var pastPointTotal = isVotedSharedPreference!!.getInt("TotalPoints",0)
+                    var votedOnItem = isVotedSharedPreference!!.getString("VotedOnTitle", "")
+                    var positionOfYourItem =  viewModel.firestoreService.list.value!!.indexOfFirst{ item->item.title == votedOnItem } + 1
 
 
+                    if(positionOfYourItem == 1){
+                        totalPoints = 200
+                    }
+                    else if(positionOfYourItem == 2){
+                        totalPoints = 100
+                    }else if(positionOfYourItem == 3){
+                        totalPoints = 50
+                    }else if(positionOfYourItem >= 5){
+                        totalPoints = 25
+                    }else{
+                        totalPoints += 5
+                    }
+
+                    if(this@MainFragment.fragmentManager != null && this@MainFragment.isVisible){
+
+                        var userPoints = activity?.findViewById<TextView>(R.id.txt_points)
+
+                        if(userPoints?.text != "") {
+                            val points: Int = Integer.parseInt(userPoints?.text as String)
+                            val userTotal = totalPoints + points
+                            userPoints?.text = userTotal.toString()
+                            userPoints?.invalidate()
+                            userPoints?.requestLayout()
+                        }
+
+                    }
+
+
+                    var pastPointTotal = isVotedSharedPreference!!.getInt("TotalPoints", 0)
+                    val firestore = FirestoreService()
+
+                    firestore.updatePoints(totalPoints)
 
                     viewModel.loadNextList(true)
 
@@ -287,16 +294,26 @@ class MainFragment : Fragment() {
                     viewModel.playAnimation = false
 
                     startCountdownTimer(countdownTime)
-                    launchListResultsDialog(votedOnItem!!,positionOfYourItem,totalPoints,pastPointTotal)
+                    launchListResultsDialog(
+                        votedOnItem!!,
+                        positionOfYourItem,
+                        totalPoints,
+                        pastPointTotal
+                    )
 
-                    isVotedSharedPreference!!.edit().putInt("TotalPoints",pastPointTotal + totalPoints)
+                    isVotedSharedPreference!!.edit().putInt(
+                        "TotalPoints",
+                        pastPointTotal + totalPoints
+                    )
 
-                    isVotedSharedPreference?.edit()?.putString("ListName",viewModel.firestoreService.currentList )?.apply()
+                    isVotedSharedPreference?.edit()?.putString(
+                        "ListName",
+                        viewModel.firestoreService.currentList
+                    )?.apply()
                     isVotedSharedPreference?.edit()?.putBoolean("HasVoted", false)?.apply()
 
                     adapter.lastClickedListItemTitle = ""
                     adapter.newList = true
-
                 }
 
                 }
@@ -306,7 +323,12 @@ class MainFragment : Fragment() {
 
     }
 
-    fun launchListResultsDialog(selectedItem:String, finalPosition:Int, pointsEarned:Int, totalPoints:Int ){
+    fun launchListResultsDialog(
+        selectedItem: String,
+        finalPosition: Int,
+        pointsEarned: Int,
+        totalPoints: Int
+    ){
 
     try{
 
@@ -315,9 +337,9 @@ class MainFragment : Fragment() {
       if(this.fragmentManager != null && this.isVisible()){
         var infoForDialog:Bundle = Bundle()
         infoForDialog.putString("ListTitle", previousListTitle)
-        infoForDialog.putString("FirstPlace",winningItem)
-          infoForDialog.putString("SelectedItem",selectedItem)
-          infoForDialog.putInt("FinalPosition",finalPosition)
+        infoForDialog.putString("FirstPlace", winningItem)
+          infoForDialog.putString("SelectedItem", selectedItem)
+          infoForDialog.putInt("FinalPosition", finalPosition)
           infoForDialog.putInt("TotalPoints", totalPoints)
           infoForDialog.putInt("PointsEarned", pointsEarned)
 
@@ -352,8 +374,10 @@ class MainFragment : Fragment() {
 
                 expiryDate = it.getDate("expireDate")!!
 
-
-                result = (TimeUnit.MILLISECONDS.convert (expiryDate.time- Date().time, TimeUnit.MILLISECONDS))
+                result = (TimeUnit.MILLISECONDS.convert(
+                    expiryDate.time - Date().time,
+                    TimeUnit.MILLISECONDS
+                ))
 
                 startCountdownTimer(result)
             }.addOnFailureListener { exception ->
@@ -361,8 +385,17 @@ class MainFragment : Fragment() {
             }
 
         return result
+   }
 
-
+    private fun createNotificationChannel(){
+        val channel = NotificationChannel(
+            channelId,
+            channelName,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply{
+            lightColor = Color.CYAN
+            enableLights(true)
+        }
 
    }
 

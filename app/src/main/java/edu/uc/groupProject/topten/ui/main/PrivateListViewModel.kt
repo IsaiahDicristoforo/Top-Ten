@@ -20,6 +20,7 @@ class PrivateListViewModel : ViewModel() {
         testOptions.add("Option 2")
 
         val service = StrawpollService()
+
         return  service.createStrawpoll("3141592653", testOptions)
     }
 }
