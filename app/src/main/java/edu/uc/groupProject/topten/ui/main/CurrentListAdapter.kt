@@ -2,7 +2,6 @@ package edu.uc.groupProject.topten.ui.main
 
 import android.animation.Animator
 import android.content.Context
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

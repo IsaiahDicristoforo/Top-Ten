@@ -23,24 +23,30 @@ class FirestoreService {
     var arrayOfLists: ArrayList<String> = ArrayList<String>()
     var list: MutableLiveData<ArrayList<ListItem>> = MutableLiveData<ArrayList<ListItem>>()
     var currentList = ""
+    var listedItem = ""
+    var pastListSelected = ""
 
 
-    fun fetchListNames() {
+
+    /**
+     * fetchListNames function.
+     * Responsible for fetching the names of the Firebase lists. Does not fetch the items inside
+     * of each list, only the names of the lists.
+     */
+    fun fetchListNames(){
         val db = FirebaseFirestore.getInstance()
         var listItemCollection = db.collection("lists")
         var theCollection = db.collection("lists").get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val myList: MutableList<String> = ArrayList()
                     for (document in task.result!!) {
-                        myList.add(document.id)
-                        arrayOfLists.add(currentList)
+                        listedItem = document.id
+                        arrayOfLists.add(document.id)
                         listOfLists.value = arrayOfLists
                     }
                 } else {
                     Log.d("ERROR", "Error getting documents: ", task.exception)
                 }
-
             }
     }
 
@@ -58,8 +64,6 @@ class FirestoreService {
                     for (document in task.result!!) {
 
                         myList.add(document.id)
-                        //arrayOfLists.add(currentList)
-                        //listOfLists.value = arrayOfLists
 
                         if (document.getBoolean("active") == true && !generateNewList) {
                             currentList = document.id
@@ -119,6 +123,42 @@ class FirestoreService {
 
         return list
     }
+
+    /**
+     * Fetches list items from the firebase - angled more toward the Past List Tab.
+     * Notably has a string parameter rather than a boolean.
+     */
+    fun fetchPastList(listTitle:String): MutableLiveData<ArrayList<ListItem>> {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("lists").document(listTitle).collection("listItems")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w("Error", "Listen Failed", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    var allListItems = ArrayList<ListItem>()
+                    val documents = snapshot.documents
+                    documents.forEach {
+                        val listItem: ListItem = ListItem(
+                            it.getLong("id")!!.toInt(),
+                            it.getString("title")!!,
+                            "Test",
+                            it.getLong("totalVotes")!!.toInt())
+
+                        allListItems.add(listItem)
+                    }
+                    allListItems = sortListItemsByVoteDesc((allListItems))
+
+                    list.value = allListItems
+
+                }
+            }
+        return list
+    }
+
 
     //TEST
     fun fetchDocument(): MutableLiveData<ArrayList<ListItem>> {
