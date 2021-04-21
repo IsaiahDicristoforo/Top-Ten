@@ -15,23 +15,12 @@ class PastListsViewModel : ViewModel() {
     var lists : MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     //var listsString = firestoreService.listOfLists
 
-    fun loadNextList(generateNewList:Boolean){
-        list = firestoreService.fetchPastList(generateNewList)
-    }
-
-
-
-    fun loadLists(): MutableLiveData<ArrayList<String>> {
-        lists = firestoreService.listOfLists //potentially a problem, could be lists.value?
-        return lists
+    fun loadNextList(listTitle: String){
+        list = firestoreService.fetchPastList(listTitle)
     }
 
     fun fetchFirestoreListItem(){
         list = firestoreService.fetchDocument()
-    }
-
-    fun fetchListServiceList(listName: String) {
-        list = listService.fetchList(listName)
     }
 
     fun fetchStrawpoll(id: Int): MutableLiveData<Strawpoll>? {

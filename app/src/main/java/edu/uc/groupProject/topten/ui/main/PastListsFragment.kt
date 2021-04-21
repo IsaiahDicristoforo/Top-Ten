@@ -61,24 +61,44 @@ class PastListsFragment : Fragment() {
         spinnerList = view!!.findViewById<Spinner>(R.id.spn_listNames)
         recyclerView.layoutManager =  LinearLayoutManager(this.context)
         (recyclerView.getItemAnimator() as SimpleItemAnimator).supportsChangeAnimations = false
-        viewModel.loadNextList(false)
+        viewModel.loadNextList("Top Ten Car Brands")
         adapter = PastListAdapter(viewModel, testList, context!!)
         recyclerView.adapter = adapter
 
         viewModel.firestoreService.fetchListNames() //fetches all the list names
 
-        var i = 0
         //Observer loop. This is where the drop-down box gets populated.
         viewModel.firestoreService.listOfLists.observe(this, Observer{
             var listOfListVariable = viewModel.firestoreService.arrayOfLists //may cause issues with observe function
 
             //Mini-adapter
             var spinAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listOfListVariable)
-            spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            i++
-            spinnerList.adapter = spinAdapter;
+            spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerList.adapter = spinAdapter
 
+            spinnerList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener  {
 
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val text = parent?.getItemAtPosition(position).toString()
+                    thing = text
+                    viewModel.firestoreService.pastListSelected = thing
+                    //recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+                    viewModel.loadNextList(thing)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    recyclerView.startLayoutAnimation()
+
+                }
+
+            }
 
 
         })
@@ -88,37 +108,13 @@ class PastListsFragment : Fragment() {
             super.onActivityCreated(savedInstanceState)
             viewModel = ViewModelProvider(this).get(PastListsViewModel::class.java)
 
-            viewModel.list.observe(this, Observer {
-                activity?.runOnUiThread(
-                    Runnable{
-                        val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
-                        adapter.setItemList(viewModel.firestoreService.list.value!!)
-                        recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
-
-                        spinnerList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener  {
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                TODO("Not yet implemented")
-                            }
-
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                val text = parent?.getItemAtPosition(position).toString()
-                                thing = text
-                                viewModel.firestoreService.pastListSelected = thing
-                                viewModel.loadNextList(false)
-                            }
-
-                        }
+            activity?.runOnUiThread(
+                Runnable{
+                    val recyclerViewState: Parcelable? = recyclerView.layoutManager!!.onSaveInstanceState()
+                    adapter.setItemList(viewModel.firestoreService.list.value!!)
+                    recyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+                    adapter.notifyDataSetChanged()
                 })
-            })
         })
-
-
-
     }
 }
